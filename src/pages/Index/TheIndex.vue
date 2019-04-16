@@ -1,27 +1,34 @@
 <template>
-  <div>{{hello}}</div>
+  <div v-if="this.$store.state.isBar.showBar">{{hello}}</div>
 </template>
 <script>
-import { getMusic , getNews } from '@/api/index.js'
+import { getMusic, getNews } from "@/api/index.js";
 export default {
-  data(){
+  data() {
     return {
-      hello:'首页'
-    }
+      hello: "首页"
+    };
   },
-  mounted () {
-    getMusic().then((response)=>{
+  mounted() {
+    getMusic().then(response => {
       // console.log(response)
-    })
-    
-    let _data = {page:1,count:5}
-    getNews(_data).then((response)=>{
+    });
+
+    let _data = { page: 1, count: 5 };
+    getNews(_data).then(response => {
       // console.log(response)
-    })
+    });
   }
 };
 </script>
-<style>
+<style lang="scss" scoped>
+$Color: #f00;
+
+div {
+  color: $Color;
+  width: percentage( 100 / 120);
+}
+
 </style>
 
 
