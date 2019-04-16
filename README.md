@@ -1,4 +1,6 @@
-# yushou
+# H5模板
+
+### 此为vue移动端H5的模板格式
 
 ## Project setup
 ```
@@ -25,5 +27,3 @@ npm run test
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
