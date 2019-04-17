@@ -1,9 +1,9 @@
 import request from '@/config/AxiosConfig.js'
 import qs from 'qs'
 
-export function getMusic(data) {
+export function getBanner(data) {
   return request({
-    url: '/musicBroadcasting',
+    url: '/info/findPicture.api',
     method: 'GET',
     params: data //对数据进行params解析
   })
