@@ -44,6 +44,15 @@ export function selectActivity(data) {
   })
 }
 
+//商品-获取商品列表 
+export function findAllGoods(data) {
+  return request({
+    url: '/goods/findAllGoods.api',
+    method: 'GET',
+    params: data //对数据进行params解析
+  })
+}
+
 export function getNews(data, isJson = true) {
   return request({
     url: '/getWangYiNews',
