@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { Toast } from 'vant';
 
 // 创建一个axios的实例
 const service = axios.create({
@@ -15,15 +15,22 @@ service.interceptors.request.use((config) => {
   return config
 }, (error) => {
   // eslint-disable-next-line no-console
-  console.log('beforeErr' +error)
+  Toast(error);
 })
 
 // 响应拦截
 service.interceptors.response.use(
-  response => response,
+  response => {
+    if(response.status === 200){
+      return response;
+    }else{
+      Toast.fail('出现错误:' + response.status)
+    }
+    
+  },
   error => {
      // eslint-disable-next-line no-console
-    console.log('backErr' + error) // for debug
+     Toast(error);
   })
 
 export default service

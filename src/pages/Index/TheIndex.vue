@@ -51,6 +51,7 @@ $Color: #fa399d;
     box-sizing: border-box;
     padding-top: 6PX;
     position: fixed;
+    z-index: 10;
 
     &::after {
       content: '';

@@ -1,5 +1,5 @@
 <template>
-  <van-tabbar v-model="active" active-color="#ea047b">
+  <van-tabbar v-model="active" active-color="#ea047b" :z-index='99'>
     <van-tabbar-item>
       <span>主页</span>
       <img slot="icon" slot-scope="props" :src="props.active ? zhuye.active : zhuye.normal">
