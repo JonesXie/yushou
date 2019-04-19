@@ -8,7 +8,7 @@ Vue.use(Vuex); //注册到vue中
 //使用模块化
 
 export default new Vuex.Store({
-  modules:{
+  modules: {
     isBar
   }
 })
@@ -24,4 +24,3 @@ export default new Vuex.Store({
 //   actions,
 //   getters
 // });
-

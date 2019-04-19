@@ -3,14 +3,14 @@ const isBar = {
     showBar: true
   },
   mutations: {
-    SET_ADDROPTIONS: (state, addrOptions) => {
-      state.showBar = addrOptions
+    SET_TABBAR: (state, opt) => {
+      state.showBar = opt
     }
   },
   actions: {
     //获取状态更改
-    AddrOptionsUp({commit}, opt) {
-      commit('SET_ADDROPTIONS', opt);
+    ChangeStatus({commit}, opt) {
+      commit('SET_TABBAR', opt);
     }
   }
 }

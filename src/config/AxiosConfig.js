@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Toast } from 'vant';
+import {Toast} from 'vant';
 
 // 创建一个axios的实例
 const service = axios.create({
@@ -21,16 +21,24 @@ service.interceptors.request.use((config) => {
 // 响应拦截
 service.interceptors.response.use(
   response => {
-    if(response.status === 200){
+    if (response.data.code === 1) {
+      //成功 1
       return response;
-    }else{
+    } else if (response.data.code === -1) {
+      //未登录 -1
+      Toast.fail('未登录')
+    } else if (response.data.code === -2) {
+      //无权限 -2
+      Toast.fail('无权限')
+    } else {
+      //失败 0
       Toast.fail('出现错误:' + response.status)
     }
-    
+
   },
   error => {
-     // eslint-disable-next-line no-console
-     Toast(error);
+    // eslint-disable-next-line no-console
+    Toast(error);
   })
 
 export default service

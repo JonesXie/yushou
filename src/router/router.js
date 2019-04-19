@@ -14,8 +14,13 @@ const RouterMap = [{
       require(['@/pages/Index/TheIndex.vue'], resolve);
     }
   },
-
-
+  {
+    path: '/getcoupon',
+    name: 'getcoupon',
+    component: resolve => {
+      require(['@/pages/Index/GetCoupon.vue'], resolve);
+    }
+  },
 
   // 设置404页面
   {
@@ -31,6 +36,8 @@ const RouterMap = [{
 ]
 export default new Router({
   mode: 'history',
-  scrollBehavior: () => ({y: 0}), //滚动到顶部
+  scrollBehavior: () => ({
+    y: 0
+  }), //滚动到顶部
   routes: RouterMap
 })

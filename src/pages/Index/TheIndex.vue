@@ -10,7 +10,9 @@
         <van-tab title="全部">
           <index-first></index-first>
         </van-tab>
-        <van-tab title="美妆">内容 2</van-tab>
+        <van-tab title="美妆">
+          <index-second :isType='id'></index-second>
+        </van-tab>
         <van-tab title="手机数码">内容 3</van-tab>
         <van-tab title="家居百货">内容 4</van-tab>
         <van-tab title="配饰">内容 4</van-tab>
@@ -22,17 +24,19 @@
 <script>
 import { Tab, Tabs } from "vant";
 import IndexFirst from '../components/IndexFirst.vue'
+import IndexSecond from '../components/IndexSecond.vue'
 
 
 export default {
   data() {
     return {
       active: 0,
-
+      id:'123'
     };
   },
   components: {
     IndexFirst,
+    IndexSecond,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
   },

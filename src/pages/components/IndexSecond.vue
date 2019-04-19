@@ -1,45 +1,57 @@
 <template>
-  <div class="fisrt_list">
-    <div class="title">
-      <img src="@/assets/img/index/pg_index_first_jx.png" alt>
-    </div>
+  <div class="index_second fisrt_list" ref="second_pg">
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+      <nav class="is_ul">
+        <span>推荐</span>
+        <span>上衣</span>
+      </nav>
 
-    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :offset="10">
-      <ul class="fl_ul">
-        <li class="van-hairline--bottom fl_li" v-for="(v,i) in listData" :key="i">
-          <img :src="v.goodsImages" alt>
-          <div class="fl_li_r">
-            <p class="fl_li_rP1">{{v.goodsName}}</p>
-            <p class="fl_li_rP2">
-              <span>正品</span>
-              <span>包邮</span>
-            </p>
-            <p class="fl_li_rP3">
-              ￥
-              <span>{{v.goodsSalePrice}}</span>.00
-            </p>
-            <p class="fl_li_rP4">{{v.goodsWaitDays}}天后发货</p>
-          </div>
-        </li>
-      </ul>
-    </van-list>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        :offset="10"
+      >
+        <ul class="fl_ul">
+          <li class="van-hairline--bottom fl_li" v-for="(v,i) in listData" :key="i">
+            <img :src="v.goodsImages" alt>
+            <div class="fl_li_r">
+              <p class="fl_li_rP1">{{v.goodsName}}</p>
+              <p class="fl_li_rP2">
+                <span>正品</span>
+                <span>包邮</span>
+              </p>
+              <p class="fl_li_rP3">
+                ￥
+                <span>{{v.goodsSalePrice}}</span>.00
+              </p>
+              <p class="fl_li_rP4">{{v.goodsWaitDays}}天后发货</p>
+            </div>
+          </li>
+        </ul>
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 
 <script>
 import { findAllGoods } from "@/api/index.js";
-import { List } from "vant";
+import { List, PullRefresh } from "vant";
 export default {
-  name: "FirstList",
+  name: "IndexSecond",
+  props: ["isType"],
   data() {
     return {
       listData: [],
       loading: false,
-      finished: false
+      finished: false,
+      isLoading: false
     };
   },
   components: {
-    [List.name]: List
+    [List.name]: List,
+    [PullRefresh.name]: PullRefresh
   },
   methods: {
     onLoad() {
@@ -56,11 +68,20 @@ export default {
           this.finished = true;
         }
       }, 500);
+    },
+    onRefresh() {
+      setTimeout(() => {
+        this.$toast("刷新成功");
+        this.isLoading = false;
+      }, 500);
     }
   },
   mounted() {
     findAllGoods().then(({ data }) => {
       this.listData = data.data;
+    });
+    this.$nextTick(() => {
+      this.$refs.second_pg.scrollTo(0, 0);
     });
   }
 };
@@ -69,17 +90,6 @@ export default {
 <style scoped lang='scss'>
 /* @import url(); */
 .fisrt_list {
-  margin-top: 8px;
-  .title {
-    background: #fff;
-    text-align: center;
-    padding:18px 0 16px 0;
-    img {
-      height: 16px;
-      width: auto;
-    }
-  }
-
   .fl_ul {
     background: #fff;
     .fl_li {
@@ -141,6 +151,30 @@ export default {
           margin-top: 12px;
         }
       }
+    }
+  }
+}
+.index_second {
+  .is_ul {
+    span {
+      display: inline-block;
+      font-size: 12px;
+      color: #ea047b;
+      border: 1px solid #ea047b;
+      width: 48px;
+      height: 19px;
+      line-height: 19px;
+      text-align: center;
+      border-radius: (19px/2);
+      margin: 9px 0 9px 15px;
+    }
+    span:first-child {
+      background: #ea047b;
+      color: #fff;
+      border: none;
+            width: 50px;
+      height: 21px;
+      line-height: 21px;
     }
   }
 }

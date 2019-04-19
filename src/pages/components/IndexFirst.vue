@@ -18,10 +18,10 @@
             </div>
           </li>
           <li>
-            <div class="iaf_wrap">
-              <img src="@/assets/img/index/pg_index_first_lq.png" alt>
-              <p>领券优惠</p>
-            </div>
+            <router-link to="/getcoupon" class="iaf_wrap">
+                  <img src="@/assets/img/index/pg_index_first_lq.png" alt>
+                  <p>领券优惠</p>
+            </router-link>
           </li>
           <li>
             <div class="iaf_wrap">
@@ -323,11 +323,16 @@
 </template>
 
 <script>
-import {getBanner,findGoods,selectCodeSubject,selectBrandSubject} from "@/api/index.js";
+import {
+  getBanner,
+  findGoods,
+  selectCodeSubject,
+  selectBrandSubject
+} from "@/api/index.js";
 import { Swipe, SwipeItem, PullRefresh } from "vant";
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
-import FirstList from './FirstList'
+import FirstList from "./FirstList";
 
 export default {
   name: "IndexFirst",
@@ -346,9 +351,7 @@ export default {
         centeredSlides: true,
         coverflowEffect: {
           rotate: 0,
-          // stretch: -30,
           depth: 80,
-          // // modifier: 1,
           slideShadows: false
         },
         pagination: {
@@ -593,18 +596,33 @@ export default {
         color: #fff;
         font-size: 12px;
         padding: 3px 6px;
+        width: 71px;
+        height: 19px;
+        box-sizing: border-box;
       }
       .fl_li_p0 {
-        background: #fe8c8d;
+        background: url("~@/assets/img/index/pg_index_first_p0.png");
+        background-repeat: no-repeat;
+        background-position: top left;
+        background-size: 100% 100%;
       }
       .fl_li_p1 {
-        background: #acabab;
+              background: url("~@/assets/img/index/pg_index_first_p1.png");
+        background-repeat: no-repeat;
+        background-position: top left;
+        background-size: 100% 100%;
       }
       .fl_li_p2 {
-        background: #87baf4;
+               background: url("~@/assets/img/index/pg_index_first_p2.png");
+        background-repeat: no-repeat;
+        background-position: top left;
+        background-size: 100% 100%;
       }
       .fl_li_p3 {
-        background: #e7a553;
+                background: url("~@/assets/img/index/pg_index_first_p3.png");
+        background-repeat: no-repeat;
+        background-position: top left;
+        background-size: 100% 100%;
       }
 
       .dec {

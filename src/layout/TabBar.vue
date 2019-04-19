@@ -1,5 +1,5 @@
 <template>
-  <van-tabbar v-model="active" active-color="#ea047b" :z-index='99'>
+  <van-tabbar v-model="active" active-color="#ea047b" :z-index="99" v-if="showBar">
     <van-tabbar-item>
       <span>主页</span>
       <img slot="icon" slot-scope="props" :src="props.active ? zhuye.active : zhuye.normal">
@@ -50,6 +50,11 @@ export default {
     [TabbarItem.name]: TabbarItem
   },
   methods: {},
+  computed: {
+    showBar: function() {
+      return this.$store.state.isBar.showBar;
+    }
+  },
   mounted() {}
 };
 </script>
