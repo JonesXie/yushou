@@ -21,6 +21,13 @@ const RouterMap = [{
       require(['@/pages/Index/GetCoupon.vue'], resolve);
     }
   },
+  {
+    path: '/thesearch',
+    name: 'thesearch',
+    component: resolve => {
+      require(['@/pages/Public/TheSearch.vue'], resolve);
+    }
+  },
 
   // 设置404页面
   {

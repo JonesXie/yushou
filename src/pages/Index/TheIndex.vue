@@ -2,16 +2,29 @@
   <div class="pg_index">
     <div class="pi_h">
       <img src="@/assets/img/pg_index_scan.png" alt>
-      <span>搜索商品</span>
+      <router-link to="/thesearch" class="pi_h_input">
+        <span>搜索商品</span>
+      </router-link>
       <img src="@/assets/img/pg_index_msg.png" alt>
     </div>
     <div class="pi_list">
-      <van-tabs v-model="active" animated :line-height='0' title-active-color='#ea047b' color='#ea047b' title-inactive-color='#666' swipeable sticky :offset-top='40' :ellipsis='false'>
+      <van-tabs
+        v-model="active"
+        animated
+        :line-height="0"
+        title-active-color="#ea047b"
+        color="#ea047b"
+        title-inactive-color="#666"
+        swipeable
+        sticky
+        :offset-top="stickTop"
+        :ellipsis="false"
+      >
         <van-tab title="全部">
           <index-first></index-first>
         </van-tab>
         <van-tab title="美妆">
-          <index-second :isType='id'></index-second>
+          <index-second :isType="id"></index-second>
         </van-tab>
         <van-tab title="手机数码">内容 3</van-tab>
         <van-tab title="家居百货">内容 4</van-tab>
@@ -23,24 +36,30 @@
 </template>
 <script>
 import { Tab, Tabs } from "vant";
-import IndexFirst from '../components/IndexFirst.vue'
-import IndexSecond from '../components/IndexSecond.vue'
-
+import IndexFirst from "../components/IndexFirst.vue";
+import IndexSecond from "../components/IndexSecond.vue";
 
 export default {
   data() {
     return {
       active: 0,
-      id:'123'
+      id: "123",
+      stickTop: 0
     };
   },
   components: {
     IndexFirst,
     IndexSecond,
     [Tab.name]: Tab,
-    [Tabs.name]: Tabs,
+    [Tabs.name]: Tabs
   },
-  mounted() {}
+  mounted() {
+    //顶部菜单固定
+    this.$nextTick(() => {
+      let rate = document.documentElement.style.fontSize.split("px")[0];
+      this.stickTop = Number((rate * 1.06667).toFixed(0));
+    });
+  }
 };
 </script>
 
@@ -49,18 +68,23 @@ $Color: #fa399d;
 .pg_index {
   .pi_h {
     width: 100vw;
-    height: 40PX;
+    height: 40px;
     background: $Color;
     overflow: hidden;
     box-sizing: border-box;
-    padding-top: 6PX;
+    padding-top: 6px;
     position: fixed;
     z-index: 10;
 
     &::after {
-      content: '';
+      content: "";
       height: 100%;
       vertical-align: middle;
+    }
+    .pi_h_input{
+      width: 270px;
+      display: inline-block;
+      margin: 0 19px;
     }
     span {
       display: inline-block;
@@ -73,14 +97,13 @@ $Color: #fa399d;
       border-radius: 5px;
       padding: 7px 12px;
       box-sizing: border-box;
-      margin: 0 19px;
       clear: both;
     }
     img {
       width: 23px;
       height: 23px;
       margin-left: 10px;
-      margin-top: 3PX;
+      margin-top: 3px;
     }
     img:last-child {
       margin-left: 0;
@@ -88,7 +111,7 @@ $Color: #fa399d;
   }
 
   .pi_list {
-     padding-top: 40PX;
+    padding-top: 40px;
   }
 }
 </style>
