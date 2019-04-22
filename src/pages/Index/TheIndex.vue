@@ -5,7 +5,9 @@
       <router-link to="/thesearch" class="pi_h_input">
         <span>搜索商品</span>
       </router-link>
-      <img src="@/assets/img/pg_index_msg.png" alt>
+      <router-link to="/thenotices">
+        <img src="@/assets/img/pg_index_msg.png" alt>
+      </router-link>
     </div>
     <div class="pi_list">
       <van-tabs
@@ -81,7 +83,7 @@ $Color: #fa399d;
       height: 100%;
       vertical-align: middle;
     }
-    .pi_h_input{
+    .pi_h_input {
       width: 270px;
       display: inline-block;
       margin: 0 19px;

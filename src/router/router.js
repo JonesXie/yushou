@@ -28,6 +28,20 @@ const RouterMap = [{
       require(['@/pages/Public/TheSearch.vue'], resolve);
     }
   },
+  {
+    path: '/thenotices',
+    name: 'thenotices',
+    component: resolve => {
+      require(['@/pages/Index/TheNotices.vue'], resolve);
+    }
+  },
+  {
+    path: '/noticedetail',
+    name: 'noticedetail',
+    component: resolve => {
+      require(['@/pages/Index/NoticeDetail.vue'], resolve);
+    }
+  },
 
   // 设置404页面
   {
