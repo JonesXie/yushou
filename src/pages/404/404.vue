@@ -37,6 +37,9 @@ export default {
   position: relative;
   width: 100vw;
   overflow: hidden;
+  z-index: 9999;
+  height: 100vh;
+  background: #f4f4f4;
   .pic-404 {
     position: relative;
     width: 100%;
@@ -51,8 +54,8 @@ export default {
       position: absolute;
       &.left {
         width: 60px;
-        top: 17PX;
-        left: 140PX;
+        top: 17px;
+        left: 140px;
         opacity: 0;
         animation-name: cloudLeft;
         animation-duration: 2s;
@@ -104,7 +107,7 @@ export default {
         100% {
           top: 97px;
           left: 20px;
-          opacity: 0;
+          opacity: 1;
         }
       }
       @keyframes cloudMid {
@@ -126,7 +129,7 @@ export default {
         100% {
           top: 160px;
           left: 120px;
-          opacity: 0;
+          opacity: 1;
         }
       }
       @keyframes cloudRight {
@@ -148,7 +151,7 @@ export default {
         100% {
           top: 200px;
           left: 246px;
-          opacity: 0;
+          opacity: 1;
         }
       }
     }

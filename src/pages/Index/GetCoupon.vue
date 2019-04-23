@@ -33,8 +33,7 @@ export default {
   methods: {
     ...mapActions(["ChangeStatus"])
   },
-  mounted() {},
-  created() {
+  mounted() {
     this.ChangeStatus(false);
   },
   beforeDestroy() {

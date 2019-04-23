@@ -1,6 +1,6 @@
 <template>
   <van-tabbar v-model="active" active-color="#ea047b" :z-index="99" v-if="showBar">
-    <van-tabbar-item>
+    <van-tabbar-item to='/index'>
       <span>主页</span>
       <img slot="icon" slot-scope="props" :src="props.active ? zhuye.active : zhuye.normal">
     </van-tabbar-item>

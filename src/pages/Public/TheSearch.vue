@@ -50,7 +50,7 @@ export default {
       this.$router.push("/");
     }
   },
-  created() {
+  mounted() {
     this.ChangeStatus(false);
   },
   beforeDestroy() {
