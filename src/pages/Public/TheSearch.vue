@@ -1,7 +1,11 @@
 <template>
   <div class="pg_search">
     <van-nav-bar left-arrow :fixed="true" @click-left="$router.back(-1)">
-      <van-search placeholder="请输入要搜索的商品" background="#f4f4f4" slot="title"/>
+      <!-- <van-search placeholder="请输入要搜索的商品" background="#f4f4f4" slot="title" v-focus/> -->
+      <div class="pgs_wrap_input" slot="title">
+        <van-icon name="search" class="search_icon" />
+        <input type="text" placeholder="请输入要搜索的商品" v-focus>
+      </div>
       <span slot="right" @click="turnPage">搜索</span>
     </van-nav-bar>
     <div class="search_history">
@@ -25,14 +29,21 @@
 </template>
 
 <script>
-import { NavBar, Search } from "vant";
+import { NavBar, Icon } from "vant";
 import { mapActions } from "vuex";
 export default {
   name: "TheSearch",
   data() {
     return {};
   },
-  components: { [NavBar.name]: NavBar, [Search.name]: Search },
+  directives: {
+    focus: {
+      inserted: function(el) {
+        el.focus();
+      }
+    }
+  },
+  components: { [NavBar.name]: NavBar, [Icon.name]: Icon  },
   methods: {
     ...mapActions(["ChangeStatus"]),
     turnPage() {
@@ -55,24 +66,38 @@ export default {
   min-height: 100vh;
   padding-top: 46px;
   box-sizing: border-box;
+
   .van-nav-bar__title {
     max-width: 70%;
-    padding-top: 6px;
+    padding-top: 10px;
   }
   .van-nav-bar__right {
     color: #e8047b;
     font-size: 14px;
   }
-  .van-search {
-    padding: 0;
+  .pgs_wrap_input {
+    width: 100%;
+    height: 28px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    overflow: hidden;
+    line-height: 0;
+    text-align: left;
+    padding-top: 5px;
+    box-sizing: border-box;
+    input {
+      display: inline-block;
+      background-color: #f4f4f4;
+      font-size: 12px;
+      color: #9e9e9e;
+      width: 80%;
+    }
+    .search_icon {
+      font-size: 15px;
+      color:#999;
+      margin:  0 6px 0 12px;
+    }
   }
-}
-.pg_search /deep/ .van-nav-bar .van-icon-search {
-  color: #999999;
-}
-.pg_search /deep/ .van-nav-bar .van-field__body {
-  position: relative;
-  top:2px;
 }
 .pg_search {
   .search_history {
