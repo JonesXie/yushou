@@ -7,6 +7,21 @@ const RouterMap = [{
     path: '/',
     redirect: '/index'
   },
+  //登录注册
+  {
+    path: '/login',
+    name: 'login',
+    component: resolve => {
+      require(['@/pages/Login/TheLogin.vue'], resolve);
+    }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: resolve => {
+      require(['@/pages/Login/TheRegister.vue'], resolve);
+    }
+  },
   //index
   {
     path: '/index',
@@ -43,19 +58,12 @@ const RouterMap = [{
       require(['@/pages/Index/NoticeDetail.vue'], resolve);
     }
   },
-  //登录注册
+  //严选
   {
-    path: '/login',
-    name: 'login',
+    path: '/yanxuan',
+    name: 'yanxuan',
     component: resolve => {
-      require(['@/pages/Login/TheLogin.vue'], resolve);
-    }
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: resolve => {
-      require(['@/pages/Login/TheRegister.vue'], resolve);
+      require(['@/pages/Yanxuan/YanXuan.vue'], resolve);
     }
   },
   //分类
@@ -63,6 +71,14 @@ const RouterMap = [{
     path: "/thetype",
     component: resolve => {
       require(['@/pages/Type/TheType.vue'], resolve);
+    }
+  },
+  //我的
+  {
+    path: '/center',
+    name: 'center',
+    component: resolve => {
+      require(['@/pages/Center/TheCenter.vue'], resolve);
     }
   },
 

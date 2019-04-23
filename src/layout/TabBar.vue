@@ -4,7 +4,7 @@
       <span>主页</span>
       <img slot="icon" slot-scope="props" :src="props.active ? zhuye.active : zhuye.normal">
     </van-tabbar-item>
-    <van-tabbar-item>
+    <van-tabbar-item to="/yanxuan">
       <span>严选</span>
       <img slot="icon" slot-scope="props" :src="props.active ? yanxuan.active : yanxuan.normal">
     </van-tabbar-item>
@@ -12,7 +12,7 @@
       <span>分类</span>
       <img slot="icon" slot-scope="props" :src="props.active ? fenlei.active : fenlei.normal">
     </van-tabbar-item>
-    <van-tabbar-item>
+    <van-tabbar-item to="/center">
       <span>我的</span>
       <img slot="icon" slot-scope="props" :src="props.active ? my.active : my.normal">
     </van-tabbar-item>
