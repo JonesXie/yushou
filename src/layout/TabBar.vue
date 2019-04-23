@@ -1,6 +1,6 @@
 <template>
   <van-tabbar v-model="active" active-color="#ea047b" :z-index="99" v-if="showBar">
-    <van-tabbar-item to='/index'>
+    <van-tabbar-item to="/index">
       <span>主页</span>
       <img slot="icon" slot-scope="props" :src="props.active ? zhuye.active : zhuye.normal">
     </van-tabbar-item>
@@ -8,7 +8,7 @@
       <span>严选</span>
       <img slot="icon" slot-scope="props" :src="props.active ? yanxuan.active : yanxuan.normal">
     </van-tabbar-item>
-    <van-tabbar-item>
+    <van-tabbar-item to="/thetype">
       <span>分类</span>
       <img slot="icon" slot-scope="props" :src="props.active ? fenlei.active : fenlei.normal">
     </van-tabbar-item>
@@ -26,7 +26,6 @@ export default {
   name: "TabBar",
   data() {
     return {
-      active: 0,
       zhuye: {
         normal: require("@/assets/img/ly_tabbar_zy.png"),
         active: require("@/assets/img/ly_tabbar_zy2.png")
@@ -53,6 +52,12 @@ export default {
   computed: {
     showBar: function() {
       return this.$store.state.isBar.showBar;
+    },
+    active: {
+      get: function() {
+        return this.$store.state.isBar.barActive;
+      },
+      set: function() {}
     }
   },
   mounted() {}

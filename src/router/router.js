@@ -7,6 +7,7 @@ const RouterMap = [{
     path: '/',
     redirect: '/index'
   },
+  //index
   {
     path: '/index',
     name: 'index',
@@ -40,6 +41,28 @@ const RouterMap = [{
     name: 'noticedetail',
     component: resolve => {
       require(['@/pages/Index/NoticeDetail.vue'], resolve);
+    }
+  },
+  //登录注册
+  {
+    path: '/login',
+    name: 'login',
+    component: resolve => {
+      require(['@/pages/Login/TheLogin.vue'], resolve);
+    }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: resolve => {
+      require(['@/pages/Login/TheRegister.vue'], resolve);
+    }
+  },
+  //分类
+  {
+    path: "/thetype",
+    component: resolve => {
+      require(['@/pages/Type/TheType.vue'], resolve);
     }
   },
 

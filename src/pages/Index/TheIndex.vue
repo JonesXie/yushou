@@ -40,7 +40,7 @@
 import { Tab, Tabs } from "vant";
 import IndexFirst from "../components/IndexFirst.vue";
 import IndexSecond from "../components/IndexSecond.vue";
-
+import {mapActions} from "vuex"
 export default {
   data() {
     return {
@@ -55,7 +55,11 @@ export default {
     [Tab.name]: Tab,
     [Tabs.name]: Tabs
   },
+  methods:{
+    ...mapActions(['ChangeActive'])
+  },
   mounted() {
+    this.ChangeActive(0)
     //顶部菜单固定
     this.$nextTick(() => {
       let rate = document.documentElement.style.fontSize.split("px")[0];

@@ -1,0 +1,161 @@
+<template>
+  <div class="pg_login">
+    <img src="@/assets/logo.png" alt class="logo">
+    <div class="pgl_input">
+      <div class="num_input van-hairline--bottom">
+        <img src="@/assets/img/login/pg_login_phone.png" alt class="num_img">
+        <input type="tel" placeholder="请输入手机号码" class="num" @blur="validPhone" v-model="phone" maxlength="11">
+      </div>
+      <div class="mima_input van-hairline--bottom">
+        <img src="@/assets/img/login/pg_login_lock.png" alt class="mima_img">
+        <input type="password" placeholder="请输入登录密码" class="mima" v-model="psw">
+      </div>
+      <p class="tips">
+        <router-link to="/register">立即注册</router-link>
+        <span>忘记密码?</span>
+      </p>
+      <div class="btn">登录</div>
+      <div class="wx_login">
+        <div class="title">第三方登录</div>
+        <div class="tx_login">
+          <div class="tx_login_w">
+            <img src="@/assets/img/login/pg_login_wx.png" alt>
+            <p>微信</p>
+          </div>
+          <div class="tx_login_w tx_login_r">
+            <img src="@/assets/img/login/pg_login_qq.png" alt>
+            <p>QQ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapActions } from "vuex";
+import { Toast } from 'vant';
+export default {
+  name: "login",
+  data() {
+    return {
+      phone: null,
+      psw: null
+    };
+  },
+  components:{Toast},
+  methods: {
+    ...mapActions(["ChangeStatus"]),
+    validPhone() {
+      let reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+      if (this.phone === null) {
+        Toast("手机号不能为空");
+      } else if (!reg.test(this.phone)) {
+        Toast("手机号格式不正确");
+        this.phone = null
+      }
+    }
+  },
+  mounted() {
+    this.ChangeStatus(false);
+  },
+  beforeDestroy() {
+    this.ChangeStatus(true);
+  }
+};
+</script>
+
+<style scoped lang="scss">
+$Color: #ea047b;
+.pg_login {
+  background: #fff;
+  min-height: 100vh;
+  width: 100vw;
+
+  .logo {
+    display: inline-block;
+    width: 90px;
+    height: 90px;
+    margin: 90px auto 110px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+.pg_login {
+  .pgl_input {
+    padding: 0 28px;
+    .num_input {
+      margin-bottom: 24px;
+    }
+    .num_input,
+    .mima_input {
+      padding-bottom: 12px;
+      padding-left: 14px;
+
+      img {
+        width: 13px;
+        height: 20px;
+      }
+      input {
+        margin-left: 13px;
+        width: 88%;
+      }
+      .mima_img {
+        width: 15px;
+        height: 19px;
+      }
+    }
+    .tips {
+      font-size: 12px;
+      margin-top: 13px;
+      overflow: hidden;
+      padding-top: 1px;
+      a {
+        color: $Color;
+      }
+      span {
+        float: right;
+        color: #666;
+      }
+    }
+    .btn {
+      background: $Color;
+      color: #fff;
+      font-size: 16px;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      border-radius: 22px;
+      margin-top: 22px;
+    }
+    .wx_login {
+      .title {
+        margin: 33px 0 25px;
+        text-align: center;
+        color: #999;
+        font-size: 13px;
+      }
+      .tx_login {
+        text-align: center;
+
+        .tx_login_w {
+          width: 40px;
+          text-align: center;
+          display: inline-block;
+          img {
+            width: 40px;
+            height: 40px;
+          }
+          p {
+            margin-top: 9px;
+          }
+        }
+        .tx_login_r {
+          margin-left: 49px;
+        }
+      }
+    }
+  }
+}
+</style>
