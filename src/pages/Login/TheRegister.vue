@@ -31,7 +31,7 @@
 <script>
 import { mapActions } from "vuex";
 import { Toast } from "vant";
-import { setInterval } from "timers";
+
 export default {
   name: "register",
   data() {
@@ -44,7 +44,6 @@ export default {
       time: 5
     };
   },
-  components: { Toast },
   methods: {
     ...mapActions(["ChangeStatus"]),
     validPhone() {
@@ -58,7 +57,6 @@ export default {
     },
     validMsn() {},
     getCode() {
-      let That = this;
       if (this.isClick) {
         this.isClick = false;
         this.countDown();

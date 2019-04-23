@@ -43,7 +43,6 @@ export default {
       psw: null
     };
   },
-  components:{Toast},
   methods: {
     ...mapActions(["ChangeStatus"]),
     validPhone() {
