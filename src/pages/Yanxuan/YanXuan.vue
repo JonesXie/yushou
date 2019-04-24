@@ -74,6 +74,7 @@ export default {
 
 <style scoped lang="scss">
 .pg_yanxuan {
+  overflow:hidden;
   .swiper {
     width: 100vw;
     height: 350px;
@@ -83,6 +84,7 @@ export default {
     background-position: top center;
     padding-top: 15px;
     box-sizing: border-box;
+    overflow:hidden;
     & /deep/ .swiper-slide-active {
       .swipe_li {
         .sl_active {
@@ -154,7 +156,7 @@ export default {
       width: 100vw;
     }
     .pg_list_tuijian {
-      width: calc(100vw - 14px);
+      width: calc(100vw - 20px);
       margin: 0 auto;
     }
   }

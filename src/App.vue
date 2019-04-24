@@ -15,6 +15,9 @@ export default {
   },
   watch: {
     "$store.state.isBar.showBar": function() {}
+  },
+  mounted () {
+    document.documentElement.style.background = "#f4f4f4"
   }
 };
 </script>
