@@ -65,7 +65,7 @@
         <div class="fenlei" v-if="FLImg !==null">
           <div class="fl_li" v-for="(v,i) in FLImg.dataList" :key="i">
             <img :src="v.subjectTitleImage" alt>
-            <p :class="['fl_li_p' ,`fl_li_p${i}`]">{{v.subjectTitle}}</p>
+            <p :class="['fl_li_p' ,'fl_li_p'+i]">{{v.subjectTitle}}</p>
             <div class="dec">
               <p>{{v.subjectName}}</p>
               <p>{{v.codeName}}</p>
@@ -229,94 +229,6 @@
           </div>
         </div>
       </div>
-      <div class="if_shuma if_meizhuang">
-        <div class="title">
-          <img src="@/assets/img/index/pg_index_first_sm.png" alt>
-        </div>
-        <div class="ifmz_list" v-if="SjData !==null">
-          <!-- 1-->
-          <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
-              <p class="ifmz_li_h">{{SjData[0].brandName}}</p>
-              <p class="ifmz_li_title">{{SjData[0].sign}}</p>
-              <div class="img_two">
-                <div>
-                  <img :src="SjData[0].brandProductMainImage" alt class="img00">
-                </div>
-                <div>
-                  <img :src="SjData[0].brandProductViceImage" alt class="img01">
-                </div>
-              </div>
-            </div>
-            <div class="ifmz_li">
-              <p class="ifmz_li_h">{{SjData[1].brandName}}</p>
-              <p class="ifmz_li_title">{{SjData[1].sign}}</p>
-              <div class="img_two">
-                <div>
-                  <img :src="SjData[1].brandProductMainImage" alt class="img01">
-                </div>
-                <div>
-                  <img :src="SjData[1].brandProductViceImage" alt class="img00">
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 2-->
-          <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
-              <p class="ifmz_li_h">{{SjData[2].brandName}}</p>
-              <p class="ifmz_li_title">{{SjData[2].sign}}</p>
-              <div class="img_two">
-                <div>
-                  <img :src="SjData[2].brandProductMainImage" alt class="img00">
-                </div>
-                <div>
-                  <img :src="SjData[2].brandProductViceImage" alt class="img00">
-                </div>
-              </div>
-            </div>
-            <div class="ifmz_li">
-              <p class="ifmz_li_h">{{SjData[3].brandName}}</p>
-              <p class="ifmz_li_title">{{SjData[3].sign}}</p>
-              <div class="img_two">
-                <div>
-                  <img :src="SjData[3].brandProductMainImage" alt class="img00">
-                </div>
-                <div>
-                  <img :src="SjData[3].brandProductViceImage" alt class="img00">
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 3-->
-          <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
-              <p class="ifmz_li_h">{{SjData[4].brandName}}</p>
-              <p class="ifmz_li_title">{{SjData[4].sign}}</p>
-              <div class="img_two">
-                <div>
-                  <img :src="SjData[4].brandProductMainImage" alt class="img00">
-                </div>
-                <div>
-                  <img :src="SjData[4].brandProductViceImage" alt class="img00">
-                </div>
-              </div>
-            </div>
-            <div class="ifmz_li">
-              <p class="ifmz_li_h">{{SjData[5].brandName}}</p>
-              <p class="ifmz_li_title">{{SjData[5].sign}}</p>
-              <div class="img_two">
-                <div>
-                  <img :src="SjData[5].brandProductMainImage" alt class="img00">
-                </div>
-                <div>
-                  <img :src="SjData[5].brandProductViceImage" alt class="img00">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <first-list></first-list>
     </van-pull-refresh>
   </div>
@@ -332,7 +244,7 @@ import {
 import { Swipe, SwipeItem, PullRefresh } from "vant";
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
-import FirstList from "./FirstList";
+import FirstList from "./FirstList.vue";
 
 export default {
   name: "IndexFirst",

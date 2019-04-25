@@ -1,6 +1,6 @@
 <template>
   <div class="pg_noticedetail">
-    <van-nav-bar title="消息中心" left-arrow :fixed="true" @click-left="$router.back(-1)"></van-nav-bar>
+    <van-nav-bar title="消息中心" left-arrow :fixed="true" @click-left="GoBack()"></van-nav-bar>
     <ul class="pgnd_ul">
       <li class="pgnd_li">
         <p class="title">订单付款成功</p>
@@ -30,7 +30,10 @@ export default {
   },
   components: { [NavBar.name]: NavBar },
   methods: {
-    ...mapActions(["ChangeStatus"])
+    ...mapActions(["ChangeStatus"]),
+    GoBack(){
+      this.$router.back(-1)
+    }
   },
   mounted() {
     this.ChangeStatus(false);

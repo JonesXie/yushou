@@ -1,10 +1,10 @@
 <template>
-  <div class="mod_waterfall" :style="{'min-height':parentHeight+'rem'}">
+  <div class="mod_waterfall" :style="{minHeight:parentHeight+'rem'}">
     <div
       class="fall_item"
       v-for="(item,index) in list"
       :key="item.id"
-      :style="{'left': item.left, 'top': item.top +'rem' }"
+      :style="{left: item.left,top: item.top +'rem'}"
       ref="col"
     >
       <div class="mw_li">

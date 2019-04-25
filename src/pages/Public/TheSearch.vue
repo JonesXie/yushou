@@ -1,6 +1,6 @@
 <template>
   <div class="pg_search">
-    <van-nav-bar left-arrow :fixed="true" @click-left="$router.back(-1)">
+    <van-nav-bar left-arrow :fixed="true" @click-left="GoBack()">
       <!-- <van-search placeholder="请输入要搜索的商品" background="#f4f4f4" slot="title" v-focus/> -->
       <div class="pgs_wrap_input" slot="title">
         <van-icon name="search" class="search_icon" />
@@ -48,6 +48,9 @@ export default {
     ...mapActions(["ChangeStatus"]),
     turnPage() {
       this.$router.push("/");
+    },
+    GoBack(){
+      this.$router.back(-1)
     }
   },
   mounted() {
