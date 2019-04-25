@@ -1,6 +1,6 @@
 <template>
   <div class="get_coupon">
-    <van-nav-bar title="领取优惠券" left-arrow :fixed="true" @click-left="$router.back(-1)"></van-nav-bar>
+    <van-nav-bar title="领取优惠券" left-arrow :fixed="true" @click-left="GoBack()"></van-nav-bar>
     <ul class="gc_ul">
       <li v-for="i in 4" :key="i">
         <div class="gc_li_l">
@@ -31,7 +31,10 @@ export default {
   },
   components: { [NavBar.name]: NavBar },
   methods: {
-    ...mapActions(["ChangeStatus"])
+    ...mapActions(["ChangeStatus"]),
+    GoBack(){
+      this.$router.back(-1)
+    }
   },
   mounted() {
     this.ChangeStatus(false);

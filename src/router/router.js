@@ -95,6 +95,20 @@ const RouterMap = [{
       require(['@/pages/Components/TheWallet.vue'], resolve);
     }
   },
+  {
+    path: '/walletdetail',
+    name: 'walletdetail',
+    component: resolve => {
+      require(['@/pages/Components/WalletDetail.vue'], resolve);
+    }
+  },
+  {
+    path: '/mysite',
+    name: 'mysite',
+    component: resolve => {
+      require(['@/pages/Components/MySite.vue'], resolve);
+    }
+  },
 
   // 设置404页面
   {

@@ -84,8 +84,8 @@
       </ul>
     </div>
     <van-cell-group class="pgc_link">
-      <van-cell title="我的挂卖" is-link/>
-      <van-cell title="我的地址" is-link/>
+      <van-cell title="我的挂卖" is-link to="/"/>
+      <van-cell title="我的地址" is-link to="/mysite"/>
     </van-cell-group>
     <div class="pgc_utils pgc_order">
       <div class="pgco_h">
