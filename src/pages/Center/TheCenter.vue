@@ -21,7 +21,7 @@
             <div class="ic_btn">{{userName}}</div>
             <van-row class="ic_row">
               <van-col span="8">
-                <router-link to="/">
+                <router-link to="/wallet">
                   <p class="ic_row_p" style="color:#e50404">
                     <span>{{money}}</span>元
                   </p>

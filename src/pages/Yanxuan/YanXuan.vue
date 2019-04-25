@@ -2,7 +2,7 @@
   <div class="pg_yanxuan">
     <swiper :options="swiperOption" ref="mySwiper" class="swiper">
       <swiper-slide v-for="(v,i) in img" :key="i" class="swipItem">
-        <div class="swipe_li">
+        <router-link to="/yanxuanlist" class="swipe_li">
           <img :src="v" alt class="sl_bg">
           <div class="sl_active">
             <img src="@/assets/img/yanxuan/pg_yanxuan_active.png" alt>
@@ -10,7 +10,7 @@
             <p class="title">保持敬畏</p>
             <p class="slogan">追求创新，追求自我突破，黑科技</p>
           </div>
-        </div>
+        </router-link>
       </swiper-slide>
     </swiper>
     <div class="pg_list">
@@ -74,7 +74,7 @@ export default {
 
 <style scoped lang="scss">
 .pg_yanxuan {
-  overflow:hidden;
+  overflow: hidden;
   .swiper {
     width: 100vw;
     height: 350px;
@@ -84,7 +84,7 @@ export default {
     background-position: top center;
     padding-top: 15px;
     box-sizing: border-box;
-    overflow:hidden;
+    overflow: hidden;
     & /deep/ .swiper-slide-active {
       .swipe_li {
         .sl_active {

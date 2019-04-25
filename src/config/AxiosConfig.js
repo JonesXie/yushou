@@ -8,10 +8,14 @@ const service = axios.create({
   // withCredentials: true, //表示跨域请求时是否需要使用凭证，默认为false
   timeout: 5000, // 请求时长
 })
-
+Toast.allowMultiple()
 // 请求拦截
 service.interceptors.request.use((config) => {
-
+  Toast.loading({
+    duration: 0,       // 持续展示 toast
+    forbidClick: true, // 禁用背景点击
+    loadingType: 'spinner',
+  });
   return config
 }, (error) => {
   // eslint-disable-next-line no-console
@@ -21,6 +25,7 @@ service.interceptors.request.use((config) => {
 // 响应拦截
 service.interceptors.response.use(
   response => {
+    Toast.clear();
     if (response.data.code === 1) {
       //成功 1
       return response;
@@ -38,6 +43,7 @@ service.interceptors.response.use(
   },
   error => {
     // eslint-disable-next-line no-console
+    Toast.clear()
     Toast(error);
   })
 

@@ -38,8 +38,8 @@
 </template>
 <script>
 import { Tab, Tabs } from "vant";
-import IndexFirst from "../components/IndexFirst.vue";
-import IndexSecond from "../components/IndexSecond.vue";
+import IndexFirst from "../Components/IndexFirst.vue";
+import IndexSecond from "../Components/IndexSecond.vue";
 import {mapActions} from "vuex"
 export default {
   data() {

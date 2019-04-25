@@ -1,6 +1,6 @@
 <template>
   <div class="pg_notice">
-    <van-nav-bar title="消息中心" left-arrow :fixed="true" @click-left="$router.back(-1)"></van-nav-bar>
+    <van-nav-bar title="消息中心" left-arrow :fixed="true" @click-left="GoBack()"></van-nav-bar>
     <ul class="pgn_ul">
       <li class="pgn_li">
         <div class="pgn_li_l">
@@ -40,7 +40,10 @@ export default {
   },
   components: { [NavBar.name]: NavBar },
   methods: {
-    ...mapActions(["ChangeStatus"])
+    ...mapActions(["ChangeStatus"]),
+    GoBack(){
+      this.$router.back(-1)
+    }
   },
   mounted() {
     this.ChangeStatus(false);

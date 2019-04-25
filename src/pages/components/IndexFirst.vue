@@ -19,8 +19,8 @@
           </li>
           <li>
             <router-link to="/getcoupon" class="iaf_wrap">
-                  <img src="@/assets/img/index/pg_index_first_lq.png" alt>
-                  <p>领券优惠</p>
+              <img src="@/assets/img/index/pg_index_first_lq.png" alt>
+              <p>领券优惠</p>
             </router-link>
           </li>
           <li>
@@ -607,19 +607,19 @@ export default {
         background-size: 100% 100%;
       }
       .fl_li_p1 {
-              background: url("~@/assets/img/index/pg_index_first_p1.png");
+        background: url("~@/assets/img/index/pg_index_first_p1.png");
         background-repeat: no-repeat;
         background-position: top left;
         background-size: 100% 100%;
       }
       .fl_li_p2 {
-               background: url("~@/assets/img/index/pg_index_first_p2.png");
+        background: url("~@/assets/img/index/pg_index_first_p2.png");
         background-repeat: no-repeat;
         background-position: top left;
         background-size: 100% 100%;
       }
       .fl_li_p3 {
-                background: url("~@/assets/img/index/pg_index_first_p3.png");
+        background: url("~@/assets/img/index/pg_index_first_p3.png");
         background-repeat: no-repeat;
         background-position: top left;
         background-size: 100% 100%;

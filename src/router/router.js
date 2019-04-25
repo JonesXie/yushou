@@ -66,6 +66,13 @@ const RouterMap = [{
       require(['@/pages/Yanxuan/YanXuan.vue'], resolve);
     }
   },
+  {
+    path: '/yanxuanlist',
+    name: 'yanxuanlist',
+    component: resolve => {
+      require(['@/pages/Yanxuan/YanxuanList.vue'], resolve);
+    }
+  },
   //分类
   {
     path: "/thetype",
@@ -79,6 +86,13 @@ const RouterMap = [{
     name: 'center',
     component: resolve => {
       require(['@/pages/Center/TheCenter.vue'], resolve);
+    }
+  },
+  {
+    path: '/wallet',
+    name: 'wallet',
+    component: resolve => {
+      require(['@/pages/Components/TheWallet.vue'], resolve);
     }
   },
 
