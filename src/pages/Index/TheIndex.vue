@@ -63,7 +63,7 @@ export default {
     //顶部菜单固定
     this.$nextTick(() => {
       let rate = document.documentElement.style.fontSize.split("px")[0];
-      this.stickTop = Number((rate * 1.06667).toFixed(0));
+      this.stickTop = Number((rate * 1.22667).toFixed(0));
     });
   }
 };
@@ -74,11 +74,11 @@ $Color: #fa399d;
 .pg_index {
   .pi_h {
     width: 100vw;
-    height: 40px;
+    height: 46px;
     background: $Color;
     overflow: hidden;
     box-sizing: border-box;
-    padding-top: 6px;
+    padding-top: 10px;
     position: fixed;
     z-index: 10;
 
@@ -109,7 +109,6 @@ $Color: #fa399d;
       width: 23px;
       height: 23px;
       margin-left: 10px;
-      margin-top: 3px;
     }
     img:last-child {
       margin-left: 0;
@@ -117,7 +116,7 @@ $Color: #fa399d;
   }
 
   .pi_list {
-    padding-top: 40px;
+    padding-top: 46px;
   }
 }
 </style>

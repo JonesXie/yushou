@@ -103,6 +103,13 @@ const RouterMap = [{
     }
   },
   {
+    path: '/mysales',
+    name: 'mysales',
+    component: resolve => {
+      require(['@/pages/Center/MySales.vue'], resolve);
+    }
+  },
+  {
     path: '/mysite',
     name: 'mysite',
     component: resolve => {
