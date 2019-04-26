@@ -109,6 +109,13 @@ const RouterMap = [{
       require(['@/pages/Components/MySite.vue'], resolve);
     }
   },
+  {
+    path: '/myorder',
+    name: 'myorder',
+    component: resolve => {
+      require(['@/pages/Components/MyOrder.vue'], resolve);
+    }
+  },
 
   // 设置404页面
   {

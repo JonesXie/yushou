@@ -1,67 +1,51 @@
 <template>
-  <div class="pg_wd">
-    <van-nav-bar title="交易明细" left-arrow :fixed="true" @click-left="GoBack()"></van-nav-bar>
-    <ul class="pgwd_ul">
-      <li :class="['pgwd_li', out?'out':'get']">
-        <div class="top">
-          <p>订单编号：657402501244664633</p>
-          <span>￥165</span>
-        </div>
-        <div class="bottom">
-          <span>2018-03-31 12:45:36</span>
-          <p>[消费]</p>
-        </div>
-      </li>
-      <li :class="['pgwd_li', out?'get':'out']">
-        <div class="top">
-          <p>订单编号：657402501244664633</p>
-          <span>￥165</span>
-        </div>
-        <div class="bottom">
-          <span>2018-03-31 12:45:36</span>
-          <p>[收益]</p>
-        </div>
-      </li>
-    </ul>
-  </div>
+  <HeadFoot class="pg_wd" :Title="title">
+    <template #content>
+      <ul class="pgwd_ul">
+        <li :class="['pgwd_li', out?'out':'get']">
+          <div class="top">
+            <p>订单编号：657402501244664633</p>
+            <span>￥165</span>
+          </div>
+          <div class="bottom">
+            <span>2018-03-31 12:45:36</span>
+            <p>[消费]</p>
+          </div>
+        </li>
+        <li :class="['pgwd_li', out?'get':'out']">
+          <div class="top">
+            <p>订单编号：657402501244664633</p>
+            <span>￥165</span>
+          </div>
+          <div class="bottom">
+            <span>2018-03-31 12:45:36</span>
+            <p>[收益]</p>
+          </div>
+        </li>
+      </ul>
+    </template>
+  </HeadFoot>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import { NavBar } from "vant";
+import HeadFoot from "@/pages/Public/HeadFoot.vue";
 export default {
   name: "WalletDetail",
   data() {
     return {
-      out:true,
+      title: "交易明细",
+      out: true
     };
   },
-  components: { [NavBar.name]: NavBar },
-  methods: {
-    ...mapActions(["ChangeStatus"]),
-    GoBack() {
-      this.$router.back(-1);
-    }
-  },
-  mounted() {
-    this.ChangeStatus(false);
-  },
-  beforeDestroy() {
-    this.ChangeStatus(true);
-  }
+  components: { HeadFoot },
+  methods: {},
+  mounted() {}
 };
 </script>
 
 <style scoped lang="scss">
 $Color: #ea047b;
 .pg_wd {
-  width: 100vw;
-  min-width: 100vh;
-  .van-nav-bar {
-    .van-icon {
-      color: #333;
-    }
-  }
   .pgwd_ul {
     width: 100vw;
     padding-top: 46px;

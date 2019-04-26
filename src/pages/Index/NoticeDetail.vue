@@ -1,60 +1,42 @@
 <template>
-  <div class="pg_noticedetail">
-    <van-nav-bar title="消息中心" left-arrow :fixed="true" @click-left="GoBack()"></van-nav-bar>
-    <ul class="pgnd_ul">
-      <li class="pgnd_li">
-        <p class="title">订单付款成功</p>
-        <p
-          class="content"
-        >亲爱的兽友，感谢您成功预定Lanvin浪凡marry me我愿意女士香水 嫁给我 ，小兽这边会尽快安排发货，亲也可以把订单转卖进行收益，感谢对小兽的信任，更多优惠请关注预兽APP。</p>
-        <p class="footer">2019-01-24&nbsp;&nbsp;17:32:41</p>
-      </li>
-      <li class="pgnd_li">
-        <p class="title">订单付款成功</p>
-        <p
-          class="content"
-        >亲爱的兽友，感谢您成功预定Lanvin浪凡marry me我愿意女士香水 嫁给我 ，小兽这边会尽快安排发货，亲也可以把订单转卖进行收益，感谢对小兽的信任，更多优惠请关注预兽APP。</p>
-        <p class="footer">2019-01-24&nbsp;&nbsp;17:32:41</p>
-      </li>
-    </ul>
-  </div>
+  <HeadFoot class="pg_noticedetail" :Title="title">
+    <template #content>
+      <ul class="pgnd_ul">
+        <li class="pgnd_li">
+          <p class="title">订单付款成功</p>
+          <p
+            class="content"
+          >亲爱的兽友，感谢您成功预定Lanvin浪凡marry me我愿意女士香水 嫁给我 ，小兽这边会尽快安排发货，亲也可以把订单转卖进行收益，感谢对小兽的信任，更多优惠请关注预兽APP。</p>
+          <p class="footer">2019-01-24&nbsp;&nbsp;17:32:41</p>
+        </li>
+        <li class="pgnd_li">
+          <p class="title">订单付款成功</p>
+          <p
+            class="content"
+          >亲爱的兽友，感谢您成功预定Lanvin浪凡marry me我愿意女士香水 嫁给我 ，小兽这边会尽快安排发货，亲也可以把订单转卖进行收益，感谢对小兽的信任，更多优惠请关注预兽APP。</p>
+          <p class="footer">2019-01-24&nbsp;&nbsp;17:32:41</p>
+        </li>
+      </ul>
+    </template>
+  </HeadFoot>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import { NavBar } from "vant";
+import HeadFoot from "@/pages/Public/HeadFoot.vue";
 export default {
   name: "NoticeDetail",
   data() {
-    return {};
+    return {
+      title: "消息中心"
+    };
   },
-  components: { [NavBar.name]: NavBar },
-  methods: {
-    ...mapActions(["ChangeStatus"]),
-    GoBack(){
-      this.$router.back(-1)
-    }
-  },
-  mounted() {
-    this.ChangeStatus(false);
-  },
-  beforeDestroy() {
-    this.ChangeStatus(true);
-  }
+  components: { HeadFoot },
+  methods: {},
+  mounted() {}
 };
 </script>
 
 <style scoped lang='scss'>
-/* @import url(); */
-.pg_noticedetail {
-  width: 100vw;
-  min-width: 100vh;
-  .van-nav-bar {
-    .van-icon {
-      color: #333;
-    }
-  }
-}
 .pg_noticedetail {
   padding-top: 46px;
   .pgnd_ul {

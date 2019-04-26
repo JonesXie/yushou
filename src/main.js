@@ -4,9 +4,10 @@ import 'amfe-flexible'; //引入rem自适应
 import router from '@/config/RouterConfig.js' //引入路由配置
 import store from '@/store/store.js' //引入路由配置
 import '@/assets/css/reset.css' //引入重置浏览器样式
-
+import { Toast } from 'vant'; //全局引入提示
 Vue.config.productionTip = false
 
+Vue.use(Toast)
 
 new Vue({
   router,

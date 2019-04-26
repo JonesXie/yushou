@@ -1,47 +1,39 @@
 <template>
-  <div class="get_coupon">
-    <van-nav-bar title="领取优惠券" left-arrow :fixed="true" @click-left="GoBack()"></van-nav-bar>
-    <ul class="gc_ul">
-      <li v-for="i in 4" :key="i">
-        <div class="gc_li_l">
-          <div class="gc_li_l_l">
-            ￥
-            <span>50</span>
+  <HeadFoot class="get_coupon" :Title="title">
+    <template #content>
+      <ul class="gc_ul">
+        <li v-for="i in 4" :key="i">
+          <div class="gc_li_l">
+            <div class="gc_li_l_l">
+              ￥
+              <span>50</span>
+            </div>
+            <div class="gc_li_l_r">
+              <p>适用品类：箱包满200可用</p>
+              <p>使用时间：自领取日十天内有效</p>
+            </div>
           </div>
-          <div class="gc_li_l_r">
-            <p>适用品类：箱包满200可用</p>
-            <p>使用时间：自领取日十天内有效</p>
+          <div class="gc_li_r">
+            <p>点击领取</p>
           </div>
-        </div>
-        <div class="gc_li_r">
-          <p>点击领取</p>
-        </div>
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </template>
+  </HeadFoot>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import { NavBar } from "vant";
+import HeadFoot from "@/pages/Public/HeadFoot.vue";
 export default {
   name: "GetCoupon",
   data() {
-    return {};
+    return {
+      title: "领取优惠券"
+    };
   },
-  components: { [NavBar.name]: NavBar },
-  methods: {
-    ...mapActions(["ChangeStatus"]),
-    GoBack(){
-      this.$router.back(-1)
-    }
-  },
-  mounted() {
-    this.ChangeStatus(false);
-  },
-  beforeDestroy() {
-    this.ChangeStatus(true);
-  }
+  components: { HeadFoot },
+  methods: {},
+  mounted() {}
 };
 </script>
 
