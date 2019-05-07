@@ -92,14 +92,14 @@ const RouterMap = [{
     path: '/wallet',
     name: 'wallet',
     component: resolve => {
-      require(['@/pages/Components/TheWallet.vue'], resolve);
+      require(['@/pages/Wallet/TheWallet.vue'], resolve);
     }
   },
   {
     path: '/walletdetail',
     name: 'walletdetail',
     component: resolve => {
-      require(['@/pages/Components/WalletDetail.vue'], resolve);
+      require(['@/pages/Wallet/WalletDetail.vue'], resolve);
     }
   },
   {
@@ -113,14 +113,14 @@ const RouterMap = [{
     path: '/mysite',
     name: 'mysite',
     component: resolve => {
-      require(['@/pages/Components/MySite.vue'], resolve);
+      require(['@/pages/Site/MySite.vue'], resolve);
     }
   },
   {
     path: '/myorder',
     name: 'myorder',
     component: resolve => {
-      require(['@/pages/Components/MyOrder.vue'], resolve);
+      require(['@/pages/Order/MyOrder.vue'], resolve);
     }
   },
 
