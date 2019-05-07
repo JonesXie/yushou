@@ -15,12 +15,24 @@
           :offset-top="stickTop"
           :ellipsis="false"
         >
-          <van-tab title="全部订单">内容1</van-tab>
-          <van-tab title="待付款">内容2</van-tab>
-          <van-tab title="调货中">内容 3</van-tab>
-          <van-tab title="待发货">内容 4</van-tab>
-          <van-tab title="待收货">内容 4</van-tab>
-          <van-tab title="交易成功">内容 4</van-tab>
+          <van-tab title="全部订单">
+            <order-list status="0"></order-list>
+          </van-tab>
+          <van-tab title="待付款">
+            <order-list status="1"></order-list>
+          </van-tab>
+          <van-tab title="调货中">
+            <order-list status="2"></order-list>
+          </van-tab>
+          <van-tab title="待发货">
+            <order-list status="2"></order-list>
+          </van-tab>
+          <van-tab title="待收货">
+            <order-list status="0"></order-list>
+          </van-tab>
+          <van-tab title="交易成功">
+            <order-list status="0"></order-list>
+          </van-tab>
         </van-tabs>
       </div>
     </template>
@@ -28,6 +40,7 @@
 </template>
 
 <script>
+import OrderList from "./OrderList";
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Tab, Tabs } from "vant";
 export default {
@@ -36,11 +49,11 @@ export default {
     return {
       title: "我的订单",
       actived: 0,
-      stickTop:0,
-      lineWidth:60
+      stickTop: 0,
+      lineWidth: 60
     };
   },
-  components: { HeadFoot, [Tab.name]: Tab, [Tabs.name]: Tabs },
+  components: { HeadFoot, [Tab.name]: Tab, [Tabs.name]: Tabs, OrderList },
   methods: {},
   mounted() {
     if (this.$route.query.active !== undefined) {

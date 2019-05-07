@@ -22,6 +22,7 @@ export default {
 };
 </script>
 <style lang='scss'>
+$Color: #ea047b;
 #app {
   width: 100vw;
   min-height: 100vh;

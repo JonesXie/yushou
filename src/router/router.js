@@ -3,7 +3,9 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const RouterMap = [{
+const RouterMap = [
+  //首页跳转
+  {
     path: '/',
     redirect: '/index'
   },
@@ -11,125 +13,100 @@ const RouterMap = [{
   {
     path: '/login',
     name: 'login',
-    component: resolve => {
-      require(['@/pages/Login/TheLogin.vue'], resolve);
-    }
+    component: () => import('@/pages/Login/TheLogin.vue')
   },
   {
     path: '/register',
     name: 'register',
-    component: resolve => {
-      require(['@/pages/Login/TheRegister.vue'], resolve);
-    }
+    component: () => import('@/pages/Login/TheRegister.vue')
   },
   //index
   {
     path: '/index',
     name: 'index',
-    component: resolve => {
-      require(['@/pages/Index/TheIndex.vue'], resolve);
-    }
+    component: () => import('@/pages/Index/TheIndex.vue')
   },
   {
     path: '/getcoupon',
     name: 'getcoupon',
-    component: resolve => {
-      require(['@/pages/Index/GetCoupon.vue'], resolve);
-    }
+    component: () => import('@/pages/Index/GetCoupon.vue')
   },
   {
     path: '/thesearch',
     name: 'thesearch',
-    component: resolve => {
-      require(['@/pages/Public/TheSearch.vue'], resolve);
-    }
+    component: () => import('@/pages/Public/TheSearch.vue')
   },
   {
     path: '/thenotices',
     name: 'thenotices',
-    component: resolve => {
-      require(['@/pages/Index/TheNotices.vue'], resolve);
-    }
+    component: () => import('@/pages/Index/TheNotices.vue')
   },
   {
     path: '/noticedetail',
     name: 'noticedetail',
-    component: resolve => {
-      require(['@/pages/Index/NoticeDetail.vue'], resolve);
-    }
+    component: () => import('@/pages/Index/NoticeDetail.vue')
   },
   //严选
   {
     path: '/yanxuan',
     name: 'yanxuan',
-    component: resolve => {
-      require(['@/pages/Yanxuan/YanXuan.vue'], resolve);
-    }
+    component: () => import('@/pages/Yanxuan/YanXuan.vue')
   },
   {
     path: '/yanxuanlist',
     name: 'yanxuanlist',
-    component: resolve => {
-      require(['@/pages/Yanxuan/YanxuanList.vue'], resolve);
-    }
+    component: () => import('@/pages/Yanxuan/YanxuanList.vue')
   },
   //分类
   {
     path: "/thetype",
-    component: resolve => {
-      require(['@/pages/Type/TheType.vue'], resolve);
-    }
+    component: () => import('@/pages/Type/TheType.vue')
   },
   //我的
   {
     path: '/center',
     name: 'center',
-    component: resolve => {
-      require(['@/pages/Center/TheCenter.vue'], resolve);
-    }
+    component: () => import('@/pages/Center/TheCenter.vue')
   },
   {
     path: '/wallet',
     name: 'wallet',
-    component: resolve => {
-      require(['@/pages/Wallet/TheWallet.vue'], resolve);
-    }
+    component: () => import('@/pages/Wallet/TheWallet.vue')
   },
   {
     path: '/walletdetail',
     name: 'walletdetail',
-    component: resolve => {
-      require(['@/pages/Wallet/WalletDetail.vue'], resolve);
-    }
+    component: () => import('@/pages/Wallet/WalletDetail.vue')
   },
   {
     path: '/mysales',
     name: 'mysales',
-    component: resolve => {
-      require(['@/pages/Center/MySales.vue'], resolve);
-    }
+    component: () => import('@/pages/Center/MySales.vue')
   },
   {
     path: '/mysite',
     name: 'mysite',
-    component: resolve => {
-      require(['@/pages/Site/MySite.vue'], resolve);
-    }
+    component: () => import('@/pages/Site/MySite.vue')
   },
   {
     path: '/myorder',
     name: 'myorder',
-    component: resolve => {
-      require(['@/pages/Order/MyOrder.vue'], resolve);
-    }
+    component: () => import('@/pages/Order/MyOrder.vue')
   },
-
+  {
+    path: '/orderdetail',
+    name: 'orderdetail',
+    component: () => import('@/pages/Order/OrderDetail.vue')
+  },
+  {
+    path: '/logistics',
+    name: 'logistics',
+    component: () => import('@/pages/Order/TheLogistics.vue')
+  },
   // 设置404页面
   {
     path: '/404',
-    component: resolve => {
-      require(['@/pages/404/404.vue'], resolve);
-    }
+    component: () => import('@/pages/404/404.vue')
   },
   {
     path: '*',

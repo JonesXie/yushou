@@ -1,7 +1,7 @@
 <template>
-  <HeadFoot class="" :Title="title">
+  <HeadFoot class="pg_orderdetail" :Title="title">
     <template #content>
-      <!-- do somethings -->
+      <div class="pgod_h">hhhh</div>
     </template>
   </HeadFoot>
 </template>
@@ -9,10 +9,10 @@
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 export default {
-  name: "",
+  name: "OrderDetail",
   data() {
     return {
-      title: ""
+      title: "订单详情"
     };
   },
   components: { HeadFoot },
