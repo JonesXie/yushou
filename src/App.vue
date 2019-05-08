@@ -16,8 +16,15 @@ export default {
   watch: {
     "$store.state.isBar.showBar": function() {}
   },
-  mounted () {
-    document.documentElement.style.background = "#f4f4f4"
+  mounted() {
+    this.$nextTick(() => {
+      //全局颜色
+      document.documentElement.style.background = "#f4f4f4";
+      //顶部菜单固定
+      let rate = document.documentElement.style.fontSize.split("px")[0];
+      let stickTop = Number((rate * 1.22667).toFixed(0));
+      this.$store.dispatch('ChangeStickTop',stickTop)
+    });
   }
 };
 </script>

@@ -46,7 +46,6 @@ export default {
     return {
       active: 0,
       id: "123",
-      stickTop: 0
     };
   },
   components: {
@@ -55,16 +54,16 @@ export default {
     [Tab.name]: Tab,
     [Tabs.name]: Tabs
   },
+  computed: {
+    stickTop: function() {
+      return this.$store.state.stickTop;
+    },
+  },
   methods:{
     ...mapActions(['ChangeActive'])
   },
   mounted() {
     this.ChangeActive(0)
-    //顶部菜单固定
-    this.$nextTick(() => {
-      let rate = document.documentElement.style.fontSize.split("px")[0];
-      this.stickTop = Number((rate * 1.22667).toFixed(0));
-    });
   }
 };
 </script>

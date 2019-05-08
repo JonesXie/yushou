@@ -1,1 +1,94 @@
 $Color: #ea047b;
+
+//单行文本溢出
+.ellipsis-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+//两行文本溢出
+.ellipsis-two {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+//三行文本溢出
+.ellipsis-three {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+//按钮
+@mixin btn($w, $h, $type:normal, $radius:true) {
+  display: inline-block;
+  width: $w;
+  height: $h;
+  line-height: $h;
+  text-align: center;
+  color: #fff;
+
+  &:active {
+    opacity: .8;
+  }
+
+  @if $radius {
+    //是否需要边框 默认需要
+    border-radius: if($radius==true, $h/2, $radius)
+  }
+
+  @if $type==normal {
+    //默认按钮
+    background: $mainColor;
+  }
+
+  @if $type==danger {
+    //警告按钮
+
+  }
+
+  @if $type==disabled {
+    //禁用按钮
+
+  }
+}
+
+// 生成三角形
+@mixin triangle($direction, $size, $borderColor) {
+  content: "";
+  height: 0;
+  width: 0;
+
+  @if $direction==top {
+    border-bottom: $size solid $borderColor;
+    border-left: $size dashed transparent;
+    border-right: $size dashed transparent;
+  }
+
+  @else if $direction==right {
+    border-left: $size solid $borderColor;
+    border-top: $size dashed transparent;
+    border-bottom: $size dashed transparent;
+  }
+
+  @else if $direction==bottom {
+    border-top: $size solid $borderColor;
+    border-left: $size dashed transparent;
+    border-right: $size dashed transparent;
+  }
+
+  @else if $direction==left {
+    border-right: $size solid $borderColor;
+    border-top: $size dashed transparent;
+    border-bottom: $size dashed transparent;
+  }
+}
+
+//计算百分比  percentage(56 / 750)
+@function math-percent($px, $base: 750) {
+  @return ($px / $base) * 100%;
+}

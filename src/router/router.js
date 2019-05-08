@@ -98,10 +98,23 @@ const RouterMap = [
     name: 'orderdetail',
     component: () => import('@/pages/Order/OrderDetail.vue')
   },
+  //物流
   {
     path: '/logistics',
     name: 'logistics',
     component: () => import('@/pages/Order/TheLogistics.vue')
+  },
+  //商品分类
+  {
+    path: '/goodstype',
+    name: 'goodstype',
+    component: () => import('@/pages/Goods/GoodsType.vue')
+  },
+  //活动
+  {
+    path: '/actions',
+    name: 'actions',
+    component: () => import('@/pages/Components/TheActions.vue')
   },
   // 设置404页面
   {
