@@ -104,6 +104,12 @@ const RouterMap = [
     name: 'logistics',
     component: () => import('@/pages/Order/TheLogistics.vue')
   },
+  //商品
+  {
+    path: '/goods',
+    name: 'goods',
+    component: () => import('@/pages/Goods/TheGoods.vue')
+  },
   //商品分类
   {
     path: '/goodstype',

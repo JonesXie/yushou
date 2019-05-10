@@ -23,6 +23,12 @@ $Color: #ea047b;
   overflow: hidden;
 }
 
+.fl{float: left;}
+.fr{float: right;}
+.tc{text-align: center}
+.tr{text-align: right}
+
+
 //按钮
 @mixin btn($w, $h, $type:normal, $radius:true) {
   display: inline-block;
@@ -43,7 +49,7 @@ $Color: #ea047b;
 
   @if $type==normal {
     //默认按钮
-    background: $mainColor;
+    background: $Color;
   }
 
   @if $type==danger {
@@ -90,5 +96,9 @@ $Color: #ea047b;
 
 //计算百分比  percentage(56 / 750)
 @function math-percent($px, $base: 750) {
+  @return ($px / $base) * 100%;
+}
+//计算百分比  percentage(56 / 750)
+@function my-percent($px, $base) {
   @return ($px / $base) * 100%;
 }
