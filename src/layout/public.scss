@@ -23,10 +23,21 @@ $Color: #ea047b;
   overflow: hidden;
 }
 
-.fl{float: left;}
-.fr{float: right;}
-.tc{text-align: center}
-.tr{text-align: right}
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.tc {
+  text-align: center
+}
+
+.tr {
+  text-align: right
+}
 
 
 //按钮
@@ -98,6 +109,7 @@ $Color: #ea047b;
 @function math-percent($px, $base: 750) {
   @return ($px / $base) * 100%;
 }
+
 //计算百分比  percentage(56 / 750)
 @function my-percent($px, $base) {
   @return ($px / $base) * 100%;
