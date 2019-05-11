@@ -105,7 +105,25 @@
           <img src="@/assets/img/goods/pg_goods_detail.png" alt>
         </div>
       </div>
-      <div class="buy_wrap"></div>
+      <div class="buy_wrap">
+        <div class="buy_L">
+          <img src="@/assets/img/goods/pg_goods_collect.png" alt>
+          <p>收藏</p>
+        </div>
+        <div class="buy_C">
+          <div class="buy_C_wrap">
+            <img src="@/assets/img/goods/pg_goods_flash.png" alt>
+            <div class="bcw_right">
+              <p>￥2200.0</p>
+              <p>立即发货</p>
+            </div>
+          </div>
+        </div>
+        <div class="buy_R">
+          <p>￥2200.0</p>
+          <p>预售</p>
+        </div>
+      </div>
     </div>
     <div class="guamai" v-else>挂卖</div>
   </div>
@@ -196,7 +214,7 @@ export default {
     width: 100vw;
     position: relative;
     box-sizing: border-box;
-    min-height: calc( 100vh - 46px);
+    min-height: calc(100vh - 46px);
     .swipeWrap {
       width: 100vw;
       height: 375px;
@@ -429,14 +447,82 @@ export default {
       }
     }
   }
-  .buy_wrap{
+  .buy_wrap {
     position: fixed;
-    bottom: 0;
+    bottom: -1px;
     left: 0;
     width: 100vw;
-    height: 53px;
+    height: 54px;
     box-sizing: border-box;
     background: #fff;
+    display: flex;
+    &::before {
+      content: "";
+      width: 100%;
+      height: 1px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: #ddd;
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
+    }
+    .buy_L {
+      flex: my-percent(115, 375);
+      text-align: center;
+      padding-top: 8px;
+      box-sizing: border-box;
+      font-size: 12px;
+      color: #999;
+      img {
+        width: 20px;
+        height: 20px;
+        margin-bottom: 5px;
+      }
+    }
+    .buy_C {
+      flex: my-percent(130, 375);
+      background: #333;
+      font-size: 15px;
+      color: #fff;
+      text-align: center;
+      padding-top: 10px;
+      box-sizing: border-box;
+      .buy_C_wrap {
+        display: inline-block;
+        box-sizing: border-box;
+        img {
+          width: 17px;
+          height: 31px;
+          vertical-align: top;
+        }
+        .bcw_right {
+          display: inline-block;
+          margin-left: 3px;
+          p:last-child {
+            font-size: 14px;
+            margin-top: 5px;
+          }
+        }
+      }
+    }
+    .buy_R {
+      flex: my-percent(130, 375);
+      font-size: 15px;
+      background: $Color;
+      color: #fff;
+      text-align: center;
+      padding-top: 10px;
+      box-sizing: border-box;
+      p:last-child {
+        font-size: 14px;
+        margin-top: 5px;
+      }
+    }
   }
 }
 </style>
