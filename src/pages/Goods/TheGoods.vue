@@ -46,7 +46,7 @@
       </ul>
       <van-cell-group class="info">
         <van-cell title="物流" :value="logistics"/>
-        <van-cell title="服务" is-link>
+        <van-cell title="服务" is-link @click="showPower=true">
           <ul class="info_ul">
             <li>
               <img src="@/assets/img/goods/pg_goods_pei.png" alt>假一赔十
@@ -59,8 +59,8 @@
             </li>
           </ul>
         </van-cell>
-        <van-cell title="规格" is-link value="选则规格"/>
-        <van-cell title="说明" is-link :value="shuoming"/>
+        <!-- <van-cell title="规格" is-link value="选则规格" @click="showParams=true"/> -->
+        <van-cell title="说明" is-link :value="shuoming" @click="showPrice=true"/>
       </van-cell-group>
       <div class="judge">
         <div class="head">商品评价（254）</div>
@@ -106,8 +106,9 @@
         </div>
       </div>
       <div class="buy_wrap">
-        <div class="buy_L">
-          <img src="@/assets/img/goods/pg_goods_collect.png" alt>
+        <div class="buy_L" @click="changeCollect">
+          <img v-if="isCollect" src="@/assets/img/goods/pg_goods_collected.png" alt>
+          <img v-else src="@/assets/img/goods/pg_goods_collect.png" alt>
           <p>收藏</p>
         </div>
         <div class="buy_C">
@@ -119,28 +120,155 @@
             </div>
           </div>
         </div>
-        <div class="buy_R">
+        <div class="buy_R" @click="showParams=true">
           <p>￥2200.0</p>
           <p>预售</p>
         </div>
       </div>
     </div>
     <div class="guamai" v-else>挂卖</div>
+    <!-- 参数选择弹窗 -->
+    <van-actionsheet v-model="showParams" :close-on-click-overlay="false" class="params_pop">
+      <div class="params_info">
+        <van-icon name="close" class="params_close" @click="showParams=false"/>
+        <div class="img_wrap" :style="{backgroundImage:'url('+paramsImg+')'}"></div>
+        <div class="pi_right">
+          <p class="pir_price">
+            ￥
+            <span>{{currentPrice}}</span>
+          </p>
+          <span class="pir_remain">库存{{currentRemain}}件</span>
+          <p>已选：黑色；35</p>
+        </div>
+      </div>
+      <div class="params_type">
+        <div class="pt_head">尺码</div>
+        <van-radio-group v-model="result" class="pt_content">
+          <van-radio class="ptc_li" :name="0">
+            <div
+              slot="icon"
+              slot-scope="props"
+              :class="['ptc_li_item',props.checked ? 'active' : 'normal']"
+            >133</div>
+          </van-radio>
+          <van-radio class="ptc_li" :name="1">
+            <div
+              slot="icon"
+              slot-scope="props"
+              :class="['ptc_li_item',props.checked ? 'active' : 'normal']"
+            >233</div>
+          </van-radio>
+        </van-radio-group>
+      </div>
+      <div class="params_number">
+        <span>数量</span>
+        <van-stepper v-model="number" class="pn_input" :min="1"/>
+      </div>
+      <div class="params_comfirm" @click="paramsComfirm">
+       确认
+      </div>
+    </van-actionsheet>
+    <!-- 价格说明弹窗 -->
+    <van-actionsheet v-model="showPrice" :close-on-click-overlay="false" class="price_pop">
+      <div class="price_title">价格说明</div>
+      <ul class="price_ul">
+        <li>
+          <p class="price_p1">
+            <span class="price_li_dot"></span>
+            <em>首发价格</em>
+          </p>
+          <p class="price_p2">商品预销售价格，首发价格为最低价，此价格仅限首发商品</p>
+        </li>
+        <li>
+          <p class="price_p1">
+            <span class="price_li_dot"></span>
+            <em>市场原价</em>
+          </p>
+          <p class="price_p2">商品市场最低价格，由预兽官方比对价格后确认市场最低价</p>
+        </li>
+        <li>
+          <p class="price_p1">
+            <span class="price_li_dot"></span>
+            <em>收益</em>
+          </p>
+          <p class="price_p2">订单挂卖后每日固定增值，商品属性不同，每日固定增值不同，用户可自行设定挂卖折扣，挂卖订单卖出后获得的利润即为收益</p>
+        </li>
+      </ul>
+      <div class="price_close_btn" @click="showPrice=false">完成</div>
+    </van-actionsheet>
+    <!-- 权益保障弹窗 -->
+    <van-actionsheet v-model="showPower" :close-on-click-overlay="false" class="price_pop">
+      <div class="price_title">权益保障</div>
+      <ul class="price_ul">
+        <li>
+          <p class="price_p1">
+            <span class="price_li_dot"></span>
+            <em>假一赔十</em>
+          </p>
+          <p class="price_p2">预兽优选产品，百分百质量保障，若出现假货，假一赔十</p>
+        </li>
+        <li>
+          <p class="price_p1">
+            <span class="price_li_dot"></span>
+            <em>全球直采</em>
+          </p>
+          <p class="price_p2">预售的货源主要来自全球直采、品牌一级经销商等源头渠道</p>
+        </li>
+        <li>
+          <p class="price_p1">
+            <span class="price_li_dot"></span>
+            <em>售后无忧</em>
+          </p>
+          <p class="price_p2">全场免邮，质量问题免费退换</p>
+        </li>
+        <li>
+          <p class="price_p1">
+            <span class="price_li_dot"></span>
+            <em>何为预兽</em>
+          </p>
+          <p
+            class="price_p2"
+          >预兽的货源主要来自全球直采、品牌一级经销商等源头渠道。预兽为了让您购买到最具性价比的商品，我们不会预先准备库存，因此有一定的调货周期，请耐心等待。预兽只在商品首发日以极低的价格预售商品，在调货期间内买家订单可自由买卖。</p>
+        </li>
+      </ul>
+      <div class="power_close_btn" @click="showPower=false">完成</div>
+    </van-actionsheet>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
-import { NavBar, Swipe, SwipeItem, Cell, CellGroup, Rate } from "vant";
+import {
+  NavBar,
+  Swipe,
+  SwipeItem,
+  Cell,
+  CellGroup,
+  Rate,
+  Actionsheet,
+  Icon,
+  Radio,
+  RadioGroup,
+  Stepper
+} from "vant";
 export default {
   name: "TheGoods",
   data() {
     return {
       actived: true,
       current: 0,
+      isCollect: false,
       logistics: "免邮费",
       shuoming: "收益：3.0元/日",
-      myrate: 4
+      myrate: 4,
+      number: 5,
+      currentPrice: 2200,
+      currentRemain: 100,
+      result: 0,
+      showParams: false,
+      showPrice: false,
+      showPower: false,
+      paramsImg: require("@/assets/img/goods/pg_goodstype_goods.png")
     };
   },
   components: {
@@ -149,7 +277,12 @@ export default {
     [SwipeItem.name]: SwipeItem,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
-    [Rate.name]: Rate
+    [Rate.name]: Rate,
+    [Actionsheet.name]: Actionsheet,
+    [Icon.name]: Icon,
+    [Radio.name]: Radio,
+    [RadioGroup.name]: RadioGroup,
+    [Stepper.name]: Stepper
   },
   methods: {
     ...mapActions(["ChangeStatus"]),
@@ -161,6 +294,17 @@ export default {
     },
     swipeChange(index) {
       this.current = index;
+    },
+    changeCollect() {
+      if (this.isCollect) {
+        this.isCollect = false;
+      } else {
+        this.isCollect = true;
+      }
+    },
+    paramsComfirm(){
+      this.showParams = false;
+      this.$router.push({path:'/orderconfirm',query:{id:'xie'}})
     }
   },
   mounted() {
@@ -466,9 +610,7 @@ export default {
       width: 100%;
       height: 1px;
       background-color: #ddd;
-      -webkit-transform-origin: 0 0;
       transform-origin: 0 0;
-      -webkit-transform: scaleY(0.5);
       transform: scaleY(0.5);
     }
     .buy_L {
@@ -522,6 +664,172 @@ export default {
         font-size: 14px;
         margin-top: 5px;
       }
+    }
+  }
+}
+.pg_goods {
+  .price_pop {
+    background: #fff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 24px 26px 10px 26px;
+    box-sizing: border-box;
+    .price_title {
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+    }
+    .price_ul {
+      margin-top: 28px;
+      li {
+        margin-bottom: 10px;
+      }
+    }
+    .price_p1 {
+      em {
+        font-size: 13px;
+        color: #333;
+        margin-left: 7px;
+      }
+    }
+    .price_p2 {
+      font-size: 11px;
+      color: #666;
+      margin-left: 14px;
+      margin-top: 5px;
+      line-height: 18px;
+    }
+    .price_li_dot {
+      display: inline-block;
+      @include myDot(7px, $Color);
+    }
+    .price_close_btn {
+      @include btn(100%, 40px);
+      box-sizing: border-box;
+      margin-top: 100px;
+    }
+    .power_close_btn {
+      @include btn(100%, 40px);
+      box-sizing: border-box;
+      margin-top: 10px;
+    }
+  }
+}
+.pg_goods {
+  .params_pop {
+    background: #fff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 15px 15px 0 15px;
+    box-sizing: border-box;
+    .params_info {
+      display: table;
+      width: 100%;
+      box-sizing: border-box;
+      .img_wrap {
+        display: inline-block;
+        width: 90px;
+        height: 90px;
+        background-color: #f4f4f4;
+        border-radius: 5px;
+        box-sizing: border-box;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        margin-right: 18px;
+      }
+      .pi_right {
+        display: table-cell;
+        vertical-align: middle;
+        width: 69%;
+        font-size: 12px;
+        .pir_price {
+          color: $Color;
+          font-size: 12px;
+          span {
+            font-size: 16px;
+          }
+        }
+        .pir_remain {
+          display: inline-block;
+          margin: 10px 0;
+          font-size: 11px;
+          color: #999;
+        }
+      }
+      .params_close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 19px;
+        color: #ccc;
+      }
+    }
+    .pt_content {
+      margin-top: 15px;
+    }
+    .params_type {
+      margin-top: 30px;
+      width: 100%;
+      .pt_head {
+        font-size: 14px;
+        color: #333;
+      }
+      .ptc_li {
+        display: inline-block;
+        margin-bottom: 15px;
+        margin-right: 15px;
+        & /deep/ .van-radio__icon {
+          height: auto;
+        }
+      }
+      .ptc_li_item {
+        border-radius: 3px;
+        box-sizing: border-box;
+        padding: 7px 16px;
+        font-size: 12px;
+        box-sizing: border-box;
+        &.active {
+          color: #fff;
+          background-color: $Color;
+        }
+        &.normal {
+          color: #333;
+          background-color: #f5f5f5;
+        }
+      }
+    }
+    .params_number {
+      padding: 10px 0;
+      height: 30px;
+      line-height: 30px;
+      overflow: hidden;
+      position: relative;
+      &::before {
+        content: ".";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #ddd;
+      }
+      &::after {
+        content: ".";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #ddd;
+      }
+      .pn_input {
+        float: right;
+      }
+    }
+    .params_comfirm{
+      @include btn(100%,40px);
+      margin: 10px 0;
     }
   }
 }
