@@ -34,18 +34,20 @@
       </van-cell-group>
       <div class="guamai">
         <span>是否挂卖</span>
-        <van-radio-group v-model="isGuamai" checked-color="#07c160" class="guamai_radio">
-          <van-radio name="shi">1是</van-radio>
-          <van-radio name="fou">0否</van-radio>
+        <van-radio-group v-model="isGuamai" class="guamai_radio">
+          <van-radio name="1" checked-color="#ea047b">是</van-radio>
+          <van-radio name="0" checked-color="#ea047b">否</van-radio>
         </van-radio-group>
+        <van-icon name="question-o" class="guamai_tips" @click="tips=true"/>
       </div>
       <van-cell title="发货时间">
         <span>2018-04-28</span>
       </van-cell>
       <van-cell-group class="info">
         <van-cell title="优惠券" is-link value="可优惠"></van-cell>
-        <van-cell title="平台补助">
-          <span>支付宝</span>
+        <van-cell title="平台补助" clickable @click="buzhu=!buzhu">
+          <van-icon name="checked" v-if="buzhu" class="buzhu passed"/>
+          <van-icon name="circle" v-else class="buzhu"/>
         </van-cell>
         <van-cell title="邮费">
           <span>免邮</span>
@@ -66,22 +68,32 @@
       </van-cell-group>
       <div class="confirm_btn">
         <div class="confirm_btn_L">￥8274.00</div>
-        <div class="confirm_btn_R">提交订单</div>
+        <div class="confirm_btn_R" @click="submit">提交订单</div>
       </div>
+      <van-popup v-model="tips" class="tips_wrap">
+        <div class="tips_h">
+          <img class="tips_img" src="@/assets/img/order/pg_orderconfirm_tips.png" alt>
+          <span>选择挂卖可以赚钱哦！</span>
+        </div>
+        <div class="tips_c">通过挂卖功能，在您等待发货的过程中如若有人购买了您的订单，您将获得订单差价的收益。</div>
+        <div class="tip_btn" @click="tips=false">好的</div>
+      </van-popup>
     </template>
   </HeadFoot>
 </template>
 
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
-import { Icon, Cell, CellGroup, Field, RadioGroup, Radio } from "vant";
+import { Icon, Cell, CellGroup, Field, RadioGroup, Radio, Popup } from "vant";
 export default {
   name: "OrderConfirm",
   data() {
     return {
       title: "确认订单",
       message: null,
-      isGuamai: "fou"
+      isGuamai: "0",
+      buzhu: false,
+      tips: false
     };
   },
   components: {
@@ -91,9 +103,14 @@ export default {
     [Icon.name]: Icon,
     [Field.name]: Field,
     [RadioGroup.name]: RadioGroup,
-    [Radio.name]: Radio
+    [Radio.name]: Radio,
+    [Popup.name]: Popup
   },
-  methods: {},
+  methods: {
+    submit(){
+      this.$router.push({path:'/orderpay',query:{id:'132'}})
+    }
+  },
   mounted() {}
 };
 </script>
@@ -172,28 +189,79 @@ export default {
         }
       }
     }
-    .guamai {
-      width: 100%;
-      padding: 15px;
-      box-sizing: border-box;
-      background: #f4f4f4;
-      .guamai_radio {
-        display: inline-block;
-        & /deep/ .van-radio {
-          display: inline-block;
-        }
-      }
-    }
     .cell-right {
       color: $Color;
     }
   }
+  .guamai {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    background: #f4f4f4;
+    position: relative;
+    .guamai_radio {
+      display: inline-block;
+      font-size: 13px;
+      & /deep/ .van-radio {
+        display: inline-block;
+        margin-left: 40px;
+      }
+    }
+    .guamai_tips {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      font-size: 18px;
+    }
+    span {
+      position: relative;
+      top: -3px;
+    }
+  }
   .info {
     margin-top: 8px;
+    .buzhu {
+      font-size: 17px;
+      position: relative;
+      top: 3px;
+      &.passed {
+        color: $Color;
+      }
+    }
   }
   .message {
     margin-top: 8px;
     margin-bottom: 50px;
+  }
+  .tips_wrap {
+    width: 310px;
+    padding: 17px 15px 15px 15px;
+    background: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    .tips_h{
+      font-size: 14px;
+      color: #333;
+      padding-bottom: 12px;
+      border-bottom: 1px dotted #ddd;
+      img{
+        width: 30px;
+        height: 32px;
+        margin-right: 14px;
+      }
+    }
+    .tips_c{
+      padding: 18px 0;
+      font-size: 13px;
+      line-height: 20px;
+      color: #999999;
+    }
+    .tip_btn{
+      @include btn(65px,25px);
+      border-radius: 5px;
+      margin-left: 50%;
+      transform: translateX(-50%)
+    }
   }
 }
 .pg_confirm {
