@@ -126,7 +126,9 @@
         </div>
       </div>
     </div>
-    <div class="guamai" v-else>挂卖</div>
+    <div class="guamai" v-else>
+      <gua-mai></gua-mai>
+    </div>
     <!-- 参数选择弹窗 -->
     <van-actionsheet v-model="showParams" :close-on-click-overlay="false" class="params_pop">
       <div class="params_info">
@@ -238,6 +240,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import GuaMai from "./GuaMai";
 import {
   NavBar,
   Swipe,
@@ -272,6 +275,7 @@ export default {
     };
   },
   components: {
+    GuaMai,
     [NavBar.name]: NavBar,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,

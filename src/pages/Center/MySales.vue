@@ -22,26 +22,65 @@
           </div>
           <div class="li_foot">
             <span class="riqi">7天后发货</span>
-            <span class="shezhi">设置折扣</span>
+            <span class="shezhi" @click="setValue">设置折扣</span>
             <span class="quxiao">取消挂卖</span>
           </div>
         </li>
       </ul>
+      <!-- 设置折扣 -->
+      <van-popup v-model="tips" class="tips_wrap">
+        <div class="tips_h">折扣比例</div>
+        <div class="tips_c">
+          <p class="tips_c_h">当前收益：</p>
+          <div class="tips_c_in">
+            <span>240.0元/天</span>*
+            <span>4天</span>=
+            <span>960.0元</span>
+          </div>
+          <p class="tips_c_setting">设置折扣：</p>
+          <van-field
+            v-model="value"
+            type="number"
+            placeholder="折扣比例不能大于总收益"
+            class="tips_c_input"
+          >
+          <span slot="right-icon" style="color:#000">%</span>
+          </van-field>
+          <p class="tips_c_computer">1000元 * 0% = 0元</p>
+          <p class="tips_c_tips">*折扣比例的设置，是您出让总收益的多少给购买方，长时间没人购买，你可修改更高比例。（默认折扣为0）</p>
+        </div>
+        <div class="tips_btn" @click="tips=false">
+          <div class="tips_btn1">确认</div>
+          <div class="tips_btn2">取消</div>
+        </div>
+      </van-popup>
     </template>
   </HeadFoot>
 </template>
 
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
+import { Popup, Field } from "vant";
 export default {
   name: "MySales",
   data() {
     return {
-      title: "我的挂卖"
+      title: "我的挂卖",
+      tips: true,
+      keyShow: true,
+      value: null
     };
   },
-  components: { HeadFoot },
-  methods: {},
+  components: {
+    HeadFoot,
+    [Popup.name]: Popup,
+    [Field.name]: Field
+  },
+  methods: {
+    setValue() {
+      this.tips = true;
+    }
+  },
   mounted() {}
 };
 </script>
@@ -167,6 +206,88 @@ $Color: #ea047b;
         color: #666666;
         display: inline-block;
       }
+    }
+  }
+}
+.pg_mysales {
+  .tips_wrap {
+    width: 280px;
+    height: 320px;
+    background: #fff;
+    box-sizing: border-box;
+    border-radius: 5px;
+    .tips_h {
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+      padding: 16px 10px 12px;
+      border-bottom: 1px dashed #ddd;
+    }
+    .tips_c {
+      padding: 18px;
+      padding-bottom: 0;
+    }
+    .tips_c_h {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 11px;
+    }
+    .tips_c_in {
+      font-size: 12px;
+      color: #000;
+      box-sizing: border-box;
+      span {
+        display: inline-block;
+        padding: 5px 6px;
+        background: #eeeeee;
+        margin: 0 3px;
+      }
+      span:first-child {
+        margin-left: 0;
+      }
+    }
+    .tips_c_setting {
+      font-size: 12px;
+      color: #666;
+      margin-top: 11px;
+      margin-bottom: 11px;
+    }
+    .tips_c_input {
+      padding: 9px;
+      font-size: 12px;
+      border: 1px solid #ddd;
+    }
+    .tips_c_computer{
+      font-size: 16px;
+      padding:  20px 0 15px;
+      text-align: center;
+    }
+    .tips_c_tips{
+      font-size: 10px;
+      color:#bebdbd;
+      line-height: 15px;
+    }
+    .tips_btn{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 35px;
+      line-height: 35px;
+      display: flex;
+    }
+    .tips_btn1{
+      flex: 1;
+      background: $Color;
+      font-size: 12px;
+      color: #fff;
+      text-align: center;
+    }
+        .tips_btn2{
+      flex: 1;
+      background: #e5e5e5;
+      font-size: 12px;
+      text-align: center;
     }
   }
 }
