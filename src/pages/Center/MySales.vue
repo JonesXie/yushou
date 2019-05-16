@@ -66,8 +66,7 @@ export default {
   data() {
     return {
       title: "我的挂卖",
-      tips: true,
-      keyShow: true,
+      tips: false,
       value: null
     };
   },

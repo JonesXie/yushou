@@ -11,9 +11,8 @@
           color="#ea047b"
           title-inactive-color="#666"
           swipeable
-          sticky
-          :offset-top="stickTop"
           :ellipsis="false"
+          class="pgmc_tab"
         >
           <van-tab title="全部订单">
             <order-list status="0"></order-list>
@@ -74,6 +73,12 @@ $Color: #ea047b;
 .pg_myorder {
   .pgm_content {
     padding-top: 46px;
+    .pgmc_tab {
+      & /deep/ .van-tabs__wrap {
+        position: fixed;
+        top: 46px;
+      }
+    }
   }
 }
 </style>

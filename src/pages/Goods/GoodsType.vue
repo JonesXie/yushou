@@ -8,8 +8,6 @@
         title-active-color="#ea047b"
         color="#ea047b"
         title-inactive-color="#666"
-        sticky
-        :offset-top="stickTop"
         :ellipsis="false"
         class="pggt_head"
       >
@@ -20,10 +18,13 @@
               <div class="txtWrap">
                 <div class="price ellipsis-line">
                   <span>立减1000元</span>
-                  <p>￥<em>2019</em>.00</p>
+                  <p>
+                    ￥
+                    <em>2019</em>.00
+                  </p>
                 </div>
                 <div class="info ellipsis-two">美宝莲 MAYBELLINE 美宝纽约时刻迷你眼影盘日落 6.1g</div>
-                <div class="buyer">10人已付款 </div>
+                <div class="buyer">10人已付款</div>
               </div>
             </li>
           </ul>
@@ -88,6 +89,10 @@ export default {
   padding-top: 46px;
   box-sizing: border-box;
   .pggt_head {
+    & /deep/ .van-tabs__wrap {
+      position: fixed;
+      top: 46px;
+    }
     .price {
       img {
         width: 9px;
@@ -118,33 +123,33 @@ export default {
       background-position: center center;
       background-size: contain;
     }
-    .txtWrap{
+    .txtWrap {
       margin-top: 13px;
-      .price{
-        color:$Color;
+      .price {
+        color: $Color;
         font-size: 12px;
-        span{
+        span {
           padding: 3px 4px;
           background: #ea637a;
           font-size: 10px;
           color: #fff;
           border-radius: 2px;
         }
-        em{
+        em {
           font-size: 16px;
         }
-        p{
+        p {
           display: inline-block;
           position: relative;
-          top:3px;
+          top: 3px;
         }
       }
-      .info{
+      .info {
         font-size: 13px;
         line-height: 19px;
         margin: 9px 0;
       }
-      .buyer{
+      .buyer {
         color: #999;
         font-size: 10px;
       }

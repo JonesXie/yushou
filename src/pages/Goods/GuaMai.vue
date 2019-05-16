@@ -6,8 +6,6 @@
       title-active-color="#ea041f"
       color="#ea041f"
       title-inactive-color="#666"
-      sticky
-      :offset-top="stickTop"
       :ellipsis="false"
       class="pggm_head"
       @change="indexChange"
@@ -28,22 +26,23 @@
           <img v-else-if="dayActive === 2" src="@/assets/img/goods/pg_guamai_down.png" alt>
           <img v-else src="@/assets/img/goods/pg_guamai_default.png" alt>
         </div>
-       <sale-list :dayData="dayActive" :selected="active"></sale-list>
+        <sale-list :dayData="dayActive" :selected="active"></sale-list>
       </van-tab>
       <van-tab>
-        <div slot="title" class="others">
+        <div slot="title" class="others" @click="show=true">
           筛选
           <img src="@/assets/img/goods/pg_guamai_add.png" alt>
         </div>
         <sale-list :otherData="otherData" :selected="active"></sale-list>
       </van-tab>
     </van-tabs>
+    <van-popup v-model="show" position="right">内容</van-popup>
   </div>
 </template>
 
 <script>
-import { Tab, Tabs } from "vant";
-import SaleList from "@/pages/Components/goods/SaleList.vue"
+import { Tab, Tabs, Popup } from "vant";
+import SaleList from "@/pages/Components/goods/SaleList.vue";
 export default {
   name: "GuaMai",
   data() {
@@ -51,19 +50,24 @@ export default {
       active: 0,
       priceActive: 0,
       dayActive: 0,
-      otherData:{},
+      otherData: {},
       img: require("@/assets/img/goods/pg_goodstype_goods.png"),
-      dataList1: ["1", "1", "1", "1", "1", "1"]
+      show: false
     };
   },
-  components: { [Tab.name]: Tab, [Tabs.name]: Tabs,SaleList },
+  components: {
+    [Tab.name]: Tab,
+    [Tabs.name]: Tabs,
+    [Popup.name]: Popup,
+    SaleList
+  },
   computed: {
     stickTop: function() {
       return this.$store.state.stickTop;
     }
   },
   methods: {
-    indexChange(index) {
+    indexChange() {
       this.priceActive = 0;
       this.dayActive = 0;
     },
@@ -104,6 +108,10 @@ export default {
 @import "~@/layout/public.scss";
 .pg_guamai {
   .pggm_head {
+    & /deep/ .van-tabs__wrap {
+      position: fixed;
+      top: 46px;
+    }
     .price {
       img {
         width: 7px;

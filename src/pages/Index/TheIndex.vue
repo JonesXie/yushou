@@ -18,9 +18,8 @@
         color="#ea047b"
         title-inactive-color="#666"
         swipeable
-        sticky
-        :offset-top="stickTop"
         :ellipsis="false"
+        class="pi_list_tab"
       >
         <van-tab title="全部">
           <index-first></index-first>
@@ -71,6 +70,7 @@ export default {
 <style lang="scss" scoped>
 $Color: #fa399d;
 .pg_index {
+  position: relative;
   .pi_h {
     width: 100vw;
     height: 46px;
@@ -79,7 +79,7 @@ $Color: #fa399d;
     box-sizing: border-box;
     padding-top: 10px;
     position: fixed;
-    z-index: 10;
+    z-index: 99;
 
     &::after {
       content: "";
@@ -116,6 +116,12 @@ $Color: #fa399d;
 
   .pi_list {
     padding-top: 46px;
+    .pi_list_tab{
+     & /deep/ .van-tabs__wrap{
+       position: fixed;
+       top: 46px;
+     }
+    }
   }
 }
 </style>

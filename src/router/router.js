@@ -113,6 +113,17 @@ const RouterMap = [
     name: 'paysuccess',
     component: () => import('@/pages/Order/PaySuccess.vue')
   },
+  //挂卖
+  {
+    path: '/guadetail',
+    name: 'guadetail',
+    component: () => import('@/pages/Order/GuaDetail.vue')
+  },
+  {
+    path: '/guaconfirm',
+    name: 'guaconfirm',
+    component: () => import('@/pages/Order/GuaConfirm.vue')
+  },
   //物流
   {
     path: '/logistics',
