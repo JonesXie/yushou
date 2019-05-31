@@ -4,7 +4,14 @@
     <div class="pgl_input">
       <div class="num_input van-hairline--bottom">
         <img src="@/assets/img/login/pg_login_phone.png" alt class="num_img">
-        <input type="tel" placeholder="请输入手机号码" class="num" @blur="validPhone" v-model="phone" maxlength="11">
+        <input
+          type="tel"
+          placeholder="请输入手机号码"
+          class="num"
+          @blur="validPhone"
+          v-model="phone"
+          maxlength="11"
+        >
       </div>
       <div class="mima_input van-hairline--bottom">
         <img src="@/assets/img/login/pg_login_lock.png" alt class="mima_img">
@@ -14,7 +21,7 @@
         <router-link to="/register">立即注册</router-link>
         <span>忘记密码?</span>
       </p>
-      <div class="btn">登录</div>
+      <div class="btn" @click="submit">登录</div>
       <div class="wx_login">
         <div class="title">第三方登录</div>
         <div class="tx_login">
@@ -22,10 +29,11 @@
             <img src="@/assets/img/login/pg_login_wx.png" alt>
             <p>微信</p>
           </div>
-          <div class="tx_login_w tx_login_r">
+          <!-- qq登录 -->
+          <!-- <div class="tx_login_w tx_login_r">
             <img src="@/assets/img/login/pg_login_qq.png" alt>
             <p>QQ</p>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -33,8 +41,9 @@
 </template>
 
 <script>
+import { doLogin } from "@/api/login.js";
 import { mapActions } from "vuex";
-import { Toast } from 'vant';
+import { Toast } from "vant";
 export default {
   name: "login",
   data() {
@@ -51,7 +60,35 @@ export default {
         Toast("手机号不能为空");
       } else if (!reg.test(this.phone)) {
         Toast("手机号格式不正确");
-        this.phone = null
+        this.phone = null;
+      }
+    },
+    submit() {
+      if (this.isNull(this.phone)) {
+        if (this.isNull(this.psw)) {
+          let _data = {
+            userName: this.phone,
+            password: this.psw,
+            qqId: null,
+            wxId: null,
+            platform: "weixin"
+          };
+          doLogin(_data, false).then(({ data }) => {
+            localStorage.setItem("token", data.token);
+            this.$router.push('/index')
+          });
+        } else {
+          Toast.fail("请填写密码");
+        }
+      } else {
+        Toast.fail("请填写手机号");
+      }
+    },
+    isNull(val) {
+      if (val !== null && val !== undefined && val !== "") {
+        return true;
+      } else {
+        return false;
       }
     }
   },

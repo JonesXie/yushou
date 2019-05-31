@@ -1,5 +1,7 @@
 import axios from "axios";
-import {Toast} from 'vant';
+import {
+  Toast
+} from 'vant';
 
 // 创建一个axios的实例
 const service = axios.create({
@@ -9,13 +11,16 @@ const service = axios.create({
   timeout: 5000, // 请求时长
 })
 Toast.allowMultiple()
+
+const isToken = localStorage.getItem('token') || null
 // 请求拦截
 service.interceptors.request.use((config) => {
   Toast.loading({
-    duration: 0,       // 持续展示 toast
+    duration: 0, // 持续展示 toast
     forbidClick: true, // 禁用背景点击
     loadingType: 'spinner',
   });
+  config.headers.authorization = isToken
   return config
 }, (error) => {
   // eslint-disable-next-line no-console
@@ -35,11 +40,13 @@ service.interceptors.response.use(
     } else if (response.data.code === -2) {
       //无权限 -2
       Toast.fail('无权限')
+    } else if (response.data.code === 0) {
+      //无权限 -2
+      Toast.fail(response.data.msg)
     } else {
       //失败 0
       Toast.fail('出现错误:' + response.status)
     }
-
   },
   error => {
     // eslint-disable-next-line no-console
