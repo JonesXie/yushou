@@ -53,10 +53,10 @@ export function findAllGoods(data) {
   })
 }
 
-export function getNews(data, isJson = true) {
+export function getNews(data, isJson = false) {
   return request({
     url: '/getWangYiNews',
     method: 'POST',
-    data: isJson ? data : qs.stringify(data) //判断是否是json格式，还是formData格式,默认是Json格式
+    data: isJson ? data : qs.stringify(data) //判断是否是json格式，还是formData格式,默认是formData格式
   })
 }

@@ -22,7 +22,7 @@
         <img src="@/assets/img/login/pg_login_lock.png" alt class="mima_img">
         <input type="text" placeholder="请设置登录密码" class="mima" v-model="psw">
       </div>
-      <div class="btn">登录</div>
+      <div class="btn" @click="submit">登录</div>
       <router-link to="/login" class="tips">已有账号，去登陆</router-link>
     </div>
   </div>
@@ -31,7 +31,7 @@
 <script>
 import { mapActions } from "vuex";
 import { Toast } from "vant";
-
+import { doRegister, toSendSms } from "@/api/login.js";
 export default {
   name: "register",
   data() {
@@ -41,11 +41,18 @@ export default {
       msn: null,
       msnTxt: "获取验证码",
       isClick: true,
-      time: 5
+      time: 60
     };
   },
   methods: {
     ...mapActions(["ChangeStatus"]),
+    validNull(val) {
+      if (val !== null && val !== undefined && val !== "") {
+        return true;
+      } else {
+        return false;
+      }
+    },
     validPhone() {
       let reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
       if (this.phone === null) {
@@ -58,8 +65,18 @@ export default {
     validMsn() {},
     getCode() {
       if (this.isClick) {
-        this.isClick = false;
-        this.countDown();
+        if (this.validNull(this.phone)) {
+          this.isClick = false;
+          this.countDown();
+          let _data = {
+            phone: this.phone
+          };
+          toSendSms(_data).then(({ data }) => {
+            Toast(data.msg);
+          });
+        } else {
+          Toast("请填写电话号码");
+        }
       } else {
         Toast({
           duration: 1000,
@@ -77,6 +94,15 @@ export default {
         this.msnTxt = "获取验证码";
         this.isClick = true;
       }
+    },
+    submit() {
+      let _data = {
+        phone: this.phone,
+        vcode: this.msn,
+        password: this.psw,
+        inviter: null
+      };
+      // doRegister
     }
   },
   mounted() {
