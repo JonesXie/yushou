@@ -3,6 +3,7 @@ import {
   Toast
 } from 'vant';
 import router from '@/config/RouterConfig.js' //引入路由配置
+import store from '@/store/store.js' //引入vuex配置
 
 // 创建一个axios的实例
 const service = axios.create({
@@ -13,7 +14,6 @@ const service = axios.create({
 })
 Toast.allowMultiple()
 
-const isToken = localStorage.getItem('token') || null
 // 请求拦截
 service.interceptors.request.use((config) => {
   Toast.loading({
@@ -21,10 +21,10 @@ service.interceptors.request.use((config) => {
     forbidClick: true, // 禁用背景点击
     loadingType: 'spinner',
   });
-  config.headers.authorization = isToken
+  config.headers.authorization = store.state.Token || localStorage.getItem('token')
   return config
 }, (error) => {
-  Toast.clear();
+  Toast.clear({clearAll: true});
   // eslint-disable-next-line no-console
   Toast(error);
 })
@@ -32,7 +32,7 @@ service.interceptors.request.use((config) => {
 // 响应拦截
 service.interceptors.response.use(
   response => {
-    Toast.clear();
+    Toast.clear({clearAll: true});
     if (response.data.code === 1) {
       //成功 1
       return response;
@@ -53,7 +53,7 @@ service.interceptors.response.use(
   },
   error => {
     // eslint-disable-next-line no-console
-    Toast.clear()
+    Toast.clear({clearAll: true});
     Toast(error);
   })
 

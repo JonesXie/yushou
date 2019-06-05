@@ -24,10 +24,7 @@
         <van-tab title="全部">
           <index-first></index-first>
         </van-tab>
-        <van-tab title="美妆">
-          <index-second :isType="id"></index-second>
-        </van-tab>
-        <van-tab v-for="item in tabList" :title="item.codeName" :key="item.id">内容 3</van-tab>
+        <van-tab v-for="item in tabList" :title="item.codeName" :key="item.id"> <index-second :isType="item.id"></index-second></van-tab>
       </van-tabs>
     </div>
   </div>

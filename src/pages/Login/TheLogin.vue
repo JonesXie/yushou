@@ -44,6 +44,7 @@
 import { doLogin } from "@/api/login.js";
 import { mapActions } from "vuex";
 import { Toast } from "vant";
+import { setTimeout } from "timers";
 export default {
   name: "login",
   data() {
@@ -74,9 +75,10 @@ export default {
             platform: "weixin"
           };
           doLogin(_data).then(({ data }) => {
-            Toast.success('登录成功');
+            Toast.success("登录成功");
             localStorage.setItem("token", data.token);
-            this.$router.back(-1);
+            this.$store.commit("SET_Token", data.token);
+            this.$router.push(this.$store.state.fromToLogin);
           });
         } else {
           Toast.fail("请填写密码");

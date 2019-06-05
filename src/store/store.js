@@ -6,16 +6,26 @@ import isBar from './modules/BarStatus'
 Vue.use(Vuex); //注册到vue中
 
 const state = {
-  stickTop: 0
+  stickTop: 0,
+  fromToLogin: "/",
+  Token: null
 };
 const mutations = {
   SET_STICKTOP: (state, val) => {
     state.stickTop = val
+  },
+  SET_FromToLogin: (state, val) => {
+    state.fromToLogin = val
+  },
+  SET_Token: (state, val) => {
+    state.Token = val
   }
 };
 const actions = {
-  ChangeStickTop:({commit},val)=>{
-    commit('SET_STICKTOP',val)
+  ChangeStickTop: ({
+    commit
+  }, val) => {
+    commit('SET_STICKTOP', val)
   }
 };
 //使用模块化
