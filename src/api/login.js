@@ -9,11 +9,11 @@ export function doLogin(data, isJson) {
 }
 //注册
 export function doRegister(data, isJson) {
-  return post('/member/doLogin.api', data, isJson)
+  return post('/member/doRegister.api', data, isJson)
 }
 //发送短信
 export function toSendSms(data, isJson) {
-  return post('/member/doLogin.api', data, isJson)
+  return post('/member/toSendSms.api', data, isJson)
 }
 
 export function getBanner(data) {

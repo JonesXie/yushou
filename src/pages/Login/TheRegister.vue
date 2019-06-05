@@ -20,9 +20,9 @@
       </div>
       <div class="mima_input van-hairline--bottom">
         <img src="@/assets/img/login/pg_login_lock.png" alt class="mima_img">
-        <input type="text" placeholder="请设置登录密码" class="mima" v-model="psw">
+        <input type="password" placeholder="请设置登录密码" class="mima" v-model="psw">
       </div>
-      <div class="btn" @click="submit">登录</div>
+      <div class="btn" @click="submit">注册</div>
       <router-link to="/login" class="tips">已有账号，去登陆</router-link>
     </div>
   </div>
@@ -102,7 +102,10 @@ export default {
         password: this.psw,
         inviter: null
       };
-      // doRegister
+      doRegister(_data).then(() => {
+        Toast.success("注册成功");
+        this.$router.push("/index");
+      });
     }
   },
   mounted() {

@@ -1,39 +1,86 @@
 <template>
   <HeadFoot class="get_coupon" :Title="title">
     <template #content>
-      <ul class="gc_ul">
-        <li v-for="i in 4" :key="i">
-          <div class="gc_li_l">
-            <div class="gc_li_l_l">
-              ￥
-              <span>50</span>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        class="vantList"
+      >
+        <ul class="gc_ul">
+          <li v-for="(item,index) in couponList" :key="index">
+            <div class="gc_li_l">
+              <div class="gc_li_l_l">
+                ￥
+                <span>{{item.price}}</span>
+              </div>
+              <div class="gc_li_l_r">
+                <p>适用品类：{{item.name}}</p>
+                <p>使用时间：自领取日{{item.effectiveDays}}天内有效</p>
+              </div>
             </div>
-            <div class="gc_li_l_r">
-              <p>适用品类：箱包满200可用</p>
-              <p>使用时间：自领取日十天内有效</p>
+            <div class="gc_li_r" @click="getCoupon(item.id)">
+              <p>点击领取</p>
             </div>
-          </div>
-          <div class="gc_li_r">
-            <p>点击领取</p>
-          </div>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </van-list>
     </template>
   </HeadFoot>
 </template>
 
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
+import { drawCouponPage, drawCoupon } from "@/api/index.js";
+import { List, Toast } from "vant";
+
 export default {
   name: "GetCoupon",
   data() {
     return {
-      title: "领取优惠券"
+      title: "领取优惠券",
+      loading: false,
+      finished: false,
+      curPage: 1,
+      couponList: []
     };
   },
-  components: { HeadFoot },
-  methods: {},
-  mounted() {}
+  components: { HeadFoot, [List.name]: List },
+  methods: {
+    onLoad() {
+      let _data = {
+        page: this.curPage
+      };
+      // 异步更新数据
+      drawCouponPage(_data).then(({ data }) => {
+        // 加载状态结束
+        this.loading = false;
+        if (data.data.page.dataList.length > 0) {
+          [...this.couponList] = [
+            ...this.couponList,
+            ...data.data.page.dataList
+          ];
+          this.curPage = this.curPage + 1;
+        } else {
+          this.finished = true;
+        }
+      });
+    },
+    getCoupon(val) {
+      let _data = {
+        couponId: val
+      };
+      drawCoupon(_data).then((response) => {
+        Toast(response.data.msg)
+      });
+    }
+  },
+  mounted() {
+    // drawCouponPage().then(({ data }) => {
+    //   this.couponList = data.data.page.dataList;
+    // });
+  }
 };
 </script>
 
@@ -46,6 +93,10 @@ export default {
     .van-icon {
       color: #333;
     }
+  }
+  .vantList {
+    width: 100vw;
+    overflow: hidden;
   }
   .gc_ul {
     width: 100vw;

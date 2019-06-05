@@ -1,5 +1,8 @@
 import axios from "axios";
-import {Toast} from 'vant';
+import {
+  Toast
+} from 'vant';
+import router from '@/config/RouterConfig.js' //引入路由配置
 
 // 创建一个axios的实例
 const service = axios.create({
@@ -21,6 +24,7 @@ service.interceptors.request.use((config) => {
   config.headers.authorization = isToken
   return config
 }, (error) => {
+  Toast.clear();
   // eslint-disable-next-line no-console
   Toast(error);
 })
@@ -34,7 +38,8 @@ service.interceptors.response.use(
       return response;
     } else if (response.data.code === -1) {
       //未登录 -1
-      Toast.fail('未登录')
+      Toast.fail(response.data.msg);
+      router.push('/login')
     } else if (response.data.code === -2) {
       //无权限 -2
       Toast.fail('无权限')

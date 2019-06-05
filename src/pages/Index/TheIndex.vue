@@ -27,10 +27,7 @@
         <van-tab title="美妆">
           <index-second :isType="id"></index-second>
         </van-tab>
-        <van-tab title="手机数码">内容 3</van-tab>
-        <van-tab title="家居百货">内容 4</van-tab>
-        <van-tab title="配饰">内容 4</van-tab>
-        <van-tab title="配饰">内容 4</van-tab>
+        <van-tab v-for="item in tabList" :title="item.codeName" :key="item.id">内容 3</van-tab>
       </van-tabs>
     </div>
   </div>
@@ -39,12 +36,14 @@
 import { Tab, Tabs } from "vant";
 import IndexFirst from "../Components/index/IndexFirst.vue";
 import IndexSecond from "../Components/index/IndexSecond.vue";
-import {mapActions} from "vuex"
+import { mapActions } from "vuex";
+import { findGoodsCode } from "@/api/index.js";
 export default {
   data() {
     return {
       active: 0,
       id: "123",
+      tabList:[],
     };
   },
   components: {
@@ -56,13 +55,16 @@ export default {
   computed: {
     stickTop: function() {
       return this.$store.state.stickTop;
-    },
+    }
   },
-  methods:{
-    ...mapActions(['ChangeActive'])
+  methods: {
+    ...mapActions(["ChangeActive"])
   },
   mounted() {
-    this.ChangeActive(0)
+    this.ChangeActive(0);
+    findGoodsCode().then(({data})=>{
+      this.tabList = data.data
+    })
   }
 };
 </script>
@@ -116,11 +118,11 @@ $Color: #fa399d;
 
   .pi_list {
     padding-top: 46px;
-    .pi_list_tab{
-     & /deep/ .van-tabs__wrap{
-       position: fixed;
-       top: 46px;
-     }
+    .pi_list_tab {
+      & /deep/ .van-tabs__wrap {
+        position: fixed;
+        top: 46px;
+      }
     }
   }
 }

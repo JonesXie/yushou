@@ -76,7 +76,7 @@ export default {
           doLogin(_data).then(({ data }) => {
             Toast.success('登录成功');
             localStorage.setItem("token", data.token);
-            // this.$router.push('/index')
+            this.$router.back(-1);
           });
         } else {
           Toast.fail("请填写密码");

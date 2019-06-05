@@ -3,9 +3,21 @@ import {
   get
 } from '@/config/AxiosBase.js'
 
+//查询商品分类
+export function findGoodsCode(data) {
+  return get('/goods/findGoodsCode.api', data)
+}
 //首页-banner图
 export function getBanner(data) {
   return get('/info/findPicture.api', data)
+}
+//领取优惠券列表
+export function drawCouponPage(data) {
+  return get('/member/drawCouponPage', data)
+}
+//领取优惠券
+export function drawCoupon(data,isJson) {
+  return post('/member/drawCoupon', data, isJson)
 }
 
 //首页-发现好物接口
