@@ -132,13 +132,13 @@ const RouterMap = [
   },
   //商品
   {
-    path: '/goods',
+    path: '/goods/:id',
     name: 'goods',
     component: () => import('@/pages/Goods/TheGoods.vue')
   },
   //商品分类
   {
-    path: '/goodstype',
+    path: '/goodstype/:id',
     name: 'goodstype',
     component: () => import('@/pages/Goods/GoodsType.vue')
   },

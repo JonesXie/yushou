@@ -4,9 +4,15 @@
       <img src="@/assets/img/index/pg_index_first_jx.png" alt>
     </div>
 
-    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :offset="10">
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+      :offset="10"
+    >
       <ul class="fl_ul">
-        <li class="van-hairline--bottom fl_li" v-for="(v,i) in listData" :key="i">
+        <li class="van-hairline--bottom fl_li" v-for="(v,i) in listData" :key="i" @click="turnGoods(v.goodsId)">
           <img :src="v.goodsImages" alt>
           <div class="fl_li_r">
             <p class="fl_li_rP1">{{v.goodsName}}</p>
@@ -35,7 +41,8 @@ export default {
     return {
       listData: [],
       loading: false,
-      finished: false
+      finished: false,
+      curPage: 1
     };
   },
   components: {
@@ -44,24 +51,29 @@ export default {
   methods: {
     onLoad() {
       // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.listData.push(this.listData.length + 1);
-        }
+      let _data = {
+        page: this.curPage
+      };
+      // 异步更新数据
+      findAllGoods(_data).then(({ data }) => {
         // 加载状态结束
         this.loading = false;
-
-        // 数据全部加载完成
-        if (this.listData.length >= 40) {
+        if (data.data.length > 0) {
+          [...this.listData] = [...this.listData, ...data.data];
+          this.curPage = this.curPage + 1;
+        } else {
           this.finished = true;
         }
-      }, 500);
+      });
+    },
+    turnGoods(val){
+      this.$router.push(`/goods/${val}`);
     }
   },
   mounted() {
-    findAllGoods().then(({ data }) => {
-      this.listData = data.data;
-    });
+    // findAllGoods().then(({ data }) => {
+    //   this.listData = data.data;
+    // });
   }
 };
 </script>
@@ -73,7 +85,7 @@ export default {
   .title {
     background: #fff;
     text-align: center;
-    padding:18px 0 16px 0;
+    padding: 18px 0 16px 0;
     img {
       height: 16px;
       width: auto;

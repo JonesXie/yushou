@@ -44,7 +44,6 @@
 import { doLogin } from "@/api/login.js";
 import { mapActions } from "vuex";
 import { Toast } from "vant";
-import { setTimeout } from "timers";
 export default {
   name: "login",
   data() {

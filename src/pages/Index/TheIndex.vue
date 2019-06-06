@@ -17,14 +17,13 @@
         title-active-color="#ea047b"
         color="#ea047b"
         title-inactive-color="#666"
-        swipeable
         :ellipsis="false"
         class="pi_list_tab"
       >
         <van-tab title="全部">
           <index-first></index-first>
         </van-tab>
-        <van-tab v-for="item in tabList" :title="item.codeName" :key="item.id"> <index-second :isType="item.id"></index-second></van-tab>
+        <van-tab v-for="item in tabList" :title="item.codeName" :key="item.id"><index-second :isType="item.codeNo" :isCode="item.codeList"></index-second></van-tab>
       </van-tabs>
     </div>
   </div>

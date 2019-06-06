@@ -3,7 +3,7 @@
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <div class="if_banner">
         <van-swipe :autoplay="5000" indicator-color="#fa399d" v-if="BannerImg !==null">
-          <van-swipe-item v-for="(v,i) in BannerImg" :key="i">
+          <van-swipe-item v-for="(v,i) in BannerImg" :key="i" @click="turnGoods(v.id)">
             <img :src="v.picUrl" alt>
           </van-swipe-item>
         </van-swipe>
@@ -37,6 +37,7 @@
           </li>
         </ul>
       </div>
+
       <div class="if_push">
         <div class="title">
           <img src="@/assets/img/index/pg_index_first_push.png" alt>
@@ -45,7 +46,12 @@
         <div class="swip">
           <swiper :options="swiperOption" ref="mySwiper" v-if="PushImg !==null">
             <!-- slides -->
-            <swiper-slide v-for="(v,i) in PushImg" :key="i" class="swipItem">
+            <swiper-slide
+              v-for="(v,i) in PushImg"
+              :key="i"
+              class="swipItem"
+              @click.native="turnGoods(v.id)"
+            >
               <div class="itemH">
                 <img :src="v.goodsImages" alt>
                 <p>调货周期：{{v.goodsWaitDays}}天</p>
@@ -63,7 +69,12 @@
         </div>
         <div class="ad"></div>
         <div class="fenlei" v-if="FLImg !==null">
-          <div class="fl_li" v-for="(v,i) in FLImg.dataList" :key="i">
+          <div
+            class="fl_li"
+            v-for="(v,i) in FLImg.dataList"
+            :key="i"
+            @click="turnGoodsType(v.codeId)"
+          >
             <img :src="v.subjectTitleImage" alt>
             <p :class="['fl_li_p' ,'fl_li_p'+i]">{{v.subjectTitle}}</p>
             <div class="dec">
@@ -73,6 +84,7 @@
           </div>
         </div>
       </div>
+      <!-- 美妆 -->
       <div class="if_meizhuang">
         <div class="title">
           <img src="@/assets/img/index/pg_index_first_mz.png" alt>
@@ -229,6 +241,93 @@
           </div>
         </div>
       </div>
+      <!-- 手机 -->
+      <div class="if_meizhuang">
+        <div class="title">
+          <img src="@/assets/img/index/pg_index_first_sm.png" alt>
+        </div>
+        <div class="ifmz_list" v-if="SjData !==null">
+          <!-- 2 -->
+          <div class="ifmz_wrap">
+            <div class="ifmz_li mode_right">
+              <p class="ifmz_li_h">{{SjData[0].brandName}}</p>
+              <p class="ifmz_li_title">{{SjData[0].sign}}</p>
+              <div class="img_two">
+                <div>
+                  <img :src="SjData[0].brandProductMainImage" alt>
+                </div>
+                <div>
+                  <img :src="SjData[0].brandProductViceImage" class="img_two_specail" alt>
+                </div>
+              </div>
+            </div>
+            <div class="ifmz_li">
+              <p class="ifmz_li_h">{{SjData[1].brandName}}</p>
+              <p class="ifmz_li_title">{{SjData[1].sign}}</p>
+              <div class="img_two">
+                <div>
+                  <img :src="SjData[1].brandProductMainImage" alt>
+                </div>
+                <div>
+                  <img :src="SjData[1].brandProductViceImage" alt>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ifmz_wrap">
+            <div class="ifmz_li mode_right">
+              <p class="ifmz_li_h">{{SjData[2].brandName}}</p>
+              <p class="ifmz_li_title">{{SjData[2].sign}}</p>
+              <div class="img_two">
+                <div>
+                  <img :src="SjData[2].brandProductMainImage" alt>
+                </div>
+                <div>
+                  <img :src="SjData[2].brandProductViceImage" alt>
+                </div>
+              </div>
+            </div>
+            <div class="ifmz_li">
+              <p class="ifmz_li_h">{{SjData[3].brandName}}</p>
+              <p class="ifmz_li_title">{{SjData[3].sign}}</p>
+              <div class="img_two">
+                <div>
+                  <img :src="SjData[3].brandProductMainImage" alt>
+                </div>
+                <div>
+                  <img :src="SjData[3].brandProductViceImage" alt>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ifmz_wrap">
+            <div class="ifmz_li mode_right">
+              <p class="ifmz_li_h">{{SjData[4].brandName}}</p>
+              <p class="ifmz_li_title">{{SjData[4].sign}}</p>
+              <div class="img_two">
+                <div>
+                  <img :src="SjData[4].brandProductMainImage" alt>
+                </div>
+                <div>
+                  <img :src="SjData[4].brandProductViceImage" alt>
+                </div>
+              </div>
+            </div>
+            <div class="ifmz_li">
+              <p class="ifmz_li_h">{{SjData[5].brandName}}</p>
+              <p class="ifmz_li_title">{{SjData[5].sign}}</p>
+              <div class="img_two">
+                <div>
+                  <img :src="SjData[5].brandProductMainImage" alt>
+                </div>
+                <div>
+                  <img :src="SjData[5].brandProductViceImage" alt>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <first-list></first-list>
     </van-pull-refresh>
   </div>
@@ -283,27 +382,41 @@ export default {
   },
   methods: {
     onRefresh() {
-      setTimeout(() => {
-        this.$toast("刷新成功");
+      this.onLoad("fresh");
+    },
+    //跳转
+    turnGoods(val) {
+      this.$router.push(`/goods/${val}`);
+    },
+//跳转
+    turnGoodsType(val) {
+      this.$router.push(`/goodstype/${val}`);
+    },
+
+    onLoad(val) {
+      getBanner().then(({ data }) => {
+        this.BannerImg = data.data;
+      });
+
+      findGoods().then(({ data }) => {
+        this.PushImg = data.data;
+      });
+
+      selectCodeSubject().then(({ data }) => {
+        this.FLImg = data.data.page;
+      });
+      selectBrandSubject().then(({ data }) => {
+        if (val === "fresh") {
+          this.$toast("刷新成功");
+        }
         this.isLoading = false;
-      }, 500);
+        this.HZPData = data.data.page.dataList[0].ymBrandVOS;
+        this.SjData = data.data.page.dataList[1].ymBrandVOS;
+      });
     }
   },
   created() {
-    getBanner().then(({ data }) => {
-      this.BannerImg = data.data;
-    });
-    findGoods().then(({ data }) => {
-      this.PushImg = data.data;
-    });
-    selectCodeSubject().then(({ data }) => {
-      this.FLImg = data.data.page;
-    });
-
-    selectBrandSubject().then(({ data }) => {
-      this.HZPData = data.data.page.dataList[0].ymBrandVOS;
-      this.SjData = data.data.page.dataList[1].ymBrandVOS;
-    });
+    this.onLoad();
   },
   mounted() {
     this.$nextTick(() => {
@@ -620,6 +733,10 @@ export default {
             height: 100%;
             width: auto;
           }
+        }
+        .img_two_specail {
+          height: auto;
+          width: 100%;
         }
       }
     }

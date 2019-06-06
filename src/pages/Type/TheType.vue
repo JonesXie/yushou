@@ -7,10 +7,7 @@
     </div>
     <div class="pgt_list">
       <van-badge-group :active-key="activeKey" @change="onChange" class="pgt_L">
-        <van-badge title="男装"/>
-        <van-badge title="女装"/>
-        <van-badge title="手机数码"/>
-        <van-badge title="家用家电"/>
+        <van-badge v-for="(v,i) in barList" :key="i" :title="v.codeName"/>
       </van-badge-group>
       <div class="pgt_R">
         <type-list :istype="getType"></type-list>
@@ -22,29 +19,36 @@
 <script>
 import { mapActions } from "vuex";
 import { NavBar, BadgeGroup, Badge } from "vant";
-import TypeList from './TypeList.vue'
+import TypeList from "./TypeList.vue";
+import { findGoodsCode } from "@/api/index.js";
 export default {
   name: "TheType",
   data() {
     return {
       activeKey: 0,
-      getType:"132"
+      getType: [],
+      barList:[]
     };
   },
   components: {
     [NavBar.name]: NavBar,
     [BadgeGroup.name]: BadgeGroup,
     [Badge.name]: Badge,
-    TypeList,
+    TypeList
   },
   methods: {
     ...mapActions(["ChangeActive"]),
     onChange(key) {
       this.activeKey = key;
+      this.getType = this.barList[key]
     }
   },
   mounted() {
     this.ChangeActive(2);
+    findGoodsCode().then(({ data }) => {
+      this.barList = data.data;
+      this.getType = this.barList[0]
+    });
   }
 };
 </script>

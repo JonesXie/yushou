@@ -103,7 +103,9 @@ export default {
         inviter: null
       };
       doRegister(_data).then(() => {
-        Toast.success("注册成功");
+        Notify("注册成功");
+        localStorage.setItem("token", data.token);
+        this.$store.commit("SET_Token", data.token);
         this.$router.push("/index");
       });
     }

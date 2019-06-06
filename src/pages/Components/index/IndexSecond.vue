@@ -1,10 +1,11 @@
 <template>
   <div class="index_second fisrt_list" ref="second_pg">
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-      <nav class="is_ul">
-        <span>推荐</span>
-        <span>上衣</span>
-      </nav>
+      <van-radio-group v-model="chooseId" class="is_ul" @change="changeId">
+        <van-radio class="is_li" v-for="(v,i) in isCode" :key="i" :name="v.codeNo">
+          <span slot="icon" slot-scope="props" :class="props.checked ? 'active' : ''">{{v.codeName}}</span>
+        </van-radio>
+      </van-radio-group>
 
       <van-list
         v-model="loading"
@@ -36,50 +37,68 @@
 </template>
 
 <script>
-import { findAllGoods } from "@/api/index.js";
-import { List, PullRefresh } from "vant";
+import { findAllGoods} from "@/api/index.js";
+import { List, PullRefresh, RadioGroup, Radio } from "vant";
 export default {
   name: "IndexSecond",
-  props: ["isType"],
+  props: ["isType", "isCode"],
   data() {
     return {
       listData: [],
       loading: false,
       finished: false,
-      isLoading: false
+      isLoading: false,
+      radio: "2",
+      chooseId: this.isCode[0].codeNo,
+      curPage: 1
     };
   },
   components: {
     [List.name]: List,
-    [PullRefresh.name]: PullRefresh
+    [PullRefresh.name]: PullRefresh,
+    [RadioGroup.name]: RadioGroup,
+    [Radio.name]: Radio
   },
   methods: {
     onLoad() {
       // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.listData.push(this.listData.length + 1);
-        }
-        // 加载状态结束
-        this.loading = false;
-
-        // 数据全部加载完成
-        if (this.listData.length >= 40) {
-          this.finished = true;
-        }
-      }, 500);
+      this.onInit();
     },
     onRefresh() {
-      setTimeout(() => {
-        this.$toast("刷新成功");
-        this.isLoading = false;
-      }, 500);
+      this.curPage = 1;
+      this.onInit(true,true);
+    },
+    changeId(val) {
+      this.curPage = 1;
+      this.onInit(false,true);
+    },
+    onInit(val=false, isInit=false) {
+      let _data = {
+        codeId: this.isType,
+        brandId: this.chooseId,
+        page: this.curPage
+      };
+      console.log(_data)
+      findAllGoods(_data).then(({ data }) => {
+        if (val) {
+          this.$toast("刷新成功");
+          this.isLoading = false;
+        }
+        this.loading = false;
+        if (data.data.length > 0) {
+          if (isInit) {
+            this.listData = data.data
+          } else {
+            [...this.listData] = [...this.listData, ...data.data];
+            this.curPage = this.curPage + 1;
+          }
+        } else {
+          this.finished = true;
+        }
+      });
     }
   },
   mounted() {
-    findAllGoods().then(({ data }) => {
-      this.listData = data.data;
-    });
     this.$nextTick(() => {
       this.$refs.second_pg.scrollTo(0, 0);
     });
@@ -156,25 +175,30 @@ export default {
 }
 .index_second {
   .is_ul {
-    span {
+    height: 40px;
+    overflow-x: scroll;
+    word-break: keep-all;
+    white-space: nowrap;
+    .is_li {
       display: inline-block;
       font-size: 12px;
       color: #ea047b;
-      border: 1px solid #ea047b;
-      width: 48px;
-      height: 19px;
-      line-height: 19px;
-      text-align: center;
-      border-radius: (19px/2);
+      height: 21px;
       margin: 9px 0 9px 15px;
     }
-    span:first-child {
+    span {
+      display: inline-block;
+      padding: 0 10px;
+      line-height: 19px;
+      height: 19px;
+      border: 1px solid #ea047b;
+      text-align: center;
+      border-radius: (19px/2);
+    }
+    .active {
       background: #ea047b;
       color: #fff;
-      border: none;
-            width: 50px;
-      height: 21px;
-      line-height: 21px;
+      // border: none;
     }
   }
 }

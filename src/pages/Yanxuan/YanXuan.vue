@@ -1,14 +1,14 @@
 <template>
   <div class="pg_yanxuan">
     <swiper :options="swiperOption" ref="mySwiper" class="swiper">
-      <swiper-slide v-for="(v,i) in img" :key="i" class="swipItem">
+      <swiper-slide v-for="(v,i) in bannerList" :key="i" class="swipItem">
         <router-link to="/yanxuanlist" class="swipe_li">
-          <img :src="v" alt class="sl_bg">
+          <img :src="v.articleClassifyImg" alt class="sl_bg">
           <div class="sl_active">
             <img src="@/assets/img/yanxuan/pg_yanxuan_active.png" alt>
-            <p class="name">科技</p>
-            <p class="title">保持敬畏</p>
-            <p class="slogan">追求创新，追求自我突破，黑科技</p>
+            <p class="name">{{v.articleClassifyName}}</p>
+            <p class="title">{{v.articleClassifyTitleName}}</p>
+            <p class="slogan">{{v.articleClassifySignature}}</p>
           </div>
         </router-link>
       </swiper-slide>
@@ -27,15 +27,12 @@ import { mapActions } from "vuex";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import "swiper/dist/css/swiper.css";
 import WaterFall from "./WaterFall.vue";
+import { selectArticleClassifyList} from "@/api/yanxuan.js";
 export default {
   name: "YanXuan",
   data() {
     return {
-      img: [
-        "http://img.fishmaimai.com/imgServer/upload/20190308/5261eead7da84024a896002c66280d9c.jpg",
-        "http://img.fishmaimai.com/imgServer/upload/20190308/5261eead7da84024a896002c66280d9c.jpg",
-        "http://img.fishmaimai.com/imgServer/upload/20190308/5261eead7da84024a896002c66280d9c.jpg"
-      ],
+      bannerList: [],
       swiperOption: {
         effect: "coverflow",
         slidesPerView: 1,
@@ -62,6 +59,9 @@ export default {
   },
   mounted() {
     this.ChangeActive(1);
+    selectArticleClassifyList().then(({ data }) => {
+      this.bannerList = data.data.dataList;
+    });
     this.$nextTick(() => {
       setTimeout(() => {
         //设置初始位置
@@ -127,10 +127,13 @@ export default {
       }
       .name {
         width: 16px;
-        line-height: 30px;
+        line-height: 24px;
+        height: 100px;
         position: absolute;
-        top: 46px;
+        top: 27px;
         left: 4px;
+        display: flex;
+        align-items: center;
       }
       .title {
         text-align: right;

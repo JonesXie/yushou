@@ -3,7 +3,7 @@
     <div
       class="fall_item"
       v-for="(item,index) in list"
-      :key="item.id"
+      :key="index"
       :style="{left: item.left,top: item.top +'rem'}"
       ref="col"
     >
@@ -25,6 +25,7 @@
 <script>
 let leftH = 0;
 let rightH = 0;
+import { selectRecommendArticlePage } from "@/api/yanxuan.js";
 export default {
   name: "WaterFall",
   data() {

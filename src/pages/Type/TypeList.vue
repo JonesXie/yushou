@@ -1,24 +1,12 @@
 <template>
   <div class="mod_list" ref="mod_list">
-    <img src="@/assets/404_img/404.png" alt class="mdl_title">
+    <img :src="istype.codeImg" alt class="mdl_title">
     <ul class="mdl_ul">
-      <li>
-        <router-link to="/">
-          <img src="@/assets/logo.png" alt>
-          <p>香水</p>
+      <li v-for="(v,i) in istype.codeList" :key="i">
+        <router-link :to="`/goodstype/${v.id}`">
+          <img :src="v.codeImg" alt>
+          <p>{{v.codeName}}</p>
         </router-link>
-      </li>
-      <li>
-        <img src="@/assets/logo.png" alt>
-        <p>香水</p>
-      </li>
-      <li>
-        <img src="@/assets/logo.png" alt>
-        <p>香水</p>
-      </li>
-      <li>
-        <img src="@/assets/logo.png" alt>
-        <p>香水</p>
       </li>
     </ul>
   </div>
@@ -31,12 +19,21 @@ export default {
   data() {
     return {};
   },
+  watch: {
+    istype: {
+      handler: function() {
+        console.log(this.istype);
+      },
+      immediate: true
+    }
+  },
   methods: {
     GotoTop() {
       this.$refs.mod_list.scrollTo(0, 0);
     }
   },
   mounted() {
+    console.log(this.istype);
     this.$nextTick(() => {
       this.GotoTop();
     });

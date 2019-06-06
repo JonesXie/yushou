@@ -1,6 +1,6 @@
 import {
   post,
-  get
+  get,
 } from '@/config/AxiosBase.js'
 
 //查询商品分类
