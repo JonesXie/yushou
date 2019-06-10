@@ -1,24 +1,25 @@
 <template>
   <div class="pg_yanxuan">
-    <swiper :options="swiperOption" ref="mySwiper" class="swiper">
-      <swiper-slide v-for="(v,i) in bannerList" :key="i" class="swipItem">
-        <router-link to="/yanxuanlist" class="swipe_li">
-          <img :src="v.articleClassifyImg" alt class="sl_bg">
-          <div class="sl_active">
-            <img src="@/assets/img/yanxuan/pg_yanxuan_active.png" alt>
-            <p class="name">{{v.articleClassifyName}}</p>
-            <p class="title">{{v.articleClassifyTitleName}}</p>
-            <p class="slogan">{{v.articleClassifySignature}}</p>
-          </div>
-        </router-link>
-      </swiper-slide>
-    </swiper>
-    <div class="pg_list">
-      <p class="pg_list_h">热门推荐</p>
-      <div class="pg_list_tuijian">
-        <water-fall></water-fall>
-      </div>
-    </div>
+    <water-fall>
+      <template #content>
+        <swiper :options="swiperOption" ref="mySwiper" class="swiper">
+          <swiper-slide v-for="(v,i) in bannerList" :key="i" class="swipItem">
+            <router-link to="/yanxuanlist" class="swipe_li">
+              <img :src="v.articleClassifyImg" alt class="sl_bg">
+              <div class="sl_active">
+                <img src="@/assets/img/yanxuan/pg_yanxuan_active.png" alt>
+                <p class="name">{{v.articleClassifyName}}</p>
+                <p class="title">{{v.articleClassifyTitleName}}</p>
+                <p class="slogan">{{v.articleClassifySignature}}</p>
+              </div>
+            </router-link>
+          </swiper-slide>
+        </swiper>
+        <div class="pg_list">
+          <p class="pg_list_h">热门推荐</p>
+        </div>
+      </template>
+    </water-fall>
   </div>
 </template>
 
@@ -27,7 +28,7 @@ import { mapActions } from "vuex";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import "swiper/dist/css/swiper.css";
 import WaterFall from "./WaterFall.vue";
-import { selectArticleClassifyList} from "@/api/yanxuan.js";
+import { selectArticleClassifyList } from "@/api/yanxuan.js";
 export default {
   name: "YanXuan",
   data() {
@@ -37,6 +38,7 @@ export default {
         effect: "coverflow",
         slidesPerView: 1,
         centeredSlides: true,
+        autoplay:true,
         coverflowEffect: {
           rotate: 0,
           depth: 80,
@@ -159,7 +161,7 @@ export default {
       width: 100vw;
     }
     .pg_list_tuijian {
-      width: calc(100vw - 20px);
+      width: calc(100vw - 10px);
       margin: 0 auto;
     }
   }

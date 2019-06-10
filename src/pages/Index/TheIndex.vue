@@ -20,11 +20,11 @@
         :ellipsis="false"
         class="pi_list_tab"
       >
-        <van-tab title="全部">
-          <index-first></index-first>
-        </van-tab>
-        <van-tab v-for="item in tabList" :title="item.codeName" :key="item.id"><index-second :isType="item.codeNo" :isCode="item.codeList"></index-second></van-tab>
+        <van-tab title="全部"></van-tab>
+        <van-tab v-for="item in tabList" :title="item.codeName" :key="item.id"></van-tab>
       </van-tabs>
+      <index-first v-if="active === 0"></index-first>
+      <index-second v-else :isType="tabList[active-1].id" :isCode="tabList[active-1].codeList"></index-second>
     </div>
   </div>
 </template>
@@ -39,7 +39,7 @@ export default {
     return {
       active: 0,
       id: "123",
-      tabList:[],
+      tabList: []
     };
   },
   components: {
@@ -58,9 +58,9 @@ export default {
   },
   mounted() {
     this.ChangeActive(0);
-    findGoodsCode().then(({data})=>{
-      this.tabList = data.data
-    })
+    findGoodsCode().then(({ data }) => {
+      this.tabList = data.data;
+    });
   }
 };
 </script>

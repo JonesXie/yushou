@@ -2,7 +2,10 @@
   <div class="index_second fisrt_list" ref="second_pg">
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <van-radio-group v-model="chooseId" class="is_ul" @change="changeId">
-        <van-radio class="is_li" v-for="(v,i) in isCode" :key="i" :name="v.codeNo">
+        <van-radio class="is_li" :name="isType">
+          <span slot="icon" slot-scope="props" :class="props.checked ? 'active' : ''">推荐</span>
+        </van-radio>
+        <van-radio class="is_li" v-for="(v,i) in isCode" :key="i" :name="v.id">
           <span slot="icon" slot-scope="props" :class="props.checked ? 'active' : ''">{{v.codeName}}</span>
         </van-radio>
       </van-radio-group>
@@ -12,7 +15,7 @@
         :finished="finished"
         finished-text="没有更多了"
         @load="onLoad"
-        :offset="10"
+        class="vantList"
       >
         <ul class="fl_ul">
           <li class="van-hairline--bottom fl_li" v-for="(v,i) in listData" :key="i">
@@ -37,7 +40,7 @@
 </template>
 
 <script>
-import { findAllGoods} from "@/api/index.js";
+import { findAllGoods } from "@/api/index.js";
 import { List, PullRefresh, RadioGroup, Radio } from "vant";
 export default {
   name: "IndexSecond",
@@ -49,9 +52,18 @@ export default {
       finished: false,
       isLoading: false,
       radio: "2",
-      chooseId: this.isCode[0].codeNo,
+      chooseId: this.isType,
       curPage: 1
     };
+  },
+  watch: {
+    isType: {
+      handler: function(nv) { 
+        this.chooseId = nv
+        this.curPage = 1;
+        this.onLoad(false, true);
+      }
+    }
   },
   components: {
     [List.name]: List,
@@ -62,36 +74,44 @@ export default {
   methods: {
     onLoad() {
       // 异步更新数据
-      this.onInit();
+      if (!this.finished) {
+        this.onInit();
+      }
     },
     onRefresh() {
       this.curPage = 1;
-      this.onInit(true,true);
+      this.onInit(true, true);
     },
-    changeId(val) {
+    changeId() {
       this.curPage = 1;
-      this.onInit(false,true);
+      this.onInit(false, true);
     },
-    onInit(val=false, isInit=false) {
+    onInit(val = false, isInit = false) {
       let _data = {
-        codeId: this.isType,
-        brandId: this.chooseId,
-        page: this.curPage
+        page: this.curPage,
+        pageSize: 10,
+        goodsName: null,
+        minimumPrice: null,
+        createtime: null,
+        goodsSaleStarttime: null,
+        activityId: null,
+        priceSort: 0,
+        goodsQuantitySort: 0,
+        codeId: this.chooseId,
+        brandId: null
       };
-      console.log(_data)
       findAllGoods(_data).then(({ data }) => {
         if (val) {
           this.$toast("刷新成功");
           this.isLoading = false;
         }
         this.loading = false;
+        if (isInit) {
+          this.listData = data.data;
+        }
         if (data.data.length > 0) {
-          if (isInit) {
-            this.listData = data.data
-          } else {
-            [...this.listData] = [...this.listData, ...data.data];
-            this.curPage = this.curPage + 1;
-          }
+          [...this.listData] = [...this.listData, ...data.data];
+          this.curPage = this.curPage + 1;
         } else {
           this.finished = true;
         }
@@ -172,11 +192,16 @@ export default {
       }
     }
   }
+  .vantList {
+    width: 100vw;
+    overflow: hidden;
+    padding-bottom: 50px;
+  }
 }
 .index_second {
   .is_ul {
-    height: 40px;
     overflow-x: scroll;
+    overflow-y: hidden;
     word-break: keep-all;
     white-space: nowrap;
     .is_li {

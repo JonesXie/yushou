@@ -10,6 +10,10 @@ export function selectArticleClassifyList(data) {
 export function selectRecommendArticlePage(data) {
   return get('/api/article/selectRecommendArticlePage', data)
 }
+//商品-评论点赞
+export function zan(data, isJson) {
+  return post('/api/comment/zan', data, isJson)
+}
 
 export function doLogin(data, isJson) {
   return post('/member/doLogin.api', data, isJson)

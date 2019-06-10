@@ -97,6 +97,7 @@ export default {
   .vantList {
     width: 100vw;
     overflow: hidden;
+    box-sizing: border-box
   }
   .gc_ul {
     width: 100vw;

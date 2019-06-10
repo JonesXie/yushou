@@ -8,7 +8,7 @@ import { Toast,Notify  } from 'vant'; //全局引入提示
 Vue.config.productionTip = false
 
 Vue.use(Toast)
-Vue.use(Notify )
+Vue.use(Notify)
 
 new Vue({
   router,

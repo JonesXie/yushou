@@ -5,10 +5,10 @@
     </div>
 
     <van-list
-      v-model="loading"
-      :finished="finished"
+      v-model="loading01"
+      :finished="finished01"
       finished-text="没有更多了"
-      @load="onLoad"
+      @load="onLoad01"
       :offset="10"
     >
       <ul class="fl_ul">
@@ -40,8 +40,8 @@ export default {
   data() {
     return {
       listData: [],
-      loading: false,
-      finished: false,
+      loading01: false,
+      finished01: false,
       curPage: 1
     };
   },
@@ -49,7 +49,7 @@ export default {
     [List.name]: List
   },
   methods: {
-    onLoad() {
+    onLoad01() {
       // 异步更新数据
       let _data = {
         page: this.curPage
@@ -57,12 +57,12 @@ export default {
       // 异步更新数据
       findAllGoods(_data).then(({ data }) => {
         // 加载状态结束
-        this.loading = false;
+        this.loading01 = false;
         if (data.data.length > 0) {
           [...this.listData] = [...this.listData, ...data.data];
           this.curPage = this.curPage + 1;
         } else {
-          this.finished = true;
+          this.finished01 = true;
         }
       });
     },

@@ -45,6 +45,17 @@ export function findAllGoods(data) {
   return get('/goods/findAllGoods.api', data)
 }
 
+//消息通知-获取用户消息通知列表
+export function selectMsgGroup(data) {
+  return get('/member/msg/selectMsgGroup.api', data)
+}
+
+//热门搜索
+export function selectGoodsSearch(data,isJson) {
+  return post('/goods/selectGoodsSearch', data, isJson)
+}
+
+
 export function doLogin(data, isJson) {
   return post('/member/doLogin.api', data, isJson)
 }

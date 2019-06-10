@@ -22,7 +22,7 @@ export default {
   watch: {
     istype: {
       handler: function() {
-        console.log(this.istype);
+        // console.log(this.istype);
       },
       immediate: true
     }
@@ -33,7 +33,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.istype);
     this.$nextTick(() => {
       this.GotoTop();
     });

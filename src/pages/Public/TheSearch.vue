@@ -3,12 +3,12 @@
     <van-nav-bar left-arrow :fixed="true" @click-left="GoBack()">
       <!-- <van-search placeholder="请输入要搜索的商品" background="#f4f4f4" slot="title" v-focus/> -->
       <div class="pgs_wrap_input" slot="title">
-        <van-icon name="search" class="search_icon" />
-        <input type="text" placeholder="请输入要搜索的商品" v-focus>
+        <van-icon name="search" class="search_icon"/>
+        <input type="text" placeholder="请输入要搜索的商品" v-focus v-model="isSearch">
       </div>
       <span slot="right" @click="turnPage">搜索</span>
     </van-nav-bar>
-    <div class="search_history">
+    <!-- <div class="search_history">
       <div class="sh_title">
         <span>历史记录</span>
         <img src="@/assets/del.png" alt>
@@ -16,13 +16,13 @@
       <div class="sh_li">
         <span v-for="i in 8" :key="i">面膜</span>
       </div>
-    </div>
+    </div>-->
     <div class="search_hot">
       <div class="sh_title">
         <span>热门搜索</span>
       </div>
       <div class="sh_li">
-        <span v-for="i in 8" :key="i">面膜</span>
+        <span v-for="(v,i) in hotList" :key="i" @click="hotClick(v)">{{v}}</span>
       </div>
     </div>
   </div>
@@ -31,10 +31,15 @@
 <script>
 import { NavBar, Icon } from "vant";
 import { mapActions } from "vuex";
+import { selectGoodsSearch } from "@/api/index.js";
+import { isNull } from "@/layout/methods.js";
 export default {
   name: "TheSearch",
   data() {
-    return {};
+    return {
+      isSearch: null,
+      hotList: []
+    };
   },
   directives: {
     focus: {
@@ -43,18 +48,32 @@ export default {
       }
     }
   },
-  components: { [NavBar.name]: NavBar, [Icon.name]: Icon  },
+  components: { [NavBar.name]: NavBar, [Icon.name]: Icon },
   methods: {
     ...mapActions(["ChangeStatus"]),
     turnPage() {
-      this.$router.push("/");
+      if (isNull(this.isSearch)) {
+        this.$router.push("/");
+      }else{
+        this.$toast('请输入值')
+      }
     },
-    GoBack(){
-      this.$router.back(-1)
+    GoBack() {
+      this.$router.back(-1);
+    },
+    hotClick(val) {
+      this.isSearch = val;
+      this.turnPage();
+    },
+    getSearch() {
+      selectGoodsSearch().then(({ data }) => {
+        this.hotList = data.data.dataList;
+      });
     }
   },
   mounted() {
     this.ChangeStatus(false);
+    this.getSearch();
   },
   beforeDestroy() {
     this.ChangeStatus(true);
@@ -97,8 +116,8 @@ export default {
     }
     .search_icon {
       font-size: 15px;
-      color:#999;
-      margin:  0 6px 0 12px;
+      color: #999;
+      margin: 0 6px 0 12px;
     }
   }
 }
