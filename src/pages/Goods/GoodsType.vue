@@ -1,85 +1,28 @@
 <template>
   <HeadFoot class="pg_goodstype" :Title="title">
     <template #content>
-      <van-tabs
-        v-model="active"
-        animated
-        :line-height="0"
-        title-active-color="#ea047b"
-        color="#ea047b"
-        title-inactive-color="#666"
-        :ellipsis="false"
-        class="pggt_head"
-      >
-        <van-tab title="综合">
-          <ul class="pggt_ul">
-            <li class="pggt_li" v-for="(item,index) in dataList1" :key="index">
-              <div class="imgWrap" :style="{backgroundImage:'url('+ img +')'}"></div>
-              <div class="txtWrap">
-                <div class="price ellipsis-line">
-                  <span>立减1000元</span>
-                  <p>
-                    ￥
-                    <em>2019</em>.00
-                  </p>
-                </div>
-                <div class="info ellipsis-two">美宝莲 MAYBELLINE 美宝纽约时刻迷你眼影盘日落 6.1g</div>
-                <div class="buyer">10人已付款</div>
-              </div>
-            </li>
-          </ul>
-        </van-tab>
-        <van-tab title="销量">内容 4</van-tab>
-        <van-tab>
-          <div slot="title" class="price" @click="changeRange">
-            价格
-            <img v-if="priceActive === 1" src="@/assets/img/goods/pg_goodstype_up.png" alt>
-            <img v-else-if="priceActive === 2" src="@/assets/img/goods/pg_goodstype_down.png" alt>
-            <img v-else src="@/assets/img/goods/pg_goodstype_default.png" alt>
-          </div>内容 4
-        </van-tab>
-      </van-tabs>
+      <type-list :id="id"></type-list>
     </template>
   </HeadFoot>
 </template>
 
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
-import { Tab, Tabs } from "vant";
+import TypeList from "@/pages/Components/goods/TypeList.vue";
 export default {
   name: "GoodsType",
   data() {
     return {
-      title: "商品",
-      active: 0,
-      priceActive: 0,
-      img: require("@/assets/img/goods/pg_goodstype_goods.png"),
-      dataList1: ["1", "1", "1", "1", "1", "1"]
+      title: null,
+      id: null
     };
   },
-  components: { HeadFoot, [Tab.name]: Tab, [Tabs.name]: Tabs },
-  computed: {
-    stickTop: function() {
-      return this.$store.state.stickTop;
-    }
-  },
-  methods: {
-    changeRange() {
-      if (this.active === 2) {
-        switch (this.priceActive) {
-          case 0:
-            this.priceActive = 1;
-            break;
-          case 1:
-            this.priceActive = 2;
-            break;
-          default:
-            this.priceActive = 0;
-        }
-      }
-    }
-  },
-  mounted() {}
+  components: { HeadFoot, TypeList },
+  mounted() {
+    this.id = this.$route.params.id;
+    this.title = this.$route.params.codeName;
+    // this.onInit();
+  }
 };
 </script>
 
@@ -153,6 +96,22 @@ export default {
         color: #999;
         font-size: 10px;
       }
+    }
+  }
+  .noData {
+    width: 100%;
+    height: calc(100vh - 120px);
+    text-align: center;
+    position: absolute;
+    top: 120px;
+    img {
+      position: absolute;
+      top: 40%;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      display: inline-block;
+      width: 227px;
+      height: 200px;
     }
   }
 }

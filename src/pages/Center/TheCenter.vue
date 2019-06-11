@@ -7,37 +7,37 @@
           <router-link to="/">
             <img src="@/assets/img/center/pg_center_set.png" alt>
           </router-link>
-          <router-link to="/">
+          <!-- <router-link to="/">
             <img src="@/assets/img/center/pg_center_kefu.png" alt>
-          </router-link>
+          </router-link>-->
         </p>
         <div class="info">
           <div class="tip">购物达人</div>
           <div class="info_cent">
             <div class="ic_tx">
               <img src="@/assets/img/center/pg_center_dec.png" alt>
-              <img src="@/assets/logo.png" alt>
+              <img :src="userInfo.images" alt>
             </div>
-            <div class="ic_btn">{{userName}}</div>
+            <div class="ic_btn">{{userInfo.nickName}}</div>
             <van-row class="ic_row">
               <van-col span="8">
                 <router-link to="/wallet">
                   <p class="ic_row_p" style="color:#e50404">
-                    <span>{{money}}</span>元
+                    <span>{{userInfo.balance}}</span>元
                   </p>
                   <span>余额</span>
                 </router-link>
               </van-col>
               <van-col span="8">
                 <p class="ic_row_p" style="color:#c40098">
-                  <span>{{jifen}}</span>个
+                  <span>{{userInfo.integral}}</span>个
                 </p>
                 <span>积分</span>
               </van-col>
               <van-col span="8">
                 <router-link to="/">
                   <p class="ic_row_p" style="color:#c056ed">
-                    <span>{{coupon}}</span>张
+                    <span>{{userInfo.couponCount}}</span>张
                   </p>
                   <span>优惠券</span>
                 </router-link>
@@ -58,27 +58,27 @@
       <ul class="pgco_list">
         <li v-on:click="turnOrder(1)">
           <img src="@/assets/img/center/pg_center_fukuan.png" alt>
-          <div class="tip">{{tips}}</div>
+          <div class="tip" v-if="userInfo.waitPay >0">{{userInfo.waitPay}}</div>
           <p>待付款</p>
         </li>
         <li v-on:click="turnOrder(2)">
           <img src="@/assets/img/center/pg_center_wait.png" alt>
-          <div class="tip">{{tips}}</div>
+          <div class="tip" v-if="userInfo.waiting >0">{{userInfo.waiting}}</div>
           <p>调货中</p>
         </li>
         <li v-on:click="turnOrder(3)">
           <img src="@/assets/img/center/pg_center_fahuo.png" alt>
-          <div class="tip">{{tips}}</div>
+          <div class="tip" v-if="userInfo.waitDeliver >0">{{userInfo.waitDeliver}}</div>
           <p>待发货</p>
         </li>
         <li v-on:click="turnOrder(4)">
           <img src="@/assets/img/center/pg_center_shouhuo.png" alt>
-          <div class="tip">{{tips}}</div>
+          <div class="tip" v-if="userInfo.waitReceipt >0">{{userInfo.waitReceipt}}</div>
           <p>待收货</p>
         </li>
         <li v-on:click="turnOrder(5)">
           <img src="@/assets/img/center/pg_center_suc.png" alt>
-          <div class="tip" v-if="false">{{tips}}</div>
+          <div class="tip" v-if="userInfo.totalProfit >0">{{userInfo.totalProfit}}</div>
           <p>交易成功</p>
         </li>
       </ul>
@@ -124,15 +124,14 @@
 <script>
 import { mapActions } from "vuex";
 import { Row, Col, Icon, Cell, CellGroup } from "vant";
+import { getMember } from "@/api/center.js";
 export default {
   name: "TheCenter",
   data() {
     return {
       userName: "立即登录",
-      money: 99999.99,
-      jifen: 66,
-      coupon: 1,
-      tips: 99
+      tips: 99,
+      userInfo: ''
     };
   },
   components: {
@@ -146,9 +145,15 @@ export default {
     ...mapActions(["ChangeActive"]),
     turnOrder: function(index = 0) {
       this.$router.push({ path: "/myorder", query: { active: index } });
+    },
+    getInfo() {
+      getMember().then(({ data }) => {
+        this.userInfo = data.data;
+      });
     }
   },
   mounted() {
+    this.getInfo();
     this.ChangeActive(3);
   }
 };

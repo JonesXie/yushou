@@ -85,7 +85,7 @@ export default {
 
 <style scoped lang="scss">
 .mode_wf {
-  padding-bottom: 50px;
+  // padding-bottom: 50px;
   & /deep/.img-wraper {
     width: 100% !important;
     height: auto !important;
@@ -105,6 +105,7 @@ export default {
 }
 .mw_li_slogan {
   line-height: 20px;
+  font-weight: bold
 }
 .mw_li_like {
   margin-top: 5px;
@@ -124,6 +125,6 @@ export default {
 }
 .mode_wf {
   display: block;
-  height: 100vh;
+  // height: 100vh; 在各个插槽中设置高度，必须
 }
 </style>

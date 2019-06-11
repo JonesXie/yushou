@@ -4,7 +4,7 @@
       <template #content>
         <swiper :options="swiperOption" ref="mySwiper" class="swiper">
           <swiper-slide v-for="(v,i) in bannerList" :key="i" class="swipItem">
-            <router-link to="/yanxuanlist" class="swipe_li">
+            <router-link :to="{ path: '/yanxuanlist', query: { id: v.id ,name:v.articleClassifyName} }" class="swipe_li">
               <img :src="v.articleClassifyImg" alt class="sl_bg">
               <div class="sl_active">
                 <img src="@/assets/img/yanxuan/pg_yanxuan_active.png" alt>
@@ -38,7 +38,7 @@ export default {
         effect: "coverflow",
         slidesPerView: 1,
         centeredSlides: true,
-        autoplay:true,
+        autoplay: true,
         coverflowEffect: {
           rotate: 0,
           depth: 80,
@@ -75,6 +75,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.pg_yanxuan {
+  & /deep/ .mode_wf {
+    height: 100vh;
+    padding-bottom: 50px;
+  }
+}
 .pg_yanxuan {
   overflow: hidden;
   .swiper {

@@ -17,7 +17,8 @@
         <span v-for="i in 8" :key="i">面膜</span>
       </div>
     </div>-->
-    <div class="search_hot">
+    <type-list :goodsName="isSearch" v-if="showList"></type-list>
+    <div class="search_hot" v-else>
       <div class="sh_title">
         <span>热门搜索</span>
       </div>
@@ -33,12 +34,14 @@ import { NavBar, Icon } from "vant";
 import { mapActions } from "vuex";
 import { selectGoodsSearch } from "@/api/index.js";
 import { isNull } from "@/layout/methods.js";
+import TypeList from "@/pages/Components/goods/TypeList.vue";
 export default {
   name: "TheSearch",
   data() {
     return {
       isSearch: null,
-      hotList: []
+      hotList: [],
+      showList: false
     };
   },
   directives: {
@@ -48,14 +51,14 @@ export default {
       }
     }
   },
-  components: { [NavBar.name]: NavBar, [Icon.name]: Icon },
+  components: { [NavBar.name]: NavBar, [Icon.name]: Icon, TypeList },
   methods: {
     ...mapActions(["ChangeStatus"]),
     turnPage() {
       if (isNull(this.isSearch)) {
-        this.$router.push("/");
-      }else{
-        this.$toast('请输入值')
+        this.showList = true;
+      } else {
+        this.$toast("请输入值");
       }
     },
     GoBack() {
