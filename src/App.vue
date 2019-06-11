@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import TabBar from "@/layout/TabBar.vue";
+import TabBar from "@/pages/Public/TabBar.vue";
 export default {
   name: "app",
   components: { TabBar },
