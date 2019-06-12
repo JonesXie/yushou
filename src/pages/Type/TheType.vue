@@ -10,7 +10,7 @@
         <van-badge v-for="(v,i) in barList" :key="i" :title="v.codeName"/>
       </van-badge-group>
       <div class="pgt_R">
-        <type-list :istype="getType"></type-list>
+        <type-right :istype="getType"></type-right>
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@
 <script>
 import { mapActions } from "vuex";
 import { NavBar, BadgeGroup, Badge } from "vant";
-import TypeList from "./TypeList.vue";
+import TypeRight from "./TypeRight.vue";
 import { findGoodsCode } from "@/api/index.js";
 export default {
   name: "TheType",
@@ -34,7 +34,7 @@ export default {
     [NavBar.name]: NavBar,
     [BadgeGroup.name]: BadgeGroup,
     [Badge.name]: Badge,
-    TypeList
+    TypeRight
   },
   methods: {
     ...mapActions(["ChangeActive"]),

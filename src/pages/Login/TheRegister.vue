@@ -102,8 +102,8 @@ export default {
         password: this.psw,
         inviter: null
       };
-      doRegister(_data).then(() => {
-        Notify("注册成功");
+      doRegister(_data).then(({data}) => {
+        this.$notify("注册成功");
         localStorage.setItem("token", data.token);
         this.$store.commit("SET_Token", data.token);
         this.$router.push("/index");

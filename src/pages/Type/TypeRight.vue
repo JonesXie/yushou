@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "TypeList",
+  name: "TypeRight",
   props: ["istype"],
   data() {
     return {};

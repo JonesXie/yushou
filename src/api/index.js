@@ -50,6 +50,10 @@ export function selectMsgGroup(data) {
   return get('/member/msg/selectMsgGroup.api', data)
 }
 
+//消息通知-消息具体消息列表
+export function selectAllMsg(data) {
+  return get('/member/msg/selectAllMsg.api', data)
+}
 //热门搜索
 export function selectGoodsSearch(data,isJson) {
   return post('/goods/selectGoodsSearch', data, isJson)

@@ -14,25 +14,14 @@
           :ellipsis="false"
           class="pgmc_tab"
         >
-          <van-tab title="全部订单">
-            <order-list status="0"></order-list>
-          </van-tab>
-          <van-tab title="待付款">
-            <order-list status="1"></order-list>
-          </van-tab>
-          <van-tab title="调货中">
-            <order-list status="2"></order-list>
-          </van-tab>
-          <van-tab title="待发货">
-            <order-list status="2"></order-list>
-          </van-tab>
-          <van-tab title="待收货">
-            <order-list status="0"></order-list>
-          </van-tab>
-          <van-tab title="交易成功">
-            <order-list status="0"></order-list>
-          </van-tab>
+          <van-tab title="全部订单"></van-tab>
+          <van-tab title="待付款"></van-tab>
+          <van-tab title="调货中"></van-tab>
+          <van-tab title="待发货"></van-tab>
+          <van-tab title="待收货"></van-tab>
+          <van-tab title="交易成功"></van-tab>
         </van-tabs>
+        <order-list :status="deliverData"></order-list>
       </div>
     </template>
   </HeadFoot>
@@ -48,22 +37,22 @@ export default {
     return {
       title: "我的订单",
       actived: 0,
-      stickTop: 0,
-      lineWidth: 60
+      lineWidth: 60,
+      setArr: [null, "01", "02", "03", "04", "100"], // 全部：不传 待支付：01 调货中：02 待发货 03 待收货 04 交易成功：100
+      deliverData: null
     };
+  },
+  watch: {
+    actived: {
+      handler: function(nv) {
+        this.deliverData = this.setArr[nv];
+      }
+    }
   },
   components: { HeadFoot, [Tab.name]: Tab, [Tabs.name]: Tabs, OrderList },
   methods: {},
   mounted() {
-    if (this.$route.query.active !== undefined) {
-      this.actived = this.$route.query.active;
-    }
-    //顶部菜单固定
-    this.$nextTick(() => {
-      let rate = document.documentElement.style.fontSize.split("px")[0];
-      this.stickTop = Number((rate * 1.22667).toFixed(0));
-      this.lineWidth = Number((rate * 1.5).toFixed(0));
-    });
+    this.actived = this.$route.params.active;
   }
 };
 </script>

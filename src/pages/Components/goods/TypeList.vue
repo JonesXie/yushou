@@ -24,7 +24,13 @@
     </van-tabs>
     <!-- list -->
     <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
-      <van-list v-model="loading" :finished="finished" @load="onLoad" finished-text="没有更多的">
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+        :immediate-check="false"
+        finished-text="没有更多了"
+      >
         <ul class="pggt_ul">
           <li class="pggt_li" v-for="(item,index) in dataList" :key="index">
             <div class="imgWrap" :style="{backgroundImage:'url('+ item.goodsImages +')'}"></div>
@@ -138,25 +144,29 @@ export default {
         codeId: this.id,
         brandId: null
       };
-      findAllGoods(_data).then(({ data }) => {
-        this.loading = false;
-        if (isInit) {
-          this.dataList = data.data;
-        } else {
-          [...this.dataList] = [...this.dataList, ...data.data];
-          if (data.data.length === 0) {
-            this.finished = true;
+      if (!this.loading) {
+        findAllGoods(_data).then(({ data }) => {
+          this.loading = false;
+          if (isInit) {
+            this.dataList = data.data;
+          } else {
+            [...this.dataList] = [...this.dataList, ...data.data];
+            this.curPage = this.curPage + 1;
+            if (data.data.length === 0) {
+              this.finished = true;
+            }
           }
-        }
-        if (reFresh) {
-          this.$toast("刷新成功");
-          this.isRefresh = false;
-        }
-      });
-      this.curPage = this.curPage + 1;
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
     }
   },
-  mounted() {}
+  mounted() {
+    this.onInit();
+  }
 };
 </script>
 

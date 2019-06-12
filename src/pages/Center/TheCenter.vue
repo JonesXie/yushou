@@ -50,7 +50,7 @@
     <div class="pgc_order">
       <div class="pgco_h">
         <p class="pgco_h_my">我的订单</p>
-        <router-link :to="{path:'/myorder',query:{active:0}}" class="pgco_h_all">
+        <router-link :to="`/myorder/0`" class="pgco_h_all">
           全部订单
           <van-icon name="arrow"/>
         </router-link>
@@ -131,7 +131,7 @@ export default {
     return {
       userName: "立即登录",
       tips: 99,
-      userInfo: ''
+      userInfo: ""
     };
   },
   components: {
@@ -144,7 +144,7 @@ export default {
   methods: {
     ...mapActions(["ChangeActive"]),
     turnOrder: function(index = 0) {
-      this.$router.push({ path: "/myorder", query: { active: index } });
+      this.$router.push(`/myorder/${index}`);
     },
     getInfo() {
       getMember().then(({ data }) => {
@@ -262,6 +262,7 @@ $Color: #ea047b;
         text-align: center;
         .ic_row_p {
           margin-bottom: 10px;
+          font-weight: bold;
           span {
             font-size: 16px;
           }

@@ -89,12 +89,17 @@ const RouterMap = [
     component: () => import('@/pages/Site/MySite.vue')
   },
   {
-    path: '/myorder',
+    path: '/setsite',
+    name: 'setsite',
+    component: () => import('@/pages/Site/SetSite.vue')
+  },
+  {
+    path: '/myorder/:active',
     name: 'myorder',
     component: () => import('@/pages/Order/MyOrder.vue')
   },
   {
-    path: '/orderdetail',
+    path: '/orderdetail/:id',
     name: 'orderdetail',
     component: () => import('@/pages/Order/OrderDetail.vue')
   },

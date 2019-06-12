@@ -3,21 +3,24 @@
     <template #content>
       <div class="pgod_h">
         <p class="pgod_h_p1">
-          <!-- <img src="@/assets/img/components/pg_orderdetail_pass.png" alt=""> -->
-          <img src="@/assets/img/components/pg_orderdetail_wait.png" alt>
-          <span>等待中</span>
+          <img v-if="detailData.orderState === '100'" src="@/assets/img/components/pg_orderdetail_pass.png" alt="">
+          <img v-else src="@/assets/img/components/pg_orderdetail_wait.png" alt>
+          <span>{{orderStatus[detailData.orderState]}}</span>
         </p>
-        <p class="pgod_h_p2">您的包裹已经在路上啦，请您耐心等待哦</p>
+        <p class="pgod_h_p2" v-if="detailData.orderState === '100'">交易成功</p>
+        <p class="pgod_h_p2" v-else-if="detailData.orderState === '00'">您的订单已取消</p>
+        <p class="pgod_h_p2" v-else-if="detailData.orderState === '01'">等待支付中</p>
+         <p class="pgod_h_p2" v-else>您的包裹已经在路上啦，请您耐心等待哦</p>
       </div>
       <van-cell-group>
-        <van-cell is-link :center="true">
+        <van-cell :center="true">
           <div slot="title" class="site">
             <p class="site_owner">
               <img src="@/assets/img/components/pg_orderdetail_car.png" alt>
-              孙鹏飞
-              <span>187****1509</span>
+              {{detailData.receivingPeople}}
+              <span>{{detailData.receivingPhone}}</span>
             </p>
-            <p class="site_info">安徽省合肥市包河区望湖街道马鞍山路绿地瀛海大厦D座1102</p>
+            <p class="site_info">{{detailData.receivingAddress}}</p>
           </div>
         </van-cell>
         <van-cell is-link :to="{path:'/logistics',query:{id:123}}">
@@ -28,46 +31,51 @@
             </p>
             <div class="logistics_info">
               <img src="@/assets/img/components/pg_orderdetail_circle.png" alt>
-              <p class="site">您已签收本次订单包裹，本次配送完成。感谢您在鱼麦麦上的购物，祝您生活愉快！</p>
-              <p class="time">2017-10-25 11:35:37</p>
+              <p class="site" v-if="detailData.exchangeExpressName === null">暂无物流信息</p>
+              <p class="site">{{detailData.exchangeExpressName}}</p>
+              <p class="time">{{nowTime}}</p>
             </div>
           </div>
         </van-cell>
       </van-cell-group>
       <van-cell-group class="order">
-        <van-cell title="订单编号  17102316279122"></van-cell>
+        <van-cell :title="`订单编号${detailData.orderNo}`"></van-cell>
         <div class="detail">
-          <img src="@/assets/logo.png" alt>
+          <img :src="detailData.goodsImages" alt>
           <div class="wrap">
-            <p>骆驼牌 透气软弹男款同步网鞋低帮套脚棉鞋男式</p>
+            <p>{{detailData.goodsName}}</p>
             <p class="guige">
-              规格：白色；42
-              <span>1件</span>
+              规格：{{detailData.goodsModel}}
+              <span>{{detailData.goodsBuyNum}}件</span>
             </p>
           </div>
         </div>
         <van-cell title="今日价格">
-          <span class="cell-right">￥4137.0</span>
+          <span class="cell-right">￥{{detailData.newDatePrice}}</span>
         </van-cell>
         <van-cell title="剩余调货周期">
-          <span class="cell-right">4天</span>
+          <span class="cell-right">{{detailData.inWaitDay}}天</span>
         </van-cell>
       </van-cell-group>
       <van-cell-group class="info">
         <van-cell title="邮费">
-          <span >免邮</span>
+          <span>免邮</span>
         </van-cell>
         <van-cell title="配送方式">
-          <span >快递配送</span>
+          <span>快递配送</span>
         </van-cell>
         <van-cell title="留言">
-          <span  slot="label">备注</span>
+          <span slot="label" v-if="detailData.orderRemarks === null">暂无备注</span>
+          <span slot="label">{{detailData.orderRemarks}}</span>
         </van-cell>
         <van-cell title="支付方式">
-          <span >支付宝</span>
+          <span>{{orderPayType[detailData.orderPayType]}}</span>
+        </van-cell>
+        <van-cell title="实付金额">
+          <span class="cell-right">{{detailData.orderPayPrice}}</span>
         </van-cell>
         <van-cell title="下单时间">
-          <span >2019-4-20</span>
+          <span>{{detailData.createtime}}</span>
         </van-cell>
       </van-cell-group>
     </template>
@@ -75,13 +83,32 @@
 </template>
 
 <script>
+import { toOrderDetail } from "@/api/order.js";
+import { getTime } from "@/layout/methods.js";
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Icon, Cell, CellGroup } from "vant";
 export default {
   name: "OrderDetail",
   data() {
     return {
-      title: "订单详情"
+      title: "订单详情",
+      orderId: null,
+      detailData: "",
+      // 1支付宝 2微信 3余额
+      orderPayType: {
+        1: "支付宝",
+        2: "微信",
+        3: "余额"
+      },
+      // 全部：不传 已取消：00 待支付：01 调货中：02 待发货 03 待收货 04 交易成功：100
+      orderStatus: {
+        "00": "已取消",
+        "01": "待支付",
+        "02": "调货中",
+        "03": "待发货",
+        "04": "待收货",
+        "100": "交易成功"
+      }
     };
   },
   components: {
@@ -90,8 +117,26 @@ export default {
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup
   },
-  methods: {},
-  mounted() {}
+  computed: {
+    nowTime: function() {
+      let timer = getTime();
+      return timer;
+    }
+  },
+  methods: {
+    onInit() {
+      let _data = {
+        orderId: this.orderId
+      };
+      toOrderDetail(_data).then(({ data }) => {
+        this.detailData = data.data;
+      });
+    }
+  },
+  mounted() {
+    this.orderId = this.$route.params.id;
+    this.onInit();
+  }
 };
 </script>
 
@@ -198,7 +243,7 @@ export default {
   .order {
     margin-top: 10px;
     .detail {
-      width: 100%;
+      width: 100vw;
       padding: 15px;
       box-sizing: border-box;
       background: #f4f4f4;

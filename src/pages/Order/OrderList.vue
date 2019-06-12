@@ -1,94 +1,130 @@
 <template>
-  <div class="mod_orderlist">
-    <ul class="mo_ul">
-      <li class="mo_li">
-        <div class="mol_h">订单编号 17102316279122</div>
-        <div class="mol_c">
-          <router-link :to="{path:'/orderdetail',query:{id:'132'}}">
-            <div class="li_content_L">
-              <img src="@/assets/logo.png" alt>
+  <div class="mod_orderlist" ref="mo_list">
+    <!-- list -->
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+        finished-text="没有更多了"
+        :immediate-check="false"
+      >
+        <ul class="mo_ul">
+          <li class="mo_li" v-for="(v,i) in dataList" :key="i">
+            <div class="mol_h">
+              <p>订单编号:{{v.orderNo}}</p>
+              <p>{{setArr[v.orderState]}}</p>
             </div>
-            <div class="li_content_R">
-              <p class="title">匡威男鞋女鞋三星黑标街拍潮流低帮休闲舒适耐磨运动帆布鞋</p>
-              <p class="type">
-                规格：黑色；37码
-                <span>x2</span>
-              </p>
-              <p class="price">今日价：￥410.1</p>
+            <div class="mol_c">
+              <router-link :to="`/orderdetail/${v.id}`">
+                <div class="li_content_L">
+                  <img :src="v.goodsImages" alt>
+                </div>
+                <div class="li_content_R">
+                  <p class="title">{{v.goodsName}}</p>
+                  <p class="type">
+                    规格：{{v.goodsParameter}}
+                    <span>x{{v.goodsBuyNum}}</span>
+                  </p>
+                  <p class="price">今日价：￥{{v.newDatePrice}}</p>
+                </div>
+              </router-link>
+              <div class="li_content_f">
+                剩余调货周期：
+                <em>{{v.inWaitDay}}</em>天
+                <span>实付：￥{{v.orderPayPrice}}</span>
+              </div>
             </div>
-          </router-link>
-          <div class="li_content_f">
-            剩余调货周期：
-            <em>29</em>天
-            <span>实付：￥4137</span>
-          </div>
-        </div>
-        <div class="mol_f">
-          <span class="wuliu">
-            <router-link to="/logistics">查看物流</router-link>
-          </span>
-          <span class="check">确认收货</span>
-        </div>
-      </li>
-      <li class="mo_li">
-        <div class="mol_h">订单编号 17102316279122</div>
-        <div class="mol_c">
-          <div class="li_content_L">
-            <img src="@/assets/logo.png" alt>
-          </div>
-          <div class="li_content_R">
-            <p class="title">匡威男鞋女鞋三星黑标街拍潮流低帮休闲舒适耐磨运动帆布鞋</p>
-            <p class="type">
-              规格：黑色；37码
-              <span>x2</span>
-            </p>
-            <p class="price">今日价：￥410.1</p>
-          </div>
-          <div class="li_content_f">
-            剩余调货周期：
-            <em>29</em>天
-            <span>实付：￥4137</span>
-          </div>
-        </div>
-        <div class="mol_f">
-          <span class="wuliu">
-            <router-link to="/logistics">查看物流</router-link>
-          </span>
-          <span class="check">确认收货</span>
-        </div>
-      </li>
-    </ul>
+            <div class="mol_f">
+              <span class="wuliu">
+                <router-link to="/logistics">查看物流</router-link>
+              </span>
+              <span class="check">确认收货</span>
+            </div>
+          </li>
+        </ul>
+      </van-list>
+    </van-pull-refresh>
+    <div v-if="dataList.length === 0" class="noData">
+      <img src="@/assets/img/ly_nodata.png" alt>
+    </div>
   </div>
 </template>
 
 <script>
+import { List, PullRefresh } from "vant";
+import { findMyOrderPage } from "@/api/order.js";
 export default {
   name: "OrderList",
   props: ["status"],
   data() {
     return {
-      dataList: "11"
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      // 全部：不传 已取消：00 待支付：01 调货中：02 待发货 03 待收货 04 交易成功：100
+      setArr: {
+        "00": "已取消",
+        "01": "待支付",
+        "02": "调货中",
+        "03": "待发货",
+        "04": "待收货",
+        "100": "交易成功"
+      }
     };
   },
-  methods: {},
-  mounted() {
-    switch (this.status) {
-      case "0":
-        this.dataList = 0;
-        break;
-      case "1":
-        this.dataList = 1;
-        break;
-      case "2":
-        this.dataList = 2;
-        break;
-      case "3":
-        this.dataList = 3;
-        break;
-      default:
-        this.dataList = 0;
-        break;
+  components: { [List.name]: List, [PullRefresh.name]: PullRefresh },
+  watch: {
+    status: {
+      handler: function() {
+        // this.$refs.mo_list.scrollTo(0, 0);
+        this.onInit();
+      }
     }
+  },
+  methods: {
+    onRefresh() {
+      this.onInit(true);
+    },
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage,
+        pageSize: 10,
+        state: this.status
+      };
+      if (!this.loading) {
+        findMyOrderPage(_data).then(({ data }) => {
+          let getList = data.data.page.dataList;
+          this.loading = false; //list 加载动画
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            this.curPage = this.curPage + 1;
+            if (getList.length === 0) {
+              this.finished = true;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
+    }
+  },
+  mounted() {
+    this.onInit();
   }
 };
 </script>
@@ -96,9 +132,10 @@ export default {
 <style scoped lang="scss">
 $Color: #ea047b;
 .mod_orderlist {
+  min-height: calc(100vh - 90px);
   .mo_ul {
     width: 100vw;
-    padding-top: 7px;
+    // padding-top: 7px;
   }
   .mo_li {
     background: #fff;
@@ -107,6 +144,15 @@ $Color: #ea047b;
   }
   .mol_h {
     padding: 18px 15px;
+    display: flex;
+    p:first-child {
+      flex: 7;
+    }
+    p:last-child {
+      flex: 2;
+      text-align: right;
+      color: $Color;
+    }
   }
   .mol_c {
     width: 100%;
@@ -194,6 +240,22 @@ $Color: #ea047b;
       color: #fff;
       display: inline-block;
       margin-left: 10px;
+    }
+  }
+  .noData {
+    width: 100%;
+    height: calc(100vh - 120px);
+    text-align: center;
+    position: absolute;
+    top: 90px;
+    img {
+      position: absolute;
+      top: 40%;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      display: inline-block;
+      width: 227px;
+      height: 200px;
     }
   }
 }

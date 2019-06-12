@@ -1,44 +1,71 @@
 <template>
   <HeadFoot class="pg_site" :Title="title">
     <template #content>
-      <div class="pgs_ul">
-        <van-swipe-cell
-          :right-width="52"
-          :class="['pgs_li' ,'default']"
-          @click="delData"
-          v-for="(i,key) in 8"
-          :key="key"
+      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" class="pgs_ul">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          @load="onLoad"
+          finished-text="没有更多了"
+          :immediate-check="false"
         >
-          <div class="li_content">
-            <p class="li_content_info">
-              <span>小桂子</span>
-              <em>18726391500</em>
-            </p>
-            <p class="li_content_site">江苏省 南京市 鼓楼市 华强路街道 管家桥 85号华荣大厦D座1704室</p>
+          <div class="pgs_ul_wrap" v-for="(v,i) in dataList" :key="i">
+            <van-swipe-cell
+              :right-width="52"
+              :class="['pgs_li' ,v.isDefault ===0 ? '':'default']"
+              @click="delData"
+            >
+              <div class="li_content">
+                <p class="li_content_info">
+                  <span>{{v.name}}</span>
+                  <em>{{v.phone}}</em>
+                </p>
+                <p class="li_content_site">{{v.area}}&nbsp;&nbsp;{{v.address}}</p>
+              </div>
+              <p slot="right" @click="delIndex(i)">
+                <span>删除</span>
+              </p>
+            </van-swipe-cell>
+            <div class="siteWrap">
+              <em class="siteEditor">编辑</em>
+              <em class="siteDefault" v-if="v.isDefault !==1" @click="changeDefault(v.id)">默认</em>
+            </div>
           </div>
-          <p slot="right" @click="delIndex(i)">
-            <span>删除</span>
-          </p>
-        </van-swipe-cell>
+        </van-list>
+      </van-pull-refresh>
+
+      <div v-if="dataList.length === 0" class="noData">
+        <img src="@/assets/img/ly_nodata.png" alt>
       </div>
-      <div class="pgs_add">新增地址</div>
+      <router-link to="/setsite" class="pgs_add">新增地址</router-link>
     </template>
   </HeadFoot>
 </template>
 
 <script>
-import { NavBar, SwipeCell } from "vant";
+import { SwipeCell, List, PullRefresh } from "vant";
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
+import { findAddress, doDefaultAddress } from "@/api/center.js";
 export default {
   name: "MySite",
   data() {
     return {
       out: true,
       delSite: 0,
-      title:'我的地址'
+      title: "我的地址",
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false
     };
   },
-  components: { [NavBar.name]: NavBar, [SwipeCell.name]: SwipeCell, HeadFoot },
+  components: {
+    HeadFoot,
+    [SwipeCell.name]: SwipeCell,
+    [List.name]: List,
+    [PullRefresh.name]: PullRefresh
+  },
   methods: {
     delData(clickPosition) {
       if (clickPosition === "right") {
@@ -47,11 +74,59 @@ export default {
     },
     delIndex(index) {
       this.delSite = index;
+    },
+    changeDefault(id) {
+      let _data = {
+        addressId: id
+      };
+      doDefaultAddress(_data).then(({ data }) => {
+        this.$toast(data.msg)
+        if (data.msg === "修改成功") {
+          this.onInit();
+        }
+      });
+    },
+
+    onRefresh() {
+      this.onInit(true);
+    },
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage,
+        pageSize: 10
+      };
+      if (!this.loading) {
+        findAddress(_data).then(({ data }) => {
+          let getList = data.data;
+          this.loading = false; //list 加载动画
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            this.curPage = this.curPage + 1;
+            if (getList.length === 0) {
+              this.finished = true;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
     }
   },
   mounted() {
-    
-  },
+    this.onInit();
+  }
 };
 </script>
 
@@ -64,6 +139,7 @@ $Color: #ea047b;
     padding-top: 46px;
     box-sizing: border-box;
     padding-bottom: 80px;
+    min-height: 100vh;
     .pgs_li {
       background: #fff;
       width: 345px;
@@ -85,7 +161,7 @@ $Color: #ea047b;
       }
     }
     .li_content {
-      padding: 15px;
+      padding: 20px;
       color: #666;
       .li_content_info {
         font-size: 14px;
@@ -134,6 +210,50 @@ $Color: #ea047b;
     bottom: 38px;
     box-sizing: border-box;
     overflow: hidden;
+  }
+}
+.pg_site {
+  .pgs_ul_wrap {
+    position: relative;
+    padding-bottom: 10px;
+    .siteWrap {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      color: #fff;
+      font-size: 12px;
+      width: 100%;
+      text-align: center;
+      .siteEditor {
+        display: inline-block;
+        padding: 5px 10px;
+        background: $Color;
+        border-radius: 14px;
+      }
+      .siteDefault {
+        display: inline-block;
+        padding: 5px 10px;
+        background: #eac215;
+        border-radius: 14px;
+        margin-left: 50px;
+      }
+    }
+  }
+  .noData {
+    width: 100%;
+    height: calc(100vh - 120px);
+    text-align: center;
+    position: absolute;
+    top: 120px;
+    img {
+      position: absolute;
+      top: 40%;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      display: inline-block;
+      width: 227px;
+      height: 200px;
+    }
   }
 }
 </style>

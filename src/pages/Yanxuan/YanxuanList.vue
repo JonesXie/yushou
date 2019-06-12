@@ -85,7 +85,7 @@ export default {
       event.preventDefault();
       // 只有当点击到图片时才进行操作
       if (event.target.tagName.toLowerCase() == "img") {
-        console.log("img clicked", index, value);
+        // console.log("img clicked", index, value);
       }
     },
     choosId(val) {
@@ -102,7 +102,7 @@ export default {
       };
       selectArticlePage(_data).then(({ data }) => {
         if (data.data.page.dataList.length > 0) {
-          let myArr = data.data.page.dataList.map((v, i, a) => {
+          let myArr = data.data.page.dataList.map((v) => {
             let _data = v;
             _data.src = v.commentImgDetails.imgPath;
             return _data;
