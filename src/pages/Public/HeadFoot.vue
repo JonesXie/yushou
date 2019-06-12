@@ -8,9 +8,10 @@
 <script>
 import { mapActions } from "vuex";
 import { NavBar } from "vant";
+import { notNull } from "@/layout/methods.js";
 export default {
   name: "HeadFoot",
-  props:['Title'],
+  props: ["Title", "backPath"],
   data() {
     return {};
   },
@@ -18,7 +19,11 @@ export default {
   methods: {
     ...mapActions(["ChangeStatus"]),
     GoBack() {
-      this.$router.back(-1);
+      if (notNull(this.backPath)) {
+        this.$router.push(this.backPath)
+      } else {
+        this.$router.back(-1);
+      }
     }
   },
   mounted() {

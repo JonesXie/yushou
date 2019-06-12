@@ -42,7 +42,7 @@
 <script>
 import { mapActions } from "vuex";
 import { NavBar } from "vant";
-import { isNull } from "@/layout/methods.js";
+import { notNull } from "@/layout/methods.js";
 import {
   selectArticleClassifyList,
   selectArticlePage,
@@ -116,7 +116,7 @@ export default {
     }
   },
   mounted() {
-    if (isNull(this.$route.query.id)) {
+    if (notNull(this.$route.query.id)) {
       this.ChangeStatus(false);
       this.chooseId = this.$route.query.id;
       this.Title = this.$route.query.name;

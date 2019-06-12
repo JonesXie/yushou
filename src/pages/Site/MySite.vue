@@ -1,5 +1,5 @@
 <template>
-  <HeadFoot class="pg_site" :Title="title">
+  <HeadFoot class="pg_site" :Title="title" :backPath="backPath">
     <template #content>
       <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" class="pgs_ul">
         <van-list
@@ -27,7 +27,7 @@
               </p>
             </van-swipe-cell>
             <div class="siteWrap">
-              <em class="siteEditor">编辑</em>
+              <router-link :to="{path:'/setsite',query:{id:v.id}}" class="siteEditor">编辑</router-link>
               <em class="siteDefault" v-if="v.isDefault !==1" @click="changeDefault(v.id)">默认</em>
             </div>
           </div>
@@ -57,7 +57,8 @@ export default {
       curPage: 1,
       isRefresh: false,
       loading: false,
-      finished: false
+      finished: false,
+      backPath:'/center'
     };
   },
   components: {
@@ -229,6 +230,7 @@ $Color: #ea047b;
         padding: 5px 10px;
         background: $Color;
         border-radius: 14px;
+        color: #fff;
       }
       .siteDefault {
         display: inline-block;

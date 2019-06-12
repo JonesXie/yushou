@@ -33,7 +33,7 @@
 import { NavBar, Icon } from "vant";
 import { mapActions } from "vuex";
 import { selectGoodsSearch } from "@/api/index.js";
-import { isNull } from "@/layout/methods.js";
+import { notNull } from "@/layout/methods.js";
 import TypeList from "@/pages/Components/goods/TypeList.vue";
 export default {
   name: "TheSearch",
@@ -55,7 +55,7 @@ export default {
   methods: {
     ...mapActions(["ChangeStatus"]),
     turnPage() {
-      if (isNull(this.isSearch)) {
+      if (notNull(this.isSearch)) {
         this.showList = true;
       } else {
         this.$toast("请输入值");

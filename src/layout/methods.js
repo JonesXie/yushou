@@ -1,5 +1,5 @@
 // 空值验证
-export function isNull(val) {
+export function notNull(val) {
   if ([undefined, null, ''].includes(val)) {
     return false
   } else {

@@ -44,6 +44,7 @@
 import { doLogin } from "@/api/login.js";
 import { mapActions } from "vuex";
 import { Toast } from "vant";
+import { notNull } from "@/layout/methods.js";
 export default {
   name: "login",
   data() {
@@ -64,8 +65,8 @@ export default {
       }
     },
     submit() {
-      if (this.isNull(this.phone)) {
-        if (this.isNull(this.psw)) {
+      if (this.notNull(this.phone)) {
+        if (this.notNull(this.psw)) {
           let _data = {
             userName: this.phone,
             password: this.psw,
@@ -86,13 +87,6 @@ export default {
         Toast.fail("请填写手机号");
       }
     },
-    isNull(val) {
-      if (val !== null && val !== undefined && val !== "") {
-        return true;
-      } else {
-        return false;
-      }
-    }
   },
   mounted() {
     this.ChangeStatus(false);
