@@ -146,7 +146,7 @@ $Color: #ea047b;
       a {
         color: $Color;
       }
-      span {
+      a:last-child {
         float: right;
         color: #666;
       }

@@ -1,33 +1,47 @@
 <template>
   <HeadFoot class="pg_mysales" :Title="title">
     <template #content>
-      <ul class="pgs_ul">
-        <li class="pgs_li">
-          <div class="li_head">
-            <div class="li_tag">231.4元/日</div>
-            <div class="li_id van-ellipsis">订单编号 17102316279122</div>
-          </div>
-          <div class="li_content">
-            <div class="li_content_L">
-              <img src="@/assets/logo.png" alt>
-            </div>
-            <div class="li_content_R">
-              <p class="title">匡威男鞋女鞋三星黑标街拍潮流低帮休闲舒适耐磨运动帆布鞋</p>
-              <p class="type">
-                规格：黑色；37码
-                <span>x2</span>
-              </p>
-              <p class="price">今日价：￥410.1</p>
-            </div>
-          </div>
-          <div class="li_foot">
-            <span class="riqi">7天后发货</span>
-            <span class="shezhi" @click="setValue">设置折扣</span>
-            <span class="quxiao">取消挂卖</span>
-          </div>
-        </li>
-      </ul>
-      <!-- 设置折扣 -->
+      <!-- list -->
+      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          @load="onLoad"
+          finished-text="没有更多了"
+          :immediate-check="false"
+        >
+          <ul class="pgs_ul">
+            <li class="pgs_li">
+              <div class="li_head">
+                <div class="li_tag">231.4元/日</div>
+                <div class="li_id van-ellipsis">订单编号 17102316279122</div>
+              </div>
+              <div class="li_content">
+                <div class="li_content_L">
+                  <img src="@/assets/logo.png" alt>
+                </div>
+                <div class="li_content_R">
+                  <p class="title">匡威男鞋女鞋三星黑标街拍潮流低帮休闲舒适耐磨运动帆布鞋</p>
+                  <p class="type">
+                    规格：黑色；37码
+                    <span>x2</span>
+                  </p>
+                  <p class="price">今日价：￥410.1</p>
+                </div>
+              </div>
+              <div class="li_foot">
+                <span class="riqi">7天后发货</span>
+                <span class="shezhi" @click="setValue">设置折扣</span>
+                <span class="quxiao">取消挂卖</span>
+              </div>
+            </li>
+          </ul>
+        </van-list>
+      </van-pull-refresh>
+      <div v-if="dataList.length === 0" class="noData">
+        <img src="@/assets/img/ly_nodata.png" alt>
+      </div>
+      <!-- 弹窗--设置折扣 -->
       <van-popup v-model="tips" class="tips_wrap">
         <div class="tips_h">折扣比例</div>
         <div class="tips_c">
@@ -38,13 +52,8 @@
             <span>960.0元</span>
           </div>
           <p class="tips_c_setting">设置折扣：</p>
-          <van-field
-            v-model="value"
-            type="number"
-            placeholder="折扣比例不能大于总收益"
-            class="tips_c_input"
-          >
-          <span slot="right-icon" style="color:#000">%</span>
+          <van-field v-model="value" type="number" placeholder="折扣比例不能大于总收益" class="tips_c_input">
+            <span slot="right-icon" style="color:#000">%</span>
           </van-field>
           <p class="tips_c_computer">1000元 * 0% = 0元</p>
           <p class="tips_c_tips">*折扣比例的设置，是您出让总收益的多少给购买方，长时间没人购买，你可修改更高比例。（默认折扣为0）</p>
@@ -60,27 +69,77 @@
 
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
-import { Popup, Field } from "vant";
+import { Popup, Field, List, PullRefresh } from "vant";
+import { findMySellOrder } from "@/api/center.js";
 export default {
   name: "MySales",
   data() {
     return {
       title: "我的挂卖",
       tips: false,
-      value: null
+      value: null,
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      noLimit: true
     };
   },
   components: {
     HeadFoot,
     [Popup.name]: Popup,
-    [Field.name]: Field
+    [Field.name]: Field,
+    [List.name]: List,
+    [PullRefresh.name]: PullRefresh
   },
   methods: {
     setValue() {
       this.tips = true;
+    },
+    onRefresh() {
+      this.onInit(true);
+    },
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage,
+      };
+      if (this.noLimit) {
+        this.noLimit = false;
+        findMySellOrder(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList;
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
     }
   },
-  mounted() {}
+  mounted() {
+    this.onInit();
+  }
 };
 </script>
 
@@ -256,17 +315,17 @@ $Color: #ea047b;
       font-size: 12px;
       border: 1px solid #ddd;
     }
-    .tips_c_computer{
+    .tips_c_computer {
       font-size: 16px;
-      padding:  20px 0 15px;
+      padding: 20px 0 15px;
       text-align: center;
     }
-    .tips_c_tips{
+    .tips_c_tips {
       font-size: 10px;
-      color:#bebdbd;
+      color: #bebdbd;
       line-height: 15px;
     }
-    .tips_btn{
+    .tips_btn {
       position: absolute;
       bottom: 0;
       left: 0;
@@ -275,19 +334,35 @@ $Color: #ea047b;
       line-height: 35px;
       display: flex;
     }
-    .tips_btn1{
+    .tips_btn1 {
       flex: 1;
       background: $Color;
       font-size: 12px;
       color: #fff;
       text-align: center;
     }
-        .tips_btn2{
+    .tips_btn2 {
       flex: 1;
       background: #e5e5e5;
       font-size: 12px;
       text-align: center;
     }
+  }
+}
+.noData {
+  width: 100%;
+  height: calc(100vh - 120px);
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 227px;
+    height: 200px;
   }
 }
 </style>

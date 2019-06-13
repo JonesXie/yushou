@@ -4,8 +4,9 @@
       <van-list
         v-model="loading"
         :finished="finished"
-        finished-text="没有更多了"
         @load="onLoad"
+        finished-text="没有更多了"
+        :immediate-check="false"
         class="vantList"
       >
         <ul class="gc_ul">
@@ -43,40 +44,60 @@ export default {
       loading: false,
       finished: false,
       curPage: 1,
-      couponList: []
+      couponList: [],
+      noLimit: true
     };
   },
   components: { HeadFoot, [List.name]: List },
   methods: {
     onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
       let _data = {
         page: this.curPage
       };
-      // 异步更新数据
-      drawCouponPage(_data).then(({ data }) => {
-        // 加载状态结束
-        this.loading = false;
-        if (data.data.page.dataList.length > 0) {
-          [...this.couponList] = [
-            ...this.couponList,
-            ...data.data.page.dataList
-          ];
-          this.curPage = this.curPage + 1;
-        } else {
-          this.finished = true;
-        }
-      });
+      if (this.noLimit) {
+        this.noLimit = false;
+        drawCouponPage(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList;
+          //赋值
+          if (isInit) {
+            this.couponList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.couponList] = [...this.couponList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
     },
+    // 领取优惠券
     getCoupon(val) {
       let _data = {
         couponId: val
       };
-      drawCoupon(_data).then((response) => {
-        Toast(response.data.msg)
+      drawCoupon(_data).then(response => {
+        Toast(response.data.msg);
       });
     }
   },
   mounted() {
+    this.onInit();
     // drawCouponPage().then(({ data }) => {
     //   this.couponList = data.data.page.dataList;
     // });
@@ -97,7 +118,7 @@ export default {
   .vantList {
     width: 100vw;
     overflow: hidden;
-    box-sizing: border-box
+    box-sizing: border-box;
   }
   .gc_ul {
     width: 100vw;
