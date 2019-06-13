@@ -1,45 +1,103 @@
 <template>
   <HeadFoot class="pg_wd" :Title="title">
     <template #content>
-      <ul class="pgwd_ul">
-        <li :class="['pgwd_li', out?'out':'get']">
-          <div class="top">
-            <p>订单编号：657402501244664633</p>
-            <span>￥165</span>
-          </div>
-          <div class="bottom">
-            <span>2018-03-31 12:45:36</span>
-            <p>[消费]</p>
-          </div>
-        </li>
-        <li :class="['pgwd_li', out?'get':'out']">
-          <div class="top">
-            <p>订单编号：657402501244664633</p>
-            <span>￥165</span>
-          </div>
-          <div class="bottom">
-            <span>2018-03-31 12:45:36</span>
-            <p>[收益]</p>
-          </div>
-        </li>
-      </ul>
+      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          @load="onLoad"
+          finished-text="没有更多了"
+          :immediate-check="false"
+        >
+          <ul class="pgwd_ul">
+            <li v-for="(v,i) in dataList" :key="i" :class="['pgwd_li', v.state==2?'get':'out']">
+              <div class="top">
+                <p>订单编号：{{v.recordNo}}</p>
+                <span>￥{{v.money}}</span>
+              </div>
+              <div class="bottom">
+                <span>{{v.createtime}}</span>
+                <p>[{{fixType[v.type]}}]</p>
+              </div>
+            </li>
+          </ul>
+        </van-list>
+      </van-pull-refresh>
+      <div v-if="dataList.length === 0" class="noData">
+        <img src="@/assets/img/ly_nodata.png" alt>
+      </div>
     </template>
   </HeadFoot>
 </template>
 
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
+import { List, PullRefresh } from "vant";
+import { findUserAccountRecord } from "@/api/center.js";
 export default {
   name: "WalletDetail",
   data() {
     return {
       title: "交易明细",
-      out: true
+      // 1收益 2提现 3消费
+      fixType: {
+        1: "收益",
+        2: "提现",
+        3: "消费"
+      },
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      noLimit: true
     };
   },
-  components: { HeadFoot },
-  methods: {},
-  mounted() {}
+  components: { HeadFoot, [List.name]: List, [PullRefresh.name]: PullRefresh },
+  methods: {
+    onRefresh() {
+      this.onInit(true);
+    },
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage
+      };
+      if (this.noLimit) {
+        this.noLimit = false;
+        findUserAccountRecord(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data;
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
+    }
+  },
+  mounted() {
+    this.onInit();
+  }
 };
 </script>
 
@@ -96,6 +154,22 @@ $Color: #ea047b;
         }
       }
     }
+  }
+}
+.noData {
+  width: 100%;
+  height: calc(100vh - 120px);
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 227px;
+    height: 200px;
   }
 }
 </style>

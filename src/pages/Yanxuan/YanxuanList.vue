@@ -80,6 +80,7 @@ export default {
         }
       });
     },
+    //eslint-disable-next-line
     clickFn(event, { index, value }) {
       // 阻止a标签跳转
       event.preventDefault();

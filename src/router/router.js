@@ -68,6 +68,28 @@ const RouterMap = [
     name: 'center',
     component: () => import('@/pages/Center/TheCenter.vue')
   },
+  //设置
+  {
+    path: '/setting',
+    name: 'setting',
+    component: () => import('@/pages/Center/TheSetting.vue')
+  },
+  {
+    path: '/fixpassword',
+    name: 'fixpassword',
+    component: () => import('@/pages/Center/FixPassword.vue')
+  },
+  {
+    path: '/security',
+    name: 'security',
+    component: () => import('@/pages/Center/SecuritySetting.vue')
+  },
+  {
+    path: '/setpay/:id',
+    name: 'setpay',
+    component: () => import('@/pages/Center/SetPay.vue')
+  },
+  //钱包
   {
     path: '/wallet',
     name: 'wallet',
@@ -79,10 +101,21 @@ const RouterMap = [
     component: () => import('@/pages/Wallet/WalletDetail.vue')
   },
   {
+    path: '/walletout',
+    name: 'walletout',
+    component: () => import('@/pages/Wallet/WalletOut.vue')
+  },
+  {
+    path: '/couponcenter',
+    name: 'couponcenter',
+    component: () => import('@/pages/Center/CouponCenter.vue')
+  },
+  {
     path: '/mysales',
     name: 'mysales',
     component: () => import('@/pages/Center/MySales.vue')
   },
+  //地址
   {
     path: '/mysite',
     name: 'mysite',
@@ -93,6 +126,7 @@ const RouterMap = [
     name: 'setsite',
     component: () => import('@/pages/Site/SetSite.vue')
   },
+
   {
     path: '/myorder/:active',
     name: 'myorder',

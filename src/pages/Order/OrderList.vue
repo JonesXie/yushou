@@ -64,6 +64,7 @@ export default {
       isRefresh: false,
       loading: false,
       finished: false,
+      noLimit: true,
       // 全部：不传 已取消：00 待支付：01 调货中：02 待发货 03 待收货 04 交易成功：100
       setArr: {
         "00": "已取消",
@@ -98,21 +99,24 @@ export default {
       }
       let _data = {
         page: this.curPage,
-        pageSize: 10,
         state: this.status
       };
-      if (!this.loading) {
+      if (this.noLimit) {
+        this.noLimit = false;
         findMyOrderPage(_data).then(({ data }) => {
-          let getList = data.data.page.dataList;
           this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList;
           //赋值
           if (isInit) {
             this.dataList = getList;
+            this.curPage = this.curPage + 1;
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
-            this.curPage = this.curPage + 1;
             if (getList.length === 0) {
               this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
             }
           }
           if (reFresh) {
@@ -122,10 +126,10 @@ export default {
         });
       }
     }
-  },
-  mounted() {
-    this.onInit();
   }
+  // mounted() {
+  //   this.onInit();
+  // }
 };
 </script>
 

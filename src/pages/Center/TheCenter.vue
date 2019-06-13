@@ -4,7 +4,7 @@
       <div class="pgch_bkg"></div>
       <div class="pgch_content">
         <p class="title">
-          <router-link to="/">
+          <router-link to="/setting">
             <img src="@/assets/img/center/pg_center_set.png" alt>
           </router-link>
           <!-- <router-link to="/">
@@ -21,12 +21,12 @@
             <div class="ic_btn">{{userInfo.nickName}}</div>
             <van-row class="ic_row">
               <van-col span="8">
-                <router-link to="/wallet">
+                <div @click="turnWallet">
                   <p class="ic_row_p" style="color:#e50404">
                     <span>{{userInfo.balance}}</span>元
                   </p>
                   <span>余额</span>
-                </router-link>
+                </div>
               </van-col>
               <van-col span="8">
                 <p class="ic_row_p" style="color:#c40098">
@@ -35,7 +35,7 @@
                 <span>积分</span>
               </van-col>
               <van-col span="8">
-                <router-link to="/">
+                <router-link to="/couponcenter">
                   <p class="ic_row_p" style="color:#c056ed">
                     <span>{{userInfo.couponCount}}</span>张
                   </p>
@@ -150,6 +150,14 @@ export default {
       getMember().then(({ data }) => {
         this.userInfo = data.data;
       });
+    },
+    turnWallet() {
+      let _data = {
+        balance: this.userInfo.balance,
+        totalProfit: this.userInfo.totalProfit,
+        waitAmount: this.userInfo.waitAmount,
+      };
+      this.$router.push({ path: "/wallet", query: _data });
     }
   },
   mounted() {

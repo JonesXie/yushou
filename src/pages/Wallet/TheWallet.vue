@@ -8,29 +8,27 @@
       <div class="pgw_h_content">
         <div class="left">
           <span>我的余额（元）</span>
-          <p>123.888</p>
+          <p>{{balance}}</p>
         </div>
         <div class="right">
           <span>我的收益（元）</span>
-          <p>123.888</p>
+          <p>{{totalProfit}}</p>
         </div>
       </div>
     </div>
     <div class="pgw_info">
       <div class="left">
         <p>在途金额(元)</p>
-        <span>12223.99</span>
+        <span>{{waitAmount}}</span>
       </div>
       <div class="right">
         <p>可提现金额(元)</p>
-        <span>12223.99</span>
+        <span>{{balance}}</span>
       </div>
     </div>
     <van-cell-group>
-      <van-cell title="交易明细" :icon="mx" is-link to="/walletdetail">
-      </van-cell>
-      <van-cell title="我要提现" :icon="tx" is-link to="/">
-      </van-cell>
+      <van-cell title="交易明细" :icon="mx" is-link to="/walletdetail"></van-cell>
+      <van-cell title="我要提现" :icon="tx" is-link to="/walletout"></van-cell>
     </van-cell-group>
   </div>
 </template>
@@ -42,8 +40,11 @@ export default {
   name: "TheWallet",
   data() {
     return {
-      mx:require('@/assets/img/components/pg_wallet_mx.png'),
-      tx:require('@/assets/img/components/pg_wallet_tx.png')
+      balance: 0,
+      totalProfit: 0,
+      waitAmount: 0,
+      mx: require("@/assets/img/components/pg_wallet_mx.png"),
+      tx: require("@/assets/img/components/pg_wallet_tx.png")
     };
   },
   components: {
@@ -55,10 +56,24 @@ export default {
     ...mapActions(["ChangeStatus"]),
     GoBack() {
       this.$router.back(-1);
+    },
+    ChangeShow(val) {
+      if ([undefined, null, ""].includes(val)) {
+        return 0;
+      } else {
+        return val;
+      }
     }
   },
   mounted() {
     this.ChangeStatus(false);
+    if (JSON.stringify(this.$route.query) == "{}") {
+      this.$router.push('/center');
+    } else {
+      this.balance = this.ChangeShow(this.$route.query.balance);
+      this.totalProfit = this.ChangeShow(this.$route.query.totalProfit);
+      this.waitAmount = this.ChangeShow(this.$route.query.waitAmount);
+    }
   },
   beforeDestroy() {
     this.ChangeStatus(true);

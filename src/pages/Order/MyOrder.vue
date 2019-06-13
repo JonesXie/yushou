@@ -36,10 +36,10 @@ export default {
   data() {
     return {
       title: "我的订单",
-      actived: 0,
+      actived: null,
       lineWidth: 60,
       setArr: [null, "01", "02", "03", "04", "100"], // 全部：不传 待支付：01 调货中：02 待发货 03 待收货 04 交易成功：100
-      deliverData: null
+      deliverData: 0
     };
   },
   watch: {
@@ -52,7 +52,7 @@ export default {
   components: { HeadFoot, [Tab.name]: Tab, [Tabs.name]: Tabs, OrderList },
   methods: {},
   mounted() {
-    this.actived = this.$route.params.active;
+    this.actived = Number(this.$route.params.active);
   }
 };
 </script>

@@ -45,7 +45,7 @@
 <script>
 import { SwipeCell, List, PullRefresh } from "vant";
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
-import { findAddress, doDefaultAddress } from "@/api/center.js";
+import { findAddress, doDefaultAddress, doDelAddress } from "@/api/center.js";
 export default {
   name: "MySite",
   data() {
@@ -58,7 +58,8 @@ export default {
       isRefresh: false,
       loading: false,
       finished: false,
-      backPath:'/center'
+      noLimit: true,
+      backPath: "/center"
     };
   },
   components: {
@@ -70,7 +71,13 @@ export default {
   methods: {
     delData(clickPosition) {
       if (clickPosition === "right") {
-        this.$toast("删除成功");
+        let data = {
+          addressId: this.dataList[this.delSite].id
+        };
+        doDelAddress(data).then(({ data }) => {
+          this.$notify(data.msg);
+          this.onInit();
+        });
       }
     },
     delIndex(index) {
@@ -81,7 +88,7 @@ export default {
         addressId: id
       };
       doDefaultAddress(_data).then(({ data }) => {
-        this.$toast(data.msg)
+        this.$toast(data.msg);
         if (data.msg === "修改成功") {
           this.onInit();
         }
@@ -103,10 +110,12 @@ export default {
         page: this.curPage,
         pageSize: 10
       };
-      if (!this.loading) {
+      if (this.noLimit) {
+        this.noLimit = false;
         findAddress(_data).then(({ data }) => {
           let getList = data.data;
           this.loading = false; //list 加载动画
+          this.noLimit = true;
           //赋值
           if (isInit) {
             this.dataList = getList;

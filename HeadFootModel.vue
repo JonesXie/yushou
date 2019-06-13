@@ -1,5 +1,5 @@
 <template>
-  <HeadFoot class="" :Title="title">
+  <HeadFoot class="" :Title="title" :backPath="backPath">
     <template #content>
       <!-- do somethings -->
     </template>
@@ -12,7 +12,8 @@ export default {
   name: "",
   data() {
     return {
-      title: ""
+      title: "",
+      backPath:"",//返回路由，可删除
     };
   },
   components: { HeadFoot },

@@ -78,7 +78,8 @@ export default {
       dataList: [],
       isRefresh: false,
       loading: false,
-      finished: false
+      finished: false,
+      noLimit: true
     };
   },
   components: {
@@ -144,9 +145,11 @@ export default {
         codeId: this.id,
         brandId: null
       };
-      if (!this.loading) {
+      if (this.noLimit) {
+         this.noLimit = false;
         findAllGoods(_data).then(({ data }) => {
           this.loading = false;
+          this.noLimit = true;
           if (isInit) {
             this.dataList = data.data;
           } else {

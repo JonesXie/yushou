@@ -19,7 +19,7 @@
       </div>
       <p class="tips">
         <router-link to="/register">立即注册</router-link>
-        <span>忘记密码?</span>
+        <router-link to="/fixpassword">忘记密码?</router-link>
       </p>
       <div class="btn" @click="submit">登录</div>
       <div class="wx_login">
@@ -65,8 +65,8 @@ export default {
       }
     },
     submit() {
-      if (this.notNull(this.phone)) {
-        if (this.notNull(this.psw)) {
+      if (notNull(this.phone)) {
+        if (notNull(this.psw)) {
           let _data = {
             userName: this.phone,
             password: this.psw,

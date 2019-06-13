@@ -38,7 +38,20 @@ export function doUpdateAddress(data, isJson) {
 export function doDelAddress(data, isJson) {
   return post('/member/doDelAddress.api', data, isJson)
 }
+//用户-忘记密码
+export function doForgetPassword(data, isJson) {
+  return post('/member/doForgetPassword.api', data, isJson)
+}
+// 用户-修改支付密码
+export function changePayPassword(data, isJson) {
+  return post('/member/changePayPassword.api', data, isJson)
+}
 
-export function doLogin(data, isJson) {
-  return post('/member/doLogin.api', data, isJson)
+//用户-消费记录
+export function findUserAccountRecord(data) {
+  return get('/member/findUserAccountRecord.api', data)
+}
+//用户-提现
+export function doPresent(data, isJson) {
+  return post('/member/doPresent.api', data, isJson)
 }

@@ -30,7 +30,8 @@ export default {
       curPage: 1,
       isRefresh: false,
       loading: false,
-      finished: false
+      finished: false,
+      noLimit: true
     };
   },
   components: { [List.name]: List, [PullRefresh.name]: PullRefresh },
@@ -49,21 +50,24 @@ export default {
       }
       let _data = {
         page: this.curPage,
-        pageSize: 10,
         state: this.status
       };
-      if (!this.loading) {
+      if (this.noLimit) {
+        this.noLimit = false;
         findMyOrderPage(_data).then(({ data }) => {
-          let getList = data.data.page.dataList;
           this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList;
           //赋值
           if (isInit) {
             this.dataList = getList;
+            this.curPage = this.curPage + 1;
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
-            this.curPage = this.curPage + 1;
             if (getList.length === 0) {
               this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
             }
           }
           if (reFresh) {

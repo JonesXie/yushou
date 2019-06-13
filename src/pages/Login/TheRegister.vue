@@ -32,6 +32,7 @@
 import { mapActions } from "vuex";
 import { Toast } from "vant";
 import { doRegister, toSendSms } from "@/api/login.js";
+import { notNull } from "@/layout/methods.js";
 export default {
   name: "register",
   data() {
@@ -96,18 +97,30 @@ export default {
       }
     },
     submit() {
-      let _data = {
-        phone: this.phone,
-        vcode: this.msn,
-        password: this.psw,
-        inviter: null
-      };
-      doRegister(_data).then(({data}) => {
-        this.$notify("注册成功");
-        localStorage.setItem("token", data.token);
-        this.$store.commit("SET_Token", data.token);
-        this.$router.push("/index");
-      });
+      if (notNull(this.phone)) {
+        if (notNull(this.psw)) {
+          if (notNull(this.msn)) {
+            let _data = {
+              phone: this.phone,
+              vcode: this.msn,
+              password: this.psw,
+              inviter: null
+            };
+            doRegister(_data).then(({ data }) => {
+              this.$notify("注册成功");
+              localStorage.setItem("token", data.token);
+              this.$store.commit("SET_Token", data.token);
+              this.$router.push("/index");
+            });
+          } else {
+            this.$toast.fail("请填写短信验证码");
+          }
+        } else {
+          this.$toast.fail("请填写密码");
+        }
+      } else {
+        this.$toast.fail("请填写手机号码");
+      }
     }
   },
   mounted() {
