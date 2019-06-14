@@ -11,28 +11,28 @@
           :immediate-check="false"
         >
           <ul class="pgs_ul">
-            <li class="pgs_li">
+            <li class="pgs_li" v-for="(v,i) in dataList" :key="i">
               <div class="li_head">
-                <div class="li_tag">231.4元/日</div>
-                <div class="li_id van-ellipsis">订单编号 17102316279122</div>
+                <div class="li_tag">{{v.orderSellProfit}}元/日</div>
+                <div class="li_id van-ellipsis">订单编号:{{v.orderNo}}</div>
               </div>
               <div class="li_content">
                 <div class="li_content_L">
-                  <img src="@/assets/logo.png" alt>
+                  <img :src="v.goodsImages" alt>
                 </div>
                 <div class="li_content_R">
-                  <p class="title">匡威男鞋女鞋三星黑标街拍潮流低帮休闲舒适耐磨运动帆布鞋</p>
+                  <p class="title">{{v.goodsName}}</p>
                   <p class="type">
-                    规格：黑色；37码
-                    <span>x2</span>
+                    {{v.goodsParm}}
+                    <span>x{{v.goodsBuyNum}}</span>
                   </p>
-                  <p class="price">今日价：￥410.1</p>
+                  <p class="price">今日价：￥{{v.newDatePrice}}</p>
                 </div>
               </div>
               <div class="li_foot">
-                <span class="riqi">7天后发货</span>
-                <span class="shezhi" @click="setValue">设置折扣</span>
-                <span class="quxiao">取消挂卖</span>
+                <span class="riqi">{{v.inWaitDay}}天后发货</span>
+                <span class="shezhi" @click="setValue(v)">设置折扣</span>
+                <span class="quxiao" @click="cancelSale(v.id)">取消挂卖</span>
               </div>
             </li>
           </ul>
@@ -47,20 +47,28 @@
         <div class="tips_c">
           <p class="tips_c_h">当前收益：</p>
           <div class="tips_c_in">
-            <span>240.0元/天</span>*
-            <span>4天</span>=
-            <span>960.0元</span>
+            <span>{{tipsData.orderSellProfit}}元/天</span>*
+            <span>{{tipsData.myWaitDay}}天</span>=
+            <span>{{myProfit}}元</span>
           </div>
           <p class="tips_c_setting">设置折扣：</p>
-          <van-field v-model="value" type="number" placeholder="折扣比例不能大于总收益" class="tips_c_input">
+          <van-field
+            v-model="setCount"
+            type="number"
+            @blur="validCount"
+            placeholder="折扣比例不能大于总收益"
+            class="tips_c_input"
+          >
             <span slot="right-icon" style="color:#000">%</span>
           </van-field>
-          <p class="tips_c_computer">1000元 * 0% = 0元</p>
+          <p
+            class="tips_c_computer"
+          >{{myProfit}}元 * {{setCount}}% = {{((myProfit*setCount)/100).toFixed(2)}}元</p>
           <p class="tips_c_tips">*折扣比例的设置，是您出让总收益的多少给购买方，长时间没人购买，你可修改更高比例。（默认折扣为0）</p>
         </div>
-        <div class="tips_btn" @click="tips=false">
-          <div class="tips_btn1">确认</div>
-          <div class="tips_btn2">取消</div>
+        <div class="tips_btn">
+          <div class="tips_btn1" @click="confirmCount">确认</div>
+          <div class="tips_btn2" @click="tips=false">取消</div>
         </div>
       </van-popup>
     </template>
@@ -70,21 +78,34 @@
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Popup, Field, List, PullRefresh } from "vant";
-import { findMySellOrder } from "@/api/center.js";
+import {
+  findMySellOrder,
+  doUpdateOrderProfitDiscount,
+  doUpdateOrderSell
+} from "@/api/center.js";
+import { notNull } from "@/layout/methods.js";
 export default {
   name: "MySales",
   data() {
     return {
       title: "我的挂卖",
       tips: false,
-      value: null,
+      setCount: 0,
       dataList: [],
       curPage: 1,
       isRefresh: false,
       loading: false,
       finished: false,
-      noLimit: true
+      noLimit: true,
+      tipsData: ""
     };
+  },
+  computed: {
+    myProfit() {
+      return (
+        Number(this.tipsData.orderSellProfit) * Number(this.tipsData.myWaitDay)
+      ).toFixed(2);
+    }
   },
   components: {
     HeadFoot,
@@ -94,8 +115,61 @@ export default {
     [PullRefresh.name]: PullRefresh
   },
   methods: {
-    setValue() {
+    setValue(val) {
+      this.tipsData = val;
       this.tips = true;
+    },
+    validCount() {
+      if (notNull(this.setCount)) {
+        let reg = /^([1-9]\d*|[0]{1,1})$/; //含0正整数正则
+        if (reg.test(this.setCount)) {
+          if (this.setCount <= 100) {
+            return true;
+          } else {
+            this.$toast("小于等于100的值");
+            this.setCount = 0;
+          }
+        } else {
+          this.$toast("请输入整数");
+          this.setCount = 0;
+        }
+      } else {
+        this.$toast("请填写折扣");
+        this.setCount = 0;
+      }
+    },
+    confirmCount() {
+      if (notNull(this.setCount) && this.setCount !== 0) {
+        let _data = {
+          orderId: this.tipsData.id,
+          discount: this.setCount
+        };
+        doUpdateOrderProfitDiscount(_data).then(({ data }) => {
+          this.$toast(data.msg);
+          if (data.msg === "设置成功") {
+            setTimeout(() => {
+              this.onInit();
+            }, 3000);
+          }
+        });
+        this.tips = false;
+      } else {
+        this.$toast("请填写折扣比");
+      }
+    },
+    cancelSale(val) {
+      let _data = {
+        orderId: val,
+        orderSellState: "01" //	订单挂卖状态 01不挂买 02挂卖
+      };
+      doUpdateOrderSell(_data).then(({ data }) => {
+        this.$toast(data.msg);
+        if (data.msg === "设置成功") {
+          setTimeout(() => {
+            this.onInit();
+          }, 3000);
+        }
+      });
     },
     onRefresh() {
       this.onInit(true);
@@ -109,20 +183,24 @@ export default {
         this.finished = false;
       }
       let _data = {
-        page: this.curPage,
+        page: this.curPage
       };
       if (this.noLimit) {
         this.noLimit = false;
         findMySellOrder(_data).then(({ data }) => {
           this.loading = false; //list 加载动画
           this.noLimit = true;
-          let getList = data.data.page.dataList;
+          let getList = data.data;
           //赋值
           if (isInit) {
             this.dataList = getList;
             this.curPage = this.curPage + 1;
+            //此页面暂无分页，若有删除下面一行
+            this.finished = true;
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
+            //此页面暂无分页，若有删除下面一行
+            this.finished = true;
             if (getList.length === 0) {
               this.finished = true;
             } else {

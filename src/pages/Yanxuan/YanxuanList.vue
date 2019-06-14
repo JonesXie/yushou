@@ -18,7 +18,7 @@
           <div class="pg_list">
             <ul class="pg_list_ul" v-if="showList">
               <li v-for="(v,i) in tabList" :key="i" @click="choosId(v)">
-                <img :src="v.articleClassifyTitleImg" alt>
+                <img :src="v.articleClassifyTitleImg" data-site="big" alt>
               </li>
             </ul>
           </div>
@@ -80,13 +80,14 @@ export default {
         }
       });
     },
-    //eslint-disable-next-line
-    clickFn(event, { index, value }) {
+    clickFn(event, { value }) {
       // 阻止a标签跳转
       event.preventDefault();
       // 只有当点击到图片时才进行操作
       if (event.target.tagName.toLowerCase() == "img") {
-        // console.log("img clicked", index, value);
+        if (!`${event.target.outerHTML}`.includes("zan")) {
+          this.$router.push(`/articledetail/${value.id}`);
+        }
       }
     },
     choosId(val) {
@@ -103,7 +104,7 @@ export default {
       };
       selectArticlePage(_data).then(({ data }) => {
         if (data.data.page.dataList.length > 0) {
-          let myArr = data.data.page.dataList.map((v) => {
+          let myArr = data.data.page.dataList.map(v => {
             let _data = v;
             _data.src = v.commentImgDetails.imgPath;
             return _data;

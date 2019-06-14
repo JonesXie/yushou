@@ -19,6 +19,7 @@ export function zan(data, isJson) {
   return post('/api/comment/zan', data, isJson)
 }
 
-export function doLogin(data, isJson) {
-  return post('/member/doLogin.api', data, isJson)
+//用户-获取文章html
+export function selectArticleDetaile(data) {
+  return get('/admin/article/selectArticleDetaile', data)
 }

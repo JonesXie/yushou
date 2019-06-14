@@ -63,7 +63,22 @@ export function findUserCoupon(data) {
   return get('/member/findUserCoupon.api', data)
 }
 
+//用户-转赠优惠券
+export function donationCoupon(data, isJson) {
+  return post('/member/donationCoupon.api', data, isJson)
+}
+
 //订单-挂卖订单列表-分页
 export function findMySellOrder(data) {
   return get('/order/findMySellOrder.api', data)
+}
+
+//订单-设置挂卖订单折扣
+export function doUpdateOrderProfitDiscount(data, isJson) {
+  return post('/order/doUpdateOrderProfitDiscount.api', data, isJson)
+}
+
+//订单-订单-申请挂卖
+export function doUpdateOrderSell(data, isJson) {
+  return post('/order/doUpdateOrderSell.api', data, isJson)
 }

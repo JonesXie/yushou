@@ -14,8 +14,13 @@
       <div class="mw_li_footer" slot-scope="props">
         <p class="mw_li_slogan">{{props.value.commentTitle}}</p>
         <p class="mw_li_like" @click="changeLike(props)">
-          <img v-if="props.value.doZan" src="@/assets/img/yanxuan/pg_yanxuan_like.png" alt>
-          <img v-else src="@/assets/img/yanxuan/pg_yanxuan_unlike.png" alt>
+          <img
+            v-if="props.value.doZan"
+            src="@/assets/img/yanxuan/pg_yanxuan_like.png"
+            alt
+            data-site="zan"
+          >
+          <img v-else src="@/assets/img/yanxuan/pg_yanxuan_unlike.png" alt data-site="zan">
           <span>{{props.value.zan}}</span>
         </p>
       </div>
@@ -49,13 +54,14 @@ export default {
         }
       });
     },
-    //eslint-disable-next-line
-    clickFn(event, { index, value }) {
+    clickFn(event, { value }) {
       // 阻止a标签跳转
       event.preventDefault();
       // 只有当点击到图片时才进行操作
       if (event.target.tagName.toLowerCase() == "img") {
-        // console.log("img clicked", index, value);
+        if (!`${event.target.outerHTML}`.includes("zan")) {
+          this.$router.push(`/articledetail/${value.id}`)
+        }
       }
     },
     getIMG() {

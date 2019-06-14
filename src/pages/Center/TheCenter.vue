@@ -244,7 +244,7 @@ $Color: #ea047b;
         img:last-child {
           width: 50px;
           height: 50px;
-          border-radius: 25px;
+          border-radius: 26px;
           position: absolute;
           top: 10px;
           left: 0;

@@ -57,6 +57,11 @@ const RouterMap = [
     name: 'yanxuanlist',
     component: () => import('@/pages/Yanxuan/YanxuanList.vue')
   },
+  {
+    path: '/articledetail/:id',
+    name: 'articledetail',
+    component: () => import('@/pages/Yanxuan/ArticleDetail.vue')
+  },
   //分类
   {
     path: "/thetype",
