@@ -142,11 +142,13 @@ const RouterMap = [
     name: 'orderdetail',
     component: () => import('@/pages/Order/OrderDetail.vue')
   },
+  //下单前
   {
     path: '/orderconfirm',
     name: 'orderconfirm',
     component: () => import('@/pages/Order/OrderConfirm.vue')
   },
+  //支付
   {
     path: '/orderpay',
     name: 'orderpay',
@@ -185,6 +187,18 @@ const RouterMap = [
     path: '/goodstype/id=:id&codeName=:codeName',
     name: 'goodstype',
     component: () => import('@/pages/Goods/GoodsType.vue')
+  },
+  //商品评论列表
+  {
+    path: '/judgelist/:goodsId',
+    name: 'judgelist',
+    component: () => import('@/pages/Goods/JudgeList.vue')
+  },
+  //商品评论详情
+  {
+    path: '/judgedetail/:id',
+    name: 'judgedetail',
+    component: () => import('@/pages/Goods/JudgeDetail.vue')
   },
   //活动
   {

@@ -32,7 +32,12 @@
         finished-text="没有更多了"
       >
         <ul class="pggt_ul">
-          <li class="pggt_li" v-for="(item,index) in dataList" :key="index">
+          <li
+            class="pggt_li"
+            v-for="(item,index) in dataList"
+            :key="index"
+            @click="turnPage(item.goodsId)"
+          >
             <div class="imgWrap" :style="{backgroundImage:'url('+ item.goodsImages +')'}"></div>
             <div class="txtWrap">
               <div class="price ellipsis-line">
@@ -93,9 +98,15 @@ export default {
       if (nv !== 0) {
         this.onInit();
       }
+    },
+    goodsName() {
+      this.onInit();
     }
   },
   methods: {
+    turnPage(val) {
+      this.$router.push(`/goods/${val}`);
+    },
     changeRange() {
       if (this.active === 2) {
         switch (this.priceActive) {
@@ -145,8 +156,11 @@ export default {
         codeId: this.id,
         brandId: null
       };
+      if (this.id !== null && this.id.length !== 32) {
+        Object.assign(_data, { codeId: null, brandId: this.id });
+      }
       if (this.noLimit) {
-         this.noLimit = false;
+        this.noLimit = false;
         findAllGoods(_data).then(({ data }) => {
           this.loading = false;
           this.noLimit = true;

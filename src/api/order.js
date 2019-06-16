@@ -13,6 +13,11 @@ export function toOrderDetail(data) {
   return get('/order/toOrderDetail.api', data)
 }
 
+// 订单-微信或支付支付
+export function doPayOrder(data) {
+  return get('/order/doPayOrder.api', data)
+}
+
 
 export function doLogin(data, isJson) {
   return post('/member/doLogin.api', data, isJson)

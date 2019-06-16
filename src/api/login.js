@@ -16,6 +16,8 @@ export function toSendSms(data, isJson) {
   return post('/member/toSendSms.api', data, isJson)
 }
 
-export function getBanner(data) {
-  return get('/member/doRegister.api', data)
+//获取微信重定向
+
+export function wxLoginPrepare(data) {
+  return get('/api/member/wxLoginPrepare', data)
 }

@@ -3,7 +3,7 @@
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <div class="if_banner">
         <van-swipe :autoplay="5000" indicator-color="#fa399d" v-if="BannerImg !==null">
-          <van-swipe-item v-for="(v,i) in BannerImg" :key="i" @click="turnGoods(v.id)">
+          <van-swipe-item v-for="(v,i) in BannerImg" :key="i" @click="turnGoods(v.picLink)">
             <img :src="v.picUrl" alt>
           </van-swipe-item>
         </van-swipe>
@@ -73,7 +73,7 @@
             class="fl_li"
             v-for="(v,i) in FLImg.dataList"
             :key="i"
-            @click="turnGoodsType(v.codeId)"
+            @click="turnGoodsType(v.codeId,v.codeName)"
           >
             <img :src="v.subjectTitleImage" alt>
             <p :class="['fl_li_p' ,'fl_li_p'+i]">{{v.subjectTitle}}</p>
@@ -91,14 +91,14 @@
         </div>
         <div class="ifmz_list" v-if="HZPData !==null">
           <!-- 1 -->
-          <div class="ifmz_li">
+          <div class="ifmz_li" @click="turnGoodsType(HZPData[0].id,HZPData[0].brandName)">
             <p class="ifmz_li_h">{{HZPData[0].brandName}}</p>
             <p class="ifmz_li_title">{{HZPData[0].sign}}</p>
             <div class="img_one">
               <img :src="HZPData[0].brandProductMainImage" alt>
             </div>
           </div>
-          <div class="ifmz_li">
+          <div class="ifmz_li" @click="turnGoodsType(HZPData[1].id,HZPData[1].brandName)">
             <p class="ifmz_li_h">{{HZPData[1].brandName}}</p>
             <p class="ifmz_li_title">{{HZPData[1].sign}}</p>
             <div class="img_one">
@@ -106,7 +106,7 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
+            <div class="ifmz_li mode_right" @click="turnGoodsType(HZPData[2].id,HZPData[2].brandName)">
               <p class="ifmz_li_h">{{HZPData[2].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[2].sign}}</p>
               <div class="img_two">
@@ -118,7 +118,7 @@
                 </div>
               </div>
             </div>
-            <div class="ifmz_li">
+            <div class="ifmz_li" @click="turnGoodsType(HZPData[3].id,HZPData[3].brandName)">
               <p class="ifmz_li_h">{{HZPData[3].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[3].sign}}</p>
               <div class="img_two">
@@ -132,7 +132,7 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
+            <div class="ifmz_li mode_right" @click="turnGoodsType(HZPData[4].id,HZPData[4].brandName)">
               <p class="ifmz_li_h">{{HZPData[4].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[4].sign}}</p>
               <div class="img_two">
@@ -144,7 +144,7 @@
                 </div>
               </div>
             </div>
-            <div class="ifmz_li">
+            <div class="ifmz_li" @click="turnGoodsType(HZPData[5].id,HZPData[5].brandName)">
               <p class="ifmz_li_h">{{HZPData[5].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[5].sign}}</p>
               <div class="img_two">
@@ -158,14 +158,14 @@
             </div>
           </div>
           <!-- 2 -->
-          <div class="ifmz_li ifmz-top">
+          <div class="ifmz_li ifmz-top" @click="turnGoodsType(HZPData[6].id,HZPData[6].brandName)">
             <p class="ifmz_li_h">{{HZPData[6].brandName}}</p>
             <p class="ifmz_li_title">{{HZPData[6].sign}}</p>
             <div class="img_one">
               <img :src="HZPData[6].brandProductMainImage" alt>
             </div>
           </div>
-          <div class="ifmz_li ifmz-top">
+          <div class="ifmz_li ifmz-top" @click="turnGoodsType(HZPData[7].id,HZPData[7].brandName)">
             <p class="ifmz_li_h">{{HZPData[7].brandName}}</p>
             <p class="ifmz_li_title">{{HZPData[7].sign}}</p>
             <div class="img_one">
@@ -173,7 +173,7 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
+            <div class="ifmz_li mode_right" @click="turnGoodsType(HZPData[8].id,HZPData[8].brandName)">
               <p class="ifmz_li_h">{{HZPData[8].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[8].sign}}</p>
               <div class="img_two">
@@ -185,7 +185,7 @@
                 </div>
               </div>
             </div>
-            <div class="ifmz_li">
+            <div class="ifmz_li" @click="turnGoodsType(HZPData[9].id,HZPData[9].brandName)">
               <p class="ifmz_li_h">{{HZPData[9].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[9].sign}}</p>
               <div class="img_two">
@@ -199,7 +199,7 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
+            <div class="ifmz_li mode_right" @click="turnGoodsType(HZPData[10].id,HZPData[10].brandName)">
               <p class="ifmz_li_h">{{HZPData[10].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[10].sign}}</p>
               <div class="img_two">
@@ -211,7 +211,7 @@
                 </div>
               </div>
             </div>
-            <div class="ifmz_li">
+            <div class="ifmz_li" @click="turnGoodsType(HZPData[11].id,HZPData[11].brandName)">
               <p class="ifmz_li_h">{{HZPData[11].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[11].sign}}</p>
               <div class="img_two">
@@ -225,14 +225,14 @@
             </div>
           </div>
           <!-- 3 -->
-          <div class="ifmz_li ifmz-top">
+          <div class="ifmz_li ifmz-top" @click="turnGoodsType(HZPData[12].id,HZPData[12].brandName)">
             <p class="ifmz_li_h">{{HZPData[12].brandName}}</p>
             <p class="ifmz_li_title">{{HZPData[12].sign}}</p>
             <div class="img_one">
               <img :src="HZPData[12].brandProductMainImage" alt>
             </div>
           </div>
-          <div class="ifmz_li ifmz-top">
+          <div class="ifmz_li ifmz-top" @click="turnGoodsType(HZPData[13].id,HZPData[13].brandName)">
             <p class="ifmz_li_h">{{HZPData[13].brandName}}</p>
             <p class="ifmz_li_title">{{HZPData[13].sign}}</p>
             <div class="img_one">
@@ -249,7 +249,7 @@
         <div class="ifmz_list" v-if="SjData !==null">
           <!-- 2 -->
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
+            <div class="ifmz_li mode_right" @click="turnGoodsType(SjData[0].id,SjData[0].brandName)">
               <p class="ifmz_li_h">{{SjData[0].brandName}}</p>
               <p class="ifmz_li_title">{{SjData[0].sign}}</p>
               <div class="img_two">
@@ -261,7 +261,7 @@
                 </div>
               </div>
             </div>
-            <div class="ifmz_li">
+            <div class="ifmz_li" @click="turnGoodsType(SjData[1].id,SjData[1].brandName)">
               <p class="ifmz_li_h">{{SjData[1].brandName}}</p>
               <p class="ifmz_li_title">{{SjData[1].sign}}</p>
               <div class="img_two">
@@ -275,7 +275,7 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
+            <div class="ifmz_li mode_right" @click="turnGoodsType(SjData[2].id,SjData[2].brandName)">
               <p class="ifmz_li_h">{{SjData[2].brandName}}</p>
               <p class="ifmz_li_title">{{SjData[2].sign}}</p>
               <div class="img_two">
@@ -287,7 +287,7 @@
                 </div>
               </div>
             </div>
-            <div class="ifmz_li">
+            <div class="ifmz_li" @click="turnGoodsType(SjData[3].id,SjData[3].brandName)">
               <p class="ifmz_li_h">{{SjData[3].brandName}}</p>
               <p class="ifmz_li_title">{{SjData[3].sign}}</p>
               <div class="img_two">
@@ -301,7 +301,7 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right">
+            <div class="ifmz_li mode_right" @click="turnGoodsType(SjData[4].id,SjData[4].brandName)">
               <p class="ifmz_li_h">{{SjData[4].brandName}}</p>
               <p class="ifmz_li_title">{{SjData[4].sign}}</p>
               <div class="img_two">
@@ -313,7 +313,7 @@
                 </div>
               </div>
             </div>
-            <div class="ifmz_li">
+            <div class="ifmz_li" @click="turnGoodsType(SjData[5].id,SjData[5].brandName)">
               <p class="ifmz_li_h">{{SjData[5].brandName}}</p>
               <p class="ifmz_li_title">{{SjData[5].sign}}</p>
               <div class="img_two">
@@ -344,6 +344,7 @@ import { Swipe, SwipeItem, PullRefresh } from "vant";
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import FirstList from "./FirstList.vue";
+import { notNull } from "@/layout/methods.js";
 
 export default {
   name: "IndexFirst",
@@ -386,11 +387,15 @@ export default {
     },
     //跳转
     turnGoods(val) {
-      this.$router.push(`/goods/${val}`);
+      if (notNull(val)) {
+        this.$router.push(`/goods/${val}`);
+      }else{
+        this.$toast("该选项仅做展示")
+      }
     },
-//跳转
-    turnGoodsType(val) {
-      this.$router.push(`/goodstype/${val}`);
+    //跳转
+    turnGoodsType(id,name) {
+      this.$router.push(`/goodstype/id=${id}&codeName=${name}`);
     },
 
     onLoad(val) {

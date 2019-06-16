@@ -1,24 +1,29 @@
 <template>
   <div class="index_second fisrt_list" ref="second_pg">
-    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-      <van-radio-group v-model="chooseId" class="is_ul" @change="changeId">
-        <van-radio class="is_li" :name="isType">
-          <span slot="icon" slot-scope="props" :class="props.checked ? 'active' : ''">推荐</span>
-        </van-radio>
-        <van-radio class="is_li" v-for="(v,i) in isCode" :key="i" :name="v.id">
-          <span slot="icon" slot-scope="props" :class="props.checked ? 'active' : ''">{{v.codeName}}</span>
-        </van-radio>
-      </van-radio-group>
-
+    <van-radio-group v-model="chooseId" class="is_ul" @change="changeId">
+      <van-radio class="is_li" :name="isType">
+        <span slot="icon" slot-scope="props" :class="props.checked ? 'active' : ''">推荐</span>
+      </van-radio>
+      <van-radio class="is_li" v-for="(v,i) in isCode" :key="i" :name="v.id">
+        <span slot="icon" slot-scope="props" :class="props.checked ? 'active' : ''">{{v.codeName}}</span>
+      </van-radio>
+    </van-radio-group>
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
       <van-list
         v-model="loading"
         :finished="finished"
-        finished-text="没有更多了"
         @load="onLoad"
+        finished-text="没有更多了"
+        :immediate-check="false"
         class="vantList"
       >
         <ul class="fl_ul">
-          <li class="van-hairline--bottom fl_li" v-for="(v,i) in listData" :key="i">
+          <li
+            class="van-hairline--bottom fl_li"
+            v-for="(v,i) in dataList"
+            :key="i"
+            @click="turnPage(v.goodsId)"
+          >
             <img :src="v.goodsImages" alt>
             <div class="fl_li_r">
               <p class="fl_li_rP1">{{v.goodsName}}</p>
@@ -47,21 +52,21 @@ export default {
   props: ["isType", "isCode"],
   data() {
     return {
-      listData: [],
-      loading: false,
-      finished: false,
-      isLoading: false,
       radio: "2",
       chooseId: this.isType,
-      curPage: 1
+      curPage: 1,
+      dataList: [],
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      noLimit: true
     };
   },
   watch: {
     isType: {
-      handler: function(nv) { 
-        this.chooseId = nv
-        this.curPage = 1;
-        this.onLoad(false, true);
+      handler: function(nv) {
+        this.chooseId = nv;
+        // this.onLoad();
       }
     }
   },
@@ -72,21 +77,24 @@ export default {
     [Radio.name]: Radio
   },
   methods: {
-    onLoad() {
-      // 异步更新数据
-      if (!this.finished) {
-        this.onInit();
-      }
+    turnPage(val) {
+      this.$router.push(`/goods/${val}`);
+    },
+    //二级分类变化
+    changeId() {
+      this.onInit();
     },
     onRefresh() {
-      this.curPage = 1;
-      this.onInit(true, true);
+      this.onInit(true);
     },
-    changeId() {
-      this.curPage = 1;
-      this.onInit(false, true);
+    onLoad() {
+      this.onInit(false, false);
     },
-    onInit(val = false, isInit = false) {
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
       let _data = {
         page: this.curPage,
         pageSize: 10,
@@ -100,25 +108,34 @@ export default {
         codeId: this.chooseId,
         brandId: null
       };
-      findAllGoods(_data).then(({ data }) => {
-        if (val) {
-          this.$toast("刷新成功");
-          this.isLoading = false;
-        }
-        this.loading = false;
-        if (isInit) {
-          this.listData = data.data;
-        }
-        if (data.data.length > 0) {
-          [...this.listData] = [...this.listData, ...data.data];
-          this.curPage = this.curPage + 1;
-        } else {
-          this.finished = true;
-        }
-      });
+      if (this.noLimit) {
+        this.noLimit = false;
+        findAllGoods(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data;
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
     }
   },
   mounted() {
+    this.onInit();
     this.$nextTick(() => {
       this.$refs.second_pg.scrollTo(0, 0);
     });

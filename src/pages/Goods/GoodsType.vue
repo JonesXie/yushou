@@ -18,7 +18,7 @@ export default {
     };
   },
   components: { HeadFoot, TypeList },
-  mounted() {
+  created() {
     this.id = this.$route.params.id;
     this.title = this.$route.params.codeName;
     // this.onInit();

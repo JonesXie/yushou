@@ -24,7 +24,9 @@ service.interceptors.request.use((config) => {
   config.headers.authorization = store.state.Token || localStorage.getItem('token')
   return config
 }, (error) => {
-  Toast.clear({clearAll: true});
+  Toast.clear({
+    clearAll: true
+  });
   // eslint-disable-next-line no-console
   Toast(error);
 })
@@ -32,7 +34,9 @@ service.interceptors.request.use((config) => {
 // 响应拦截
 service.interceptors.response.use(
   response => {
-    Toast.clear({clearAll: true});
+    Toast.clear({
+      clearAll: true
+    });
     if (response.data.code === 1) {
       //成功 1
       return response;
@@ -48,12 +52,17 @@ service.interceptors.response.use(
       Toast.fail(response.data.msg)
     } else {
       //失败 0
-      Toast.fail('出现错误:' + response.status)
+      if (`${response.config.url}`.includes('selectArticleDetaile')) {
+        return response;
+      }
+
     }
   },
   error => {
     // eslint-disable-next-line no-console
-    Toast.clear({clearAll: true});
+    Toast.clear({
+      clearAll: true
+    });
     Toast(error);
   })
 

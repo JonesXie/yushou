@@ -66,7 +66,8 @@ export default {
   components: { HeadFoot, [Radio.name]: Radio, [RadioGroup.name]: RadioGroup },
   methods: {
     submit(){
-      this.$router.push({path:'/paysuccess',query:{id:'132'}})
+      
+      // this.$router.push({path:'/paysuccess',query:{id:'132'}})
     }
   },
   mounted() {}

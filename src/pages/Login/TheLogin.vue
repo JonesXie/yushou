@@ -22,10 +22,10 @@
         <router-link to="/fixpassword">忘记密码?</router-link>
       </p>
       <div class="btn" @click="submit">登录</div>
-      <div class="wx_login">
+      <div class="wx_login" >
         <div class="title">第三方登录</div>
         <div class="tx_login">
-          <div class="tx_login_w">
+          <div class="tx_login_w" @click="wxLogin">
             <img src="@/assets/img/login/pg_login_wx.png" alt>
             <p>微信</p>
           </div>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { doLogin } from "@/api/login.js";
+import { doLogin, wxLoginPrepare } from "@/api/login.js";
 import { mapActions } from "vuex";
 import { Toast } from "vant";
 import { notNull } from "@/layout/methods.js";
@@ -87,6 +87,17 @@ export default {
         Toast.fail("请填写手机号");
       }
     },
+    //微信
+    wxLogin() {
+      wxLoginPrepare().then(({ data }) => {
+        let fixURL = data.data.url.split("redirect_uri=");
+        let fixURL01 = `${fixURL[1].split("&")[0]}/login`;
+        let url = `${fixURL[0]}redirect_uri=${fixURL01}&${
+          fixURL[1].split("&")[1]
+        }&${fixURL[1].split("&")[2]}&${fixURL[1].split("&")[3]}`;
+        window.location.href = url;
+      });
+    }
   },
   mounted() {
     this.ChangeStatus(false);
