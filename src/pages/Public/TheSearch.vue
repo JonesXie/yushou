@@ -87,7 +87,7 @@ export default {
 <style lang="scss" scoped>
 /* @import url(); */
 .pg_search {
-  background: #fff;
+  // background: #fff;
   min-height: 100vh;
   padding-top: 46px;
   box-sizing: border-box;
