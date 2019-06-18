@@ -10,6 +10,9 @@ router.beforeEach((to, from, next) => {
       store.commit('SET_FromToLogin', from.path)
     }
   }
+  // if (`${to.path}`.includes('goods')) {
+  //   store.commit('setTogoods', from.path)
+  // }
   next()
 })
 

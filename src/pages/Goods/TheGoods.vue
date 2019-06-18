@@ -36,7 +36,7 @@ export default {
   methods: {
     ...mapActions(["ChangeStatus"]),
     GoBack() {
-      this.$router.back(-1);
+      this.$router.go(-1);
     },
     changePage(bool) {
       this.actived = bool;

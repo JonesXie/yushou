@@ -27,3 +27,8 @@ export function selectComment(data, isJson) {
 export function insertComment(data, isJson) {
   return post('/api/comment/insertComment', data, isJson)
 }
+
+//订单-订单预览
+export function toComfirmOrder(data, isJson) {
+  return post('/order/toComfirmOrder.api', data, isJson)
+}

@@ -71,7 +71,7 @@
           <img v-else src="@/assets/img/goods/pg_goods_collect.png" alt>
           <p>收藏</p>
         </div>
-        <div class="buy_C">
+        <div class="buy_C" v-if="goodsInfo.quickBuy === 1" @click="paramsPop('now')">
           <div class="buy_C_wrap">
             <img src="@/assets/img/goods/pg_goods_flash.png" alt>
             <div class="bcw_right">
@@ -80,15 +80,30 @@
             </div>
           </div>
         </div>
-        <div class="buy_R" @click="showParams=true">
+
+        <div class="buy_R" @click="paramsPop('yu')">
           <p>￥{{goodsInfo.goodsSalePrice}}</p>
           <p>预售</p>
         </div>
       </div>
     </div>
-    <!-- 参数选择弹窗 -->
-    <van-actionsheet v-model="showParams" :close-on-click-overlay="false" class="params_pop">
-
+    <!-- 参数选择弹窗 01-->
+    <van-actionsheet v-model="showParams01" :close-on-click-overlay="false" class="params_pop">
+      <params-choose
+        :paramsList="paramsList"
+        :paramsLimit="paramsLimit"
+        :isType="isType"
+        @closeBtn="showParams01=false"
+      ></params-choose>
+    </van-actionsheet>
+    <!-- 参数选择弹窗 02-->
+    <van-actionsheet v-model="showParams02" :close-on-click-overlay="false" class="params_pop">
+      <params-choose
+        :paramsList="paramsList"
+        :paramsLimit="paramsLimit"
+        :isType="isType"
+        @closeBtn="showParams02=false"
+      ></params-choose>
     </van-actionsheet>
 
     <!-- 价格说明弹窗 -->
@@ -174,6 +189,7 @@ import {
 import GoodsJudge from "./GoodsJudge";
 import { findGoodsDetail } from "@/api/goods.js";
 import { doAddCollect, doDelUserCollect } from "@/api/yanxuan.js";
+import ParamsChoose from "./ParamsChoose.vue";
 export default {
   name: "GoodsDetail",
   props: ["goodsId"],
@@ -198,20 +214,18 @@ export default {
       current: 0,
       isCollect: false,
       logistics: "卖家包邮",
-      paramsList:[],//参数选择list
-      chooseParams:[],
-
-      number: 5,
-      currentPrice: 2200,
-      currentRemain: 100,
-      showParams: false,
+      isType: null,
+      paramsList: [], //参数选择list
+      paramsLimit: null, //参数选择限制
+      showParams01: false,
+      showParams02: false,
       showPrice: false,
-      showPower: false,
-      paramsImg: require("@/assets/img/goods/pg_goodstype_goods.png")
+      showPower: false
     };
   },
   components: {
     GoodsJudge,
+    ParamsChoose,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
     [Cell.name]: Cell,
@@ -235,6 +249,15 @@ export default {
     swipeChange(index) {
       this.current = index;
     },
+    //弹窗
+    paramsPop(val) {
+      this.isType = val;
+      if (val === "now") {
+        this.showParams01 = true;
+      } else {
+        this.showParams02 = true;
+      }
+    },
     //收藏
     changeCollect() {
       if (this.goodsInfo.isCollect === 0) {
@@ -257,10 +280,6 @@ export default {
         );
       }
     },
-    paramsComfirm() {
-      this.showParams = false;
-      this.$router.push({ path: "/orderconfirm", query: { id: "xie" } });
-    }
   },
   created() {
     findGoodsDetail({ goodsId: this.goodsId }).then(({ data }) => {
@@ -269,6 +288,7 @@ export default {
       this.commentNum = data.data.commentNum;
       this.commentPageInfo = data.data.commentPageInfo;
       this.paramsList = data.data.parameterNameVOS;
+      this.paramsLimit = data.data.skuVOS;
       this.swiperList = [data.data.goodsImages, ...data.data.goodsPictures];
     });
   }

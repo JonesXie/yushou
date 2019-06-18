@@ -1,35 +1,40 @@
 <template>
-  <HeadFoot class="pg_confirm" :Title="title">
-    <template #content>
+  <HeadFoot class="pg_confirm" :Title="title" :backPath="backPath">
+    <template #content v-if="allInfo">
       <!-- do somethings -->
-      <van-cell class="site" is-link :center="true">
-        <p class="site_user">
-          小桂子
-          <span>13083654079</span>
-        </p>
-        <p class="site_info">安徽省合肥市包河区望湖街道马鞍山路绿地瀛海大厦D座1902室</p>
+      <!-- 地址 -->
+      <van-cell class="site" is-link @click="turnSite" :center="true" v-if="myAddress">
+        <div v-if="JSON.stringify(myAddress) !== '{}'">
+          <p class="site_user">
+            {{myAddress.addressName}}
+            <span>{{myAddress.addressPhone}}</span>
+          </p>
+          <p class="site_info">{{myAddress.addressArea}}&nbsp;{{myAddress.address}}</p>
+        </div>
+        <div v-else>暂无收货地址，请添加</div>
       </van-cell>
       <div class="site_bootm"></div>
+
       <van-cell-group class="order">
         <van-cell class="order_head_home">
           <van-icon name="wap-home"/>
-          <span>鱼麦麦自营店</span>
+          <span>{{allInfo.storeName}}</span>
         </van-cell>
         <div class="detail">
-          <img src="@/assets/logo.png" alt>
+          <img :src="allInfo.goodsImages" alt>
           <div class="wrap">
-            <p>骆驼牌 透气软弹男款同步网鞋低帮套脚棉鞋男式</p>
+            <p>{{allInfo.goodsName}}</p>
             <p class="guige">
-              规格：白色；42
-              <span>￥4137</span>
+              {{allInfo.goodsParams}}
+              <span>￥{{allInfo.goodsSalePrice}}.00</span>
             </p>
           </div>
         </div>
         <van-cell title="调货周期">
-          <span>4天</span>
+          <span>{{allInfo.goodsWaitDays}}天</span>
         </van-cell>
         <van-cell title="购买数量">
-          <span>4件</span>
+          <span>{{allInfo.buyCount}}件</span>
         </van-cell>
       </van-cell-group>
       <div class="guamai">
@@ -41,14 +46,14 @@
         <van-icon name="question-o" class="guamai_tips" @click="tips=true"/>
       </div>
       <van-cell title="发货时间">
-        <span>2018-04-28</span>
+        <span>{{allInfo.goodsDeliverytime}}</span>
       </van-cell>
       <van-cell-group class="info">
         <van-cell title="优惠券" is-link value="可优惠"></van-cell>
-        <van-cell title="平台补助" clickable @click="buzhu=!buzhu">
+        <!-- <van-cell title="平台补助" clickable @click="buzhu=!buzhu">
           <van-icon name="checked" v-if="buzhu" class="buzhu passed"/>
           <van-icon name="circle" v-else class="buzhu"/>
-        </van-cell>
+        </van-cell>-->
         <van-cell title="邮费">
           <span>免邮</span>
         </van-cell>
@@ -67,7 +72,7 @@
         />
       </van-cell-group>
       <div class="confirm_btn">
-        <div class="confirm_btn_L">￥8274.00</div>
+        <div class="confirm_btn_L">￥{{totalMoney}}</div>
         <div class="confirm_btn_R" @click="submit">提交订单</div>
       </div>
       <van-popup v-model="tips" class="tips_wrap">
@@ -84,7 +89,9 @@
 
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
+import { notNull } from "@/layout/methods.js";
 import { Icon, Cell, CellGroup, Field, RadioGroup, Radio, Popup } from "vant";
+import { mapActions } from "vuex";
 export default {
   name: "OrderConfirm",
   data() {
@@ -92,8 +99,11 @@ export default {
       title: "确认订单",
       message: null,
       isGuamai: "0",
-      buzhu: false,
-      tips: false
+      // buzhu: false,//平台补助
+      tips: false,
+      allInfo: null,
+      myAddress: null,
+      backPath: "/"
     };
   },
   components: {
@@ -106,12 +116,37 @@ export default {
     [Radio.name]: Radio,
     [Popup.name]: Popup
   },
-  methods: {
-    submit(){
-      this.$router.push({path:'/orderpay',query:{id:'132'}})
+  computed: {
+    totalMoney() {
+      return (
+        Number(this.allInfo.goodsSalePrice) * Number(this.allInfo.buyCount)
+      ).toFixed(2);
     }
   },
-  mounted() {}
+  methods: {
+    ...mapActions(["setTosite"]),
+    turnSite() {
+      this.setTosite(true);
+      this.$router.push("/mysite");
+    },
+    submit() {
+      this.$router.push({ path: "/orderpay", query: { id: "132" } });
+    }
+  },
+  created() {
+    let isOrder = this.$store.state.isOrder;
+    if (notNull(isOrder.confirmInfo)) {
+      this.allInfo = isOrder.confirmInfo;
+      this.backPath = `/goods/${isOrder.confirmInfo.id}`;
+      if (isOrder.fromSite) {
+        this.myAddress = isOrder.siteData;
+      } else {
+        this.myAddress = isOrder.confirmInfo.address;
+      }
+    } else {
+      this.$router.go(-1);
+    }
+  }
 };
 </script>
 
@@ -158,7 +193,7 @@ export default {
     }
 
     .detail {
-      width: 100%;
+      width: 100vw;
       padding: 15px;
       box-sizing: border-box;
       background: #f4f4f4;
@@ -239,28 +274,28 @@ export default {
     background: #fff;
     border-radius: 5px;
     box-sizing: border-box;
-    .tips_h{
+    .tips_h {
       font-size: 14px;
       color: #333;
       padding-bottom: 12px;
       border-bottom: 1px dotted #ddd;
-      img{
+      img {
         width: 30px;
         height: 32px;
         margin-right: 14px;
       }
     }
-    .tips_c{
+    .tips_c {
       padding: 18px 0;
       font-size: 13px;
       line-height: 20px;
       color: #999999;
     }
-    .tip_btn{
-      @include btn(65px,25px);
+    .tip_btn {
+      @include btn(65px, 25px);
       border-radius: 5px;
       margin-left: 50%;
-      transform: translateX(-50%)
+      transform: translateX(-50%);
     }
   }
 }

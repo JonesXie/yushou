@@ -20,7 +20,7 @@ export default {
     ...mapActions(["ChangeStatus"]),
     GoBack() {
       if (notNull(this.backPath)) {
-        this.$router.push(this.backPath)
+        this.$router.go(this.backPath)
       } else {
         this.$router.back(-1);
       }

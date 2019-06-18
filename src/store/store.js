@@ -2,6 +2,7 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 
 import isBar from './modules/BarStatus'
+import isOrder from './modules/OrderInfo'
 
 Vue.use(Vuex); //注册到vue中
 
@@ -31,7 +32,8 @@ const actions = {
 //使用模块化
 export default new Vuex.Store({
   modules: {
-    isBar
+    isBar,
+    isOrder
   },
   state,
   mutations,

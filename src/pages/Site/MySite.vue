@@ -15,7 +15,7 @@
               :class="['pgs_li' ,v.isDefault ===0 ? '':'default']"
               @click="delData"
             >
-              <div class="li_content">
+              <div class="li_content" @click="chooseSite(i)">
                 <p class="li_content_info">
                   <span>{{v.name}}</span>
                   <em>{{v.phone}}</em>
@@ -46,6 +46,7 @@
 import { SwipeCell, List, PullRefresh } from "vant";
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { findAddress, doDefaultAddress, doDelAddress } from "@/api/center.js";
+// import { notNull } from "@/layout/methods.js";
 export default {
   name: "MySite",
   data() {
@@ -59,7 +60,8 @@ export default {
       loading: false,
       finished: false,
       noLimit: true,
-      backPath: "/center"
+      backPath: "/center",
+      canClick: false
     };
   },
   components: {
@@ -78,6 +80,21 @@ export default {
           this.$notify(data.msg);
           this.onInit();
         });
+      }
+    },
+    chooseSite(index) {
+      if (this.canClick) {
+        let _data = {
+          addressPhone: this.dataList[index].phone,
+          address: this.dataList[index].address,
+          addressName: this.dataList[index].name,
+          addressArea: this.dataList[index].area,
+          addressId: this.dataList[index].id
+        };
+        this.$store.dispatch("setSitedata", _data);
+        this.$store.dispatch("setTosite", false);
+        this.$store.dispatch("setFromsite", true);
+        this.$router.push("/orderconfirm");
       }
     },
     delIndex(index) {
@@ -136,6 +153,10 @@ export default {
   },
   mounted() {
     this.onInit();
+    if (this.$store.state.isOrder.toSite) {
+      this.backPath = "/orderconfirm";
+      this.canClick = true;
+    }
   }
 };
 </script>

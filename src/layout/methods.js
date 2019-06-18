@@ -2,6 +2,8 @@
 export function notNull(val) {
   if ([undefined, null, ''].includes(val)) {
     return false
+  } else if (JSON.stringify(val) === "{}") {
+    return false
   } else {
     return true
   }
