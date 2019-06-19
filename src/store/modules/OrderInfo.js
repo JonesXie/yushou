@@ -4,7 +4,7 @@ const isOrder = {
     toSite: false,
     fromSite: false,
     siteData: null,
-    toGoods: "/"
+    couponData: null
   },
   mutations: {
     SET_CONfIRMINFO: (state, opt) => {
@@ -19,8 +19,8 @@ const isOrder = {
     SET_SITEDATA: (state, opt) => {
       state.siteData = opt
     },
-    SET_TOGOODS: (state, opt) => {
-      state.toGoods = opt
+    SET_COUPONDATA: (state, opt) => {
+      state.couponData = opt
     },
   },
   actions: {
@@ -44,10 +44,10 @@ const isOrder = {
     }, opt) {
       commit('SET_SITEDATA', opt);
     },
-    setTogoods({
+    mapActions({
       commit
     }, opt) {
-      commit('SET_TOGOODS', opt);
+      commit('SET_COUPONDATA', opt);
     },
   }
 }

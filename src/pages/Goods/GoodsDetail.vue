@@ -93,6 +93,7 @@
         :paramsList="paramsList"
         :paramsLimit="paramsLimit"
         :isType="isType"
+        :showIMG="showIMG"
         @closeBtn="showParams01=false"
       ></params-choose>
     </van-actionsheet>
@@ -102,6 +103,7 @@
         :paramsList="paramsList"
         :paramsLimit="paramsLimit"
         :isType="isType"
+        :showIMG="showIMG"
         @closeBtn="showParams02=false"
       ></params-choose>
     </van-actionsheet>
@@ -190,6 +192,7 @@ import GoodsJudge from "./GoodsJudge";
 import { findGoodsDetail } from "@/api/goods.js";
 import { doAddCollect, doDelUserCollect } from "@/api/yanxuan.js";
 import ParamsChoose from "./ParamsChoose.vue";
+import { notNull } from "@/layout/methods.js";
 export default {
   name: "GoodsDetail",
   props: ["goodsId"],
@@ -215,6 +218,7 @@ export default {
       isCollect: false,
       logistics: "卖家包邮",
       isType: null,
+      showIMG: true,
       paramsList: [], //参数选择list
       paramsLimit: null, //参数选择限制
       showParams01: false,
@@ -280,6 +284,31 @@ export default {
         );
       }
     },
+    delParams(val) {
+      if (notNull(val.parameterNameVOS) && val.skuVOS.length > 0) {
+        this.paramsList = val.parameterNameVOS;
+        this.paramsLimit = val.skuVOS;
+      } else {
+        this.showIMG = false;
+        let goodsName = val.goodsParams.map(v => {
+          return { name: v };
+        });
+        let goodsModel = val.goodsModels.map(v => {
+          return { name: v };
+        });
+        this.paramsList = [
+          {
+            name: val.goodsParameterName,
+            ymParameterVOS: goodsName
+          },
+          {
+            name: val.goodsModelName,
+            ymParameterVOS: goodsModel
+          }
+        ];
+        this.paramsLimit = [{ goodsId: val.id }];
+      }
+    }
   },
   created() {
     findGoodsDetail({ goodsId: this.goodsId }).then(({ data }) => {
@@ -287,8 +316,7 @@ export default {
       this.commentAllNum = data.data.commentAllNum;
       this.commentNum = data.data.commentNum;
       this.commentPageInfo = data.data.commentPageInfo;
-      this.paramsList = data.data.parameterNameVOS;
-      this.paramsLimit = data.data.skuVOS;
+      this.delParams(data.data);
       this.swiperList = [data.data.goodsImages, ...data.data.goodsPictures];
     });
   }

@@ -40,8 +40,8 @@
       <div class="guamai">
         <span>是否挂卖</span>
         <van-radio-group v-model="isGuamai" class="guamai_radio">
-          <van-radio name="1" checked-color="#ea047b">是</van-radio>
-          <van-radio name="0" checked-color="#ea047b">否</van-radio>
+          <van-radio name="01" checked-color="#ea047b">是</van-radio>
+          <van-radio name="02" checked-color="#ea047b">否</van-radio>
         </van-radio-group>
         <van-icon name="question-o" class="guamai_tips" @click="tips=true"/>
       </div>
@@ -49,7 +49,9 @@
         <span>{{allInfo.goodsDeliverytime}}</span>
       </van-cell>
       <van-cell-group class="info">
-        <van-cell title="优惠券" is-link value="可优惠"></van-cell>
+        <van-cell title="优惠券" @click="turnCoupon" is-link>
+          <span class="myCoupon">{{couponName}}</span>
+        </van-cell>
         <!-- <van-cell title="平台补助" clickable @click="buzhu=!buzhu">
           <van-icon name="checked" v-if="buzhu" class="buzhu passed"/>
           <van-icon name="circle" v-else class="buzhu"/>
@@ -92,18 +94,21 @@ import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { notNull } from "@/layout/methods.js";
 import { Icon, Cell, CellGroup, Field, RadioGroup, Radio, Popup } from "vant";
 import { mapActions } from "vuex";
+import { doSubmitOrder } from "@/api/order.js";
 export default {
   name: "OrderConfirm",
   data() {
     return {
       title: "确认订单",
       message: null,
-      isGuamai: "0",
+      isGuamai: "02",
       // buzhu: false,//平台补助
       tips: false,
       allInfo: null,
-      myAddress: null,
-      backPath: "/"
+      myAddress: {},
+      backPath: "/",
+      couponData: null,
+      couponName: "可优惠"
     };
   },
   components: {
@@ -129,8 +134,36 @@ export default {
       this.setTosite(true);
       this.$router.push("/mysite");
     },
+    turnCoupon() {
+      this.$router.push(`/ordercoupon/${this.allInfo.id}`);
+    },
     submit() {
-      this.$router.push({ path: "/orderpay", query: { id: "132" } });
+      if (notNull(this.myAddress)) {
+        let _couponId = null;
+        if (notNull(this.couponData)) {
+          _couponId = this.couponData.id;
+        }
+        let _data = {
+          goodsId: this.allInfo.id,
+          goodsParam: this.allInfo.goodsParams,
+          goodsModel: this.allInfo.goodsModels,
+          goodsNum: this.allInfo.buyCount,
+          isSale: this.isGuamai,
+          addressId: this.myAddress.addressId,
+          remarks: this.message,
+          couponId: _couponId,
+          goodsPrivilege: null,
+          skuId: this.allInfo.skuId,
+          buyType: this.allInfo.buyType
+        };
+        doSubmitOrder(_data).then(({ data }) => {
+          if (data.code == "1") {
+            this.$router.push({ path:`/orderpay/${data.orderId}`});
+          }
+        });
+      } else {
+        this.$notify("请填写收货地址");
+      }
     }
   },
   created() {
@@ -142,6 +175,10 @@ export default {
         this.myAddress = isOrder.siteData;
       } else {
         this.myAddress = isOrder.confirmInfo.address;
+      }
+      if (notNull(isOrder.couponData)) {
+        this.couponData = isOrder.couponData;
+        this.couponName = `-${isOrder.couponData.price}`;
       }
     } else {
       this.$router.go(-1);
@@ -177,6 +214,9 @@ export default {
   background-position: center;
   background-size: 100%;
   background: url("~@/assets/img/order/pg_orderconfirm_bottom.png");
+}
+.myCoupon {
+  color: $Color;
 }
 .pg_confirm {
   .order {

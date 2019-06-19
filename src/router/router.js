@@ -148,14 +148,20 @@ const RouterMap = [
     name: 'orderconfirm',
     component: () => import('@/pages/Order/OrderConfirm.vue')
   },
+  //订单优惠券
+  {
+    path: '/ordercoupon/:goodsId',
+    name: 'ordercoupon',
+    component: () => import('@/pages/Order/OrderCoupon.vue')
+  },
   //支付
   {
-    path: '/orderpay',
+    path: '/orderpay/:orderId',
     name: 'orderpay',
     component: () => import('@/pages/Order/OrderPay.vue')
   },
   {
-    path: '/paysuccess',
+    path: '/paysuccess/:payType/:price',
     name: 'paysuccess',
     component: () => import('@/pages/Order/PaySuccess.vue')
   },

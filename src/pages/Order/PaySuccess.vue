@@ -3,17 +3,20 @@
     <template #content>
       <div class="pgp_content">
         <div class="pgpc_title">
-          <img src="@/assets/img/order/pg_pay_alipay.png" alt>
+          <img v-if="payType ===1" src="@/assets/img/order/pg_pay_alipay.png" alt>
+          <img v-else-if="payType ===2" src="@/assets/img/order/pg_pay_wechat.png" alt>
+          <img v-else src="@/assets/img/order/pg_pay_yue.png" alt>
           <span>支付成功</span>
         </div>
         <div class="pgpc_money">
-          <span>￥</span>12313.00
+          <span>￥</span>
+          {{price}}.00
         </div>
         <div class="pgpc_btn">
-          <div class="pgpc_btn1">查看详情</div>
+          <div class="pgpc_btn1" @click="$router.replace('/myorder/0')">查看详情</div>
           <div class="pgpc_btn2" @click="$router.push('/index')">回到首页</div>
         </div>
-        <div class="pgpc_tips">温馨提示：一切冒充我平台工作人员的第三方皆为诈骗，如遇到问题，请致电400-0000-000。</div>
+        <div class="pgpc_tips">温馨提示：一切冒充我平台工作人员的第三方皆为诈骗，如遇到问题，请致电0551-65156891。</div>
       </div>
     </template>
   </HeadFoot>
@@ -25,12 +28,17 @@ export default {
   name: "PaySuccess",
   data() {
     return {
-      title: "支付成功"
+      title: "支付成功",
+      price: 0,
+      payType: 0
     };
   },
   components: { HeadFoot },
   methods: {},
-  mounted() {}
+  mounted() {
+    this.price = this.$route.params.price;
+    this.payType = this.$route.params.payType;
+  }
 };
 </script>
 
@@ -50,6 +58,7 @@ export default {
       text-align: center;
       font-size: 19px;
       color: #000;
+      margin-top: 10px;
       img {
         width: 25px;
         height: 25px;
@@ -61,7 +70,7 @@ export default {
       }
     }
     .pgpc_money {
-      padding: 39px 0;
+      padding: 20px 0 39px 0;
       font-size: 21px;
       color: #000;
       text-align: center;
@@ -70,9 +79,9 @@ export default {
         font-size: 14px;
       }
     }
-    .pgpc_btn{
+    .pgpc_btn {
       text-align: center;
-      .pgpc_btn1{
+      .pgpc_btn1 {
         display: inline-block;
         width: 90px;
         height: 30px;
@@ -84,11 +93,11 @@ export default {
         border-radius: 15px;
         margin-right: 40px;
       }
-            .pgpc_btn2{
-        @include btn(90px ,30px)
+      .pgpc_btn2 {
+        @include btn(90px, 30px);
       }
     }
-    .pgpc_tips{
+    .pgpc_tips {
       margin-top: 30px;
       font-size: 12px;
       color: #999;

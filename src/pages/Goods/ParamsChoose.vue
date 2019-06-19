@@ -1,6 +1,6 @@
 <template>
   <div class="mod_paramschoose">
-    <div class="params_info">
+    <div class="params_info" v-if="showIMG">
       <van-icon name="close" class="params_close" @click="closePop"/>
       <div class="img_wrap" :style="{backgroundImage:'url('+paramsImg+')'}"></div>
       <div class="pi_right">
@@ -46,7 +46,7 @@ import { toComfirmOrder } from "@/api/goods.js";
 import { mapActions } from "vuex";
 export default {
   name: "ParamsChoose",
-  props: ["paramsList", "paramsLimit", "isType"],
+  props: ["paramsList", "paramsLimit", "isType", "showIMG"],
   data() {
     return {
       chooseParams: [],
@@ -101,12 +101,13 @@ export default {
         goodsId: this.paramsLimit[0].goodsId,
         goodsParam: this.chooseParams[0],
         goodsModel: this.chooseParams[1],
-        skuId: this.skuId,
+        skuId: this.showIMG ? this.skuId : null,
         buyType: this.isType === "yu" ? 0 : 1
       };
       toComfirmOrder(_data).then(({ data }) => {
         if (data.code === 1) {
           data.data.buyCount = this.number;
+          data.data.buyType = this.isType === "yu" ? 0 : 1;
           this.setInfo(data.data);
           this.$router.push({ path: "/orderconfirm" });
         }
