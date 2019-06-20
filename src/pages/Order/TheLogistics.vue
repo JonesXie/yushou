@@ -35,7 +35,8 @@
         </van-steps>
       </div>
       <div class="pgl_f">
-        <span>申请换货</span>
+        <!-- <span>申请换货</span> -->
+        <span>购物愉快</span>
       </div>
     </template>
   </HeadFoot>

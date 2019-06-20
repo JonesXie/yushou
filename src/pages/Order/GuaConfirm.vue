@@ -79,7 +79,7 @@ export default {
     return {
       title: "购买订单",
       message: null,
-      isGuamai: "1",
+      isGuamai: "1"
     };
   },
   components: {
@@ -93,7 +93,8 @@ export default {
   },
   methods: {
     submit() {
-      this.$router.push({ path: "/orderpay", query: { id: "132" } });
+      this.$toast("正在实现中");
+      // this.$router.push({ path: "/orderpay", query: { id: "132" } });
     }
   },
   mounted() {}
@@ -239,17 +240,16 @@ export default {
     box-sizing: border-box;
     background: #fff;
     text-align: center;
-    .confirm_btn_H{
+    .confirm_btn_H {
       font-size: 14px;
       color: #000;
       padding: 20px;
-      span{
+      span {
         margin-right: 10px;
-
       }
     }
-    .confirm_btn_F{
-      @include btn(345px,40px)
+    .confirm_btn_F {
+      @include btn(345px, 40px);
     }
     &::before {
       content: "";

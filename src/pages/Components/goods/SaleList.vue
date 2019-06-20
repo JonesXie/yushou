@@ -1,65 +1,119 @@
 <template>
-  <ul class="mod_salelist">
-    <li class="mod_li">
-      <p class="mod_li_h">订单编号：78958758892146</p>
-      <p class="mod_li_info">
-        <span>参数规格：</span>
-        <em>白色；36码（1件）</em>
-      </p>
-      <p class="mod_li_info">
-        <span>实付金额：</span>
-        <em>￥4137</em>
-      </p>
-      <p class="mod_li_info">
-        <span>剩余调货周期：</span>
-        <em>29天</em>
-      </p>
-      <div class="mod_li_btn">
-        <div class="mod_li_btn1" @click="detailBtn">详情</div>
-        <div class="mod_li_btn2" @click="buyBtn">购买</div>
-      </div>
-    </li>
-  </ul>
+  <div class="mod_slalist">
+    <!-- list -->
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+        finished-text="没有更多了"
+        :immediate-check="false"
+      >
+        <!-- list -->
+        <ul class="mod_ul">
+          <li class="mod_li" v-for="(v,i) in dataList" :key="i">
+            <p class="mod_li_h">卖家:{{v.nickName}}</p>
+            <p class="mod_li_info">
+              <span>参数规格：</span>
+              <em>{{v.goodsParameter}}({{v.goodsBuyNum}}件)</em>
+            </p>
+            <p class="mod_li_info">
+              <span>实付金额：</span>
+              <em>￥{{v.actualMoney}}</em>
+            </p>
+            <p class="mod_li_info">
+              <span>发货信息：</span>
+              <em>{{v.inWaitDay}}天后发货</em>
+            </p>
+            <div class="mod_li_btn">
+              <div class="mod_li_btn1" @click="detailBtn(v.id)">详情</div>
+              <div class="mod_li_btn2" @click="buyBtn(v.id)">购买</div>
+            </div>
+          </li>
+        </ul>
+      </van-list>
+    </van-pull-refresh>
+    <div v-if="dataList.length === 0" class="noData">
+      <img src="@/assets/img/ly_nodata.png" alt>
+    </div>
+  </div>
 </template>
 
 <script>
+import { List, PullRefresh } from "vant";
+import { findGoodsSellOrderPage } from "@/api/order.js";
 export default {
   name: "SaleList",
-  props: ["priceData", "dayData", "otherData"],
+  props: ["goodsId", "getParams"],
   data() {
-    return {};
+    return {
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      noLimit: true
+    };
   },
+  components: { [List.name]: List, [PullRefresh.name]: PullRefresh },
   watch: {
-    priceData: {
+    getParams: {
       handler: function() {
-        // console.log(this.priceData);
+        this.onInit();
       },
-      immediate: true
-    },
-    dayData: {
-      handler: function() {
-        // console.log(this.dayData);
-      },
-      immediate: true
-    },
-    otherData: {
-      handler: function() {
-        // console.log(this.otherData);
-      },
-      immediate: true
+      deep: true
     }
   },
   methods: {
-    detailBtn() {
-      this.$router.push({ path: "/guadetail", query: { id: "xie" } });
+    onRefresh() {
+      this.onInit(true);
     },
-    buyBtn() {
-      this.$router.push({ path: "/guaconfirm", query: { id: "xie" } });
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage
+      };
+      Object.assign(_data, this.getParams);
+      if (this.noLimit) {
+        this.noLimit = false;
+        findGoodsSellOrderPage(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList;
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
+    },
+    detailBtn(orderId) {
+      this.$router.push({ path: `/guadetail/${orderId}` });
+    },
+    buyBtn(orderId) {
+      this.$router.push({ path: `/guaconfirm/${orderId}` });
     }
   },
   mounted() {
-    // console.log(this.activeData);
-    // console.log(this.otherData);
+    this.onInit();
   }
 };
 </script>
@@ -112,6 +166,25 @@ export default {
   }
   .mod_li_btn2 {
     @include btn(60px, 25px);
+  }
+}
+.mod_ul {
+  min-height: calc(100vh - 50px);
+}
+.noData {
+  width: 100%;
+  height: calc(100vh - 120px);
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 227px;
+    height: 200px;
   }
 }
 </style>

@@ -165,14 +165,19 @@ const RouterMap = [
     name: 'paysuccess',
     component: () => import('@/pages/Order/PaySuccess.vue')
   },
+  {
+    path: '/editorconfig/:orderId',
+    name: 'editorconfig',
+    component: () => import('@/pages/Order/EditorConfig.vue')
+  },
   //挂卖
   {
-    path: '/guadetail',
+    path: '/guadetail/:orderId',
     name: 'guadetail',
     component: () => import('@/pages/Order/GuaDetail.vue')
   },
   {
-    path: '/guaconfirm',
+    path: '/guaconfirm/:orderId',
     name: 'guaconfirm',
     component: () => import('@/pages/Order/GuaConfirm.vue')
   },

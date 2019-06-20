@@ -1,42 +1,44 @@
 <template>
   <HeadFoot class="pg_orderdetail" :Title="title">
-    <template #content>
+    <template #content v-if="allInfo">
       <div class="content_wrap">
-      <van-cell-group class="order">
-        <van-cell>
-          <span>订单编号  17102316279122</span>
-        </van-cell>
-        <div class="detail">
-          <img src="@/assets/logo.png" alt>
-          <div class="wrap">
-            <p>骆驼牌 透气软弹男款同步网鞋低帮套脚棉鞋男式</p>
-            <p class="guige">
-              规格：白色；42
-              <span>1件</span>
-            </p>
+        <van-cell-group class="order">
+          <van-cell>
+            <span>订单编号: {{allInfo.orderNo}}</span>
+          </van-cell>
+          <div class="detail">
+            <img :src="allInfo.goodsImages" alt>
+            <div class="wrap">
+              <p>{{allInfo.goodsName}}</p>
+              <p class="guige">
+                {{allInfo.goodsModel}}
+                <span>{{allInfo.goodsBuyNum}}件</span>
+              </p>
+            </div>
           </div>
-        </div>
-        <van-cell title="今日价格">
-          <span class="cell-right">￥4137.0</span>
-        </van-cell>
-        <van-cell title="剩余调货周期">
-          <span class="cell-right">4天</span>
-        </van-cell>
-      </van-cell-group>
-      <van-cell-group class="info">
-        <van-cell title="邮费">
-          <span >免邮</span>
-        </van-cell>
-        <van-cell title="配送方式">
-          <span >快递配送</span>
-        </van-cell>
-        <van-cell title="支付方式">
-          <span >支付宝</span>
-        </van-cell>
-        <van-cell title="下单时间">
-          <span >2019-4-20</span>
-        </van-cell>
-      </van-cell-group>
+          <van-cell title="今日价格">
+            <span class="cell-right">￥{{allInfo.newDatePrice}}</span>
+          </van-cell>
+          <van-cell title="剩余调货周期">
+            <span class="cell-right">{{allInfo.inWaitDay}}天</span>
+          </van-cell>
+        </van-cell-group>
+        <van-cell-group class="info">
+          <van-cell title="邮费">
+            <span>免邮</span>
+          </van-cell>
+          <van-cell title="配送方式">
+            <span>快递配送</span>
+          </van-cell>
+          <van-cell title="支付方式">
+            <span v-if="allInfo.orderPayType ==1">支付宝</span>
+            <span v-if="allInfo.orderPayType ==2">微信</span>
+            <span v-if="allInfo.orderPayType ==3">余额</span>
+          </van-cell>
+          <van-cell title="下单时间">
+            <span>{{allInfo.orderPayTime}}</span>
+          </van-cell>
+        </van-cell-group>
       </div>
       <div class="btn" @click="submit">立即购买</div>
     </template>
@@ -46,11 +48,14 @@
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Icon, Cell, CellGroup } from "vant";
+import { toOrderDetail } from "@/api/order.js";
 export default {
   name: "GuaDetail",
   data() {
     return {
-      title: "订单详情"
+      title: "订单详情",
+      orderId: null,
+      allInfo: null
     };
   },
   components: {
@@ -60,11 +65,19 @@ export default {
     [CellGroup.name]: CellGroup
   },
   methods: {
-    submit(){
-      this.$router.push({ path: "/guaconfirm", query: { id: "xie" } });
+    submit() {
+      this.$router.push({ path: `/guaconfirm/${this.orderId}` });
+    },
+    getInit() {
+      toOrderDetail({ orderId: this.orderId }).then(({ data }) => {
+        this.allInfo = data.data;
+      });
     }
   },
-  mounted() {}
+  mounted() {
+    this.orderId = this.$route.params.orderId;
+    this.getInit();
+  }
 };
 </script>
 
@@ -76,12 +89,12 @@ export default {
   padding-top: 46px;
 }
 .pg_orderdetail {
-  .content_wrap{
+  .content_wrap {
     padding-bottom: 52px;
   }
   .order {
     .detail {
-      width: 100%;
+      width: 100vw;
       padding: 15px;
       box-sizing: border-box;
       background: #f4f4f4;
@@ -114,17 +127,17 @@ export default {
       color: $Color;
     }
   }
-  .info{
+  .info {
     margin-top: 10px;
   }
-  .btn{
+  .btn {
     width: 100vw;
     height: 50px;
     background: $Color;
     text-align: center;
     line-height: 50px;
     font-size: 19px;
-    color:#fff;
+    color: #fff;
     position: fixed;
     left: 0;
     bottom: 0px;

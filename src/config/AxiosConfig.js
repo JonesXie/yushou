@@ -42,8 +42,9 @@ service.interceptors.response.use(
       return response;
     } else if (response.data.code === -1) {
       //未登录 -1
+      localStorage.setItem("token", null);
       Toast.fail(response.data.msg);
-      router.push('/login')
+      router.replace('/login')
     } else if (response.data.code === -2) {
       //无权限 -2
       Toast.fail('无权限')

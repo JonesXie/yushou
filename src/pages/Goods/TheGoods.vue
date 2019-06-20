@@ -10,7 +10,7 @@
       <goods-detail :goodsId="goodsId"></goods-detail>
     </div>
     <div class="guamai" v-else>
-      <gua-mai></gua-mai>
+      <gua-mai :goodsId="goodsId"></gua-mai>
     </div>
   </div>
 </template>
@@ -44,6 +44,9 @@ export default {
   },
   created() {
     this.goodsId = this.$route.params.id;
+    if (this.$route.query.actived !== undefined) {
+      this.actived = this.$route.query.actived === "false" ? false : true;
+    }
   },
   mounted() {
     this.ChangeStatus(false);

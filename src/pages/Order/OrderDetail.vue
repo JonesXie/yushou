@@ -3,14 +3,18 @@
     <template #content>
       <div class="pgod_h">
         <p class="pgod_h_p1">
-          <img v-if="detailData.orderState === '100'" src="@/assets/img/components/pg_orderdetail_pass.png" alt="">
+          <img
+            v-if="detailData.orderState === '99'"
+            src="@/assets/img/components/pg_orderdetail_pass.png"
+            alt
+          >
           <img v-else src="@/assets/img/components/pg_orderdetail_wait.png" alt>
           <span>{{orderStatus[detailData.orderState]}}</span>
         </p>
-        <p class="pgod_h_p2" v-if="detailData.orderState === '100'">交易成功</p>
+        <p class="pgod_h_p2" v-if="detailData.orderState === '99'">您的包裹已到达,祝您购物愉快</p>
         <p class="pgod_h_p2" v-else-if="detailData.orderState === '00'">您的订单已取消</p>
         <p class="pgod_h_p2" v-else-if="detailData.orderState === '01'">等待支付中</p>
-         <p class="pgod_h_p2" v-else>您的包裹已经在路上啦，请您耐心等待哦</p>
+        <p class="pgod_h_p2" v-else>您的包裹已经在路上啦，请您耐心等待哦</p>
       </div>
       <van-cell-group>
         <van-cell :center="true">
@@ -39,8 +43,11 @@
         </van-cell>
       </van-cell-group>
       <van-cell-group class="order">
-        <van-cell :title="`订单编号${detailData.orderNo}`"></van-cell>
-        <div class="detail">
+        <van-cell :title="`订单编号:${detailData.orderNo}`"></van-cell>
+        <router-link
+          :to="{path:`/goods/${detailData.goodsId}`,query:{actived:false}}"
+          class="detail"
+        >
           <img :src="detailData.goodsImages" alt>
           <div class="wrap">
             <p>{{detailData.goodsName}}</p>
@@ -49,7 +56,7 @@
               <span>{{detailData.goodsBuyNum}}件</span>
             </p>
           </div>
-        </div>
+        </router-link>
         <van-cell title="今日价格">
           <span class="cell-right">￥{{detailData.newDatePrice}}</span>
         </van-cell>
@@ -107,7 +114,7 @@ export default {
         "02": "调货中",
         "03": "待发货",
         "04": "待收货",
-        "100": "交易成功"
+        "99": "交易成功"
       }
     };
   },

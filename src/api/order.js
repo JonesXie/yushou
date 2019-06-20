@@ -33,3 +33,33 @@ export function balancePay(data, isJson) {
 export function doPayOrder(data, isJson) {
   return post('/order/doPayOrder.api', data, isJson)
 }
+
+//订单-取消待支付订单
+export function doCancelOrder(data, isJson) {
+  return post('/order/doCancelOrder.api', data, isJson)
+}
+
+// 提醒发货
+export function toConsignmentReminding(data) {
+  return get('/order/toConsignmentReminding.api', data)
+}
+
+//订单-订单收货
+export function doTakeDeliveryr(data, isJson) {
+  return post('/order/doTakeDeliveryr.api', data, isJson)
+}
+
+//订单-获取订单地址信息
+export function selectOrderAddress(data, isJson) {
+  return post('/api/order/selectOrderAddress', data, isJson)
+}
+
+//订单-修改订单身份证号码
+export function changeOrderIdentity(data, isJson) {
+  return post('/api/order/changeOrderIdentity', data, isJson)
+}
+
+//订单-获取商品挂卖订单列表
+export function findGoodsSellOrderPage(data, isJson) {
+  return post('/order/findGoodsSellOrderPage.api', data, isJson)
+}

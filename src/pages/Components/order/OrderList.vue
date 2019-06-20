@@ -35,12 +35,7 @@
                 <span>实付：￥{{v.orderPayPrice}}</span>
               </div>
             </div>
-            <div class="mol_f">
-              <span class="wuliu">
-                <router-link to="/logistics">查看物流</router-link>
-              </span>
-              <span class="check">确认收货</span>
-            </div>
+            <list-footer :itemData="v" @reGet="onInit"></list-footer>
           </li>
         </ul>
       </van-list>
@@ -52,6 +47,7 @@
 </template>
 
 <script>
+import ListFooter from "./ListFooter";
 import { List, PullRefresh } from "vant";
 import { findMyOrderPage } from "@/api/order.js";
 export default {
@@ -65,18 +61,22 @@ export default {
       loading: false,
       finished: false,
       noLimit: true,
-      // 全部：不传 已取消：00 待支付：01 调货中：02 待发货 03 待收货 04 交易成功：100
+      // 全部：不传 已取消：00 待支付：01 调货中：02 待发货 03 待收货 04 交易成功：100(回显99 ，传参101）
       setArr: {
         "00": "已取消",
-        "01": "待支付",
+        "01": "待付款",
         "02": "调货中",
         "03": "待发货",
         "04": "待收货",
-        "100": "交易成功"
+        "99": "交易成功" //回显99 ，传参101
       }
     };
   },
-  components: { [List.name]: List, [PullRefresh.name]: PullRefresh },
+  components: {
+    [List.name]: List,
+    [PullRefresh.name]: PullRefresh,
+    ListFooter
+  },
   watch: {
     status: {
       handler: function() {
@@ -101,6 +101,12 @@ export default {
         page: this.curPage,
         state: this.status
       };
+      if (this.status == "101") {
+        _data = {
+          page: this.curPage,
+          states: this.status
+        };
+      }
       if (this.noLimit) {
         this.noLimit = false;
         findMyOrderPage(_data).then(({ data }) => {
@@ -218,34 +224,7 @@ $Color: #ea047b;
       }
     }
   }
-  .mol_f {
-    padding: 11px 15px;
-    text-align: right;
-    .wuliu {
-      width: 73px;
-      height: 28px;
-      line-height: 28px;
-      text-align: center;
-      background: #fff;
-      border-radius: 5px;
-      font-size: 12px;
-      color: $Color;
-      display: inline-block;
-      border: 1px solid $Color;
-    }
-    .check {
-      width: 75px;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      background: $Color;
-      border-radius: 5px;
-      font-size: 12px;
-      color: #fff;
-      display: inline-block;
-      margin-left: 10px;
-    }
-  }
+
   .noData {
     width: 100%;
     height: calc(100vh - 120px);

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import OrderList from "./OrderList";
+import OrderList from "@/pages/Components/order/OrderList";
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Tab, Tabs } from "vant";
 export default {
@@ -38,7 +38,7 @@ export default {
       title: "我的订单",
       actived: null,
       lineWidth: 60,
-      setArr: [null, "01", "02", "03", "04", "100"], // 全部：不传 待支付：01 调货中：02 待发货 03 待收货 04 交易成功：100
+      setArr: [null, "01", "02", "03", "04", "101"], // 全部：不传 待支付：01 调货中：02 待发货 03 待收货 04 交易成功：100(回显99 ，传参101）
       deliverData: 0
     };
   },
