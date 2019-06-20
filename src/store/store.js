@@ -8,7 +8,7 @@ Vue.use(Vuex); //注册到vue中
 
 const state = {
   stickTop: 0,
-  fromToLogin: "/",
+  fromToLogin: "/index",
   Token: null
 };
 const mutations = {

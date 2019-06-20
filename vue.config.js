@@ -1,5 +1,5 @@
 module.exports = {
-  lintOnSave: true,//保存时使用eslint
+  lintOnSave: true, //保存时使用eslint
   css: {
     loaderOptions: {
       postcss: {

@@ -22,7 +22,7 @@
         <router-link to="/fixpassword">忘记密码?</router-link>
       </p>
       <div class="btn" @click="submit">登录</div>
-      <div class="wx_login" >
+      <div class="wx_login">
         <div class="title">第三方登录</div>
         <div class="tx_login">
           <div class="tx_login_w" @click="wxLogin">
@@ -75,7 +75,7 @@ export default {
             platform: "weixin"
           };
           doLogin(_data).then(({ data }) => {
-            Toast.success("登录成功");
+            this.$toast(data.msg);
             localStorage.setItem("token", data.token);
             this.$store.commit("SET_Token", data.token);
             this.$router.push(this.$store.state.fromToLogin);

@@ -155,7 +155,7 @@ export default {
       let _data = {
         balance: this.userInfo.balance,
         totalProfit: this.userInfo.totalProfit,
-        waitAmount: this.userInfo.waitAmount,
+        waitAmount: this.userInfo.waitAmount
       };
       this.$router.push({ path: "/wallet", query: _data });
     }

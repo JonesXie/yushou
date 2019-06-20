@@ -44,7 +44,7 @@ service.interceptors.response.use(
       //未登录 -1
       localStorage.setItem("token", null);
       Toast.fail(response.data.msg);
-      router.replace('/login')
+      router.push('/login')
     } else if (response.data.code === -2) {
       //无权限 -2
       Toast.fail('无权限')
@@ -56,7 +56,6 @@ service.interceptors.response.use(
       if (`${response.config.url}`.includes('selectArticleDetaile')) {
         return response;
       }
-
     }
   },
   error => {
@@ -64,7 +63,7 @@ service.interceptors.response.use(
     Toast.clear({
       clearAll: true
     });
-    Toast(error);
+    alert(error);
   })
 
 export default service
