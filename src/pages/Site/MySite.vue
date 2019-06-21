@@ -94,7 +94,7 @@ export default {
         this.$store.dispatch("setSitedata", _data);
         this.$store.dispatch("setTosite", false);
         this.$store.dispatch("setFromsite", true);
-        this.$router.push("/orderconfirm");
+        this.$router.push(this.backPath);
       }
     },
     delIndex(index) {
@@ -154,7 +154,7 @@ export default {
   mounted() {
     this.onInit();
     if (this.$store.state.isOrder.toSite) {
-      this.backPath = "/orderconfirm";
+      this.backPath = this.$store.state.isOrder.toSitePath;
       this.canClick = true;
     }
   }

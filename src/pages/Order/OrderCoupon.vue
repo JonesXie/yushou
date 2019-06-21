@@ -79,10 +79,10 @@ export default {
     [RadioGroup.name]: RadioGroup
   },
   methods: {
-    ...mapActions(["mapActions"]),
+    ...mapActions(["setCouponData"]),
     confirm() {
       if (notNull(this.chooseCoupon)) {
-        this.mapActions(this.dataList[this.chooseCoupon]);
+        this.setCouponData(this.dataList[this.chooseCoupon]);
         this.$router.go(-1);
       } else {
         this.$toast("请选择优惠券");

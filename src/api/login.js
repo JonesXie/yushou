@@ -17,7 +17,6 @@ export function toSendSms(data, isJson) {
 }
 
 //获取微信重定向
-
 export function wxLoginPrepare(data) {
   return get('/api/member/wxLoginPrepare', data)
 }

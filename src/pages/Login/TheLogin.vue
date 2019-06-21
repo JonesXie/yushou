@@ -46,7 +46,7 @@ import { mapActions } from "vuex";
 import { Toast } from "vant";
 import { notNull } from "@/layout/methods.js";
 export default {
-  name: "login",
+  name: "TheLogin",
   data() {
     return {
       phone: null,
@@ -74,12 +74,17 @@ export default {
             wxId: null,
             platform: "weixin"
           };
-          doLogin(_data).then(({ data }) => {
-            this.$toast(data.msg);
-            localStorage.setItem("token", data.token);
-            this.$store.commit("SET_Token", data.token);
-            this.$router.push(this.$store.state.fromToLogin);
-          });
+          doLogin(_data).then(
+            ({ data }) => {
+              if (data.code === 1) {
+                this.$toast(data.msg);
+                localStorage.setItem("token", data.token);
+                this.$store.commit("SET_Token", data.token);
+                this.$router.push(this.$store.state.fromToLogin);
+              }
+            },
+            () => {}
+          );
         } else {
           Toast.fail("请填写密码");
         }

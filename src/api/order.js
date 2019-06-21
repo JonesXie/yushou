@@ -63,3 +63,13 @@ export function changeOrderIdentity(data, isJson) {
 export function findGoodsSellOrderPage(data, isJson) {
   return post('/order/findGoodsSellOrderPage.api', data, isJson)
 }
+
+//订单-确认购买挂卖订单
+export function toComfirmSellOrder(data, isJson) {
+  return post('/order/toComfirmSellOrder.api', data, isJson)
+}
+
+//订单-生成挂卖订单
+export function doSubmitSellOrder(data, isJson) {
+  return post('/order/doSubmitSellOrder.api', data, isJson)
+}

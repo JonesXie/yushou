@@ -1,45 +1,53 @@
 <template>
-  <HeadFoot class="pg_confirm" :Title="title">
-    <template #content>
+  <HeadFoot class="pg_confirm" :Title="title" :backPath="backPath">
+    <template #content v-if="allInfo">
       <!-- do somethings -->
-      <van-cell class="site" is-link :center="true">
-        <p class="site_user">
-          小桂子
-          <span>13083654079</span>
-        </p>
-        <p class="site_info">安徽省合肥市包河区望湖街道马鞍山路绿地瀛海大厦D座1902室</p>
+      <!-- 地址 -->
+      <van-cell class="site" is-link @click="turnSite" :center="true" v-if="myAddress">
+        <div v-if="JSON.stringify(myAddress) !== '{}'">
+          <p class="site_user">
+            {{myAddress.addressName}}
+            <span>{{myAddress.addressPhone}}</span>
+          </p>
+          <p class="site_info">{{myAddress.addressArea}}&nbsp;{{myAddress.address}}</p>
+        </div>
+        <div v-else>暂无收货地址，请添加</div>
       </van-cell>
       <div class="site_bootm"></div>
+
       <van-cell-group class="order">
         <van-cell class="order_head_home">
-          <span>订单编号 17102316279122</span>
+          <span>订单编号 {{allInfo.orderNo}}</span>
         </van-cell>
         <div class="detail">
-          <img src="@/assets/logo.png" alt>
+          <img :src="allInfo.goodsImages" alt>
           <div class="wrap">
-            <p>骆驼牌 透气软弹男款同步网鞋低帮套脚棉鞋男式</p>
+            <p>{{allInfo.goodsName}}</p>
             <p class="guige">
-              规格：白色；42
-              <span>x2</span>
+              {{allInfo.goodsParameter}}
+              <span>x{{allInfo.goodsBuyNum}}</span>
             </p>
           </div>
         </div>
         <van-cell title="今日价格">
-          <span>￥2321</span>
+          <span>￥{{allInfo.newDatePrice}}.00</span>
         </van-cell>
         <van-cell title="剩余调货周期">
-          <span>4天</span>
+          <span>{{allInfo.inWaitDay}}天</span>
         </van-cell>
       </van-cell-group>
+
       <div class="guamai">
         <span>是否挂卖</span>
         <van-radio-group v-model="isGuamai" class="guamai_radio">
-          <van-radio name="1" checked-color="#ea047b">是</van-radio>
-          <van-radio name="0" checked-color="#ea047b">否</van-radio>
+          <van-radio name="01" checked-color="#ea047b">是</van-radio>
+          <van-radio name="02" checked-color="#ea047b">否</van-radio>
         </van-radio-group>
+        <van-icon name="question-o" class="guamai_tips" @click="tips=true"/>
       </div>
+
       <van-cell title="折扣">
-        <span class="zhekou">-100</span>
+        <span class="zhekou">-{{allInfo.discountPrice}}.00</span>
       </van-cell>
       <van-cell-group class="info">
         <van-cell title="邮费">
@@ -61,25 +69,41 @@
       </van-cell-group>
       <div class="confirm_btn">
         <div class="confirm_btn_H">
-          <span>共：1件</span>
-          <em>实付金额：￥4037</em>
+          <span>共：{{allInfo.goodsBuyNum}}件</span>
+          <em>实付金额：￥{{totalMoney}}</em>
         </div>
         <div class="confirm_btn_F" @click="submit">提交订单</div>
       </div>
+      <van-popup v-model="tips" class="tips_wrap">
+        <div class="tips_h">
+          <img class="tips_img" src="@/assets/img/order/pg_orderconfirm_tips.png" alt>
+          <span>选择挂卖可以赚钱哦！</span>
+        </div>
+        <div class="tips_c">通过挂卖功能，在您等待发货的过程中如若有人购买了您的订单，您将获得订单差价的收益。</div>
+        <div class="tip_btn" @click="tips=false">好的</div>
+      </van-popup>
     </template>
   </HeadFoot>
 </template>
 
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
-import { Icon, Cell, CellGroup, Field, RadioGroup, Radio } from "vant";
+import { toComfirmSellOrder, doSubmitSellOrder } from "@/api/order.js";
+import { mapActions } from "vuex";
+import { Icon, Cell, CellGroup, Field, RadioGroup, Radio, Popup } from "vant";
+import { notNull } from "@/layout/methods.js";
 export default {
   name: "GuaConfirm",
   data() {
     return {
       title: "购买订单",
       message: null,
-      isGuamai: "1"
+      isGuamai: "02",
+      orderId: null,
+      allInfo: null,
+      myAddress: {},
+      backPath: "/",
+      tips: false
     };
   },
   components: {
@@ -89,15 +113,55 @@ export default {
     [Icon.name]: Icon,
     [Field.name]: Field,
     [RadioGroup.name]: RadioGroup,
-    [Radio.name]: Radio
+    [Radio.name]: Radio,
+    [Popup.name]: Popup
   },
-  methods: {
-    submit() {
-      this.$toast("正在实现中");
-      // this.$router.push({ path: "/orderpay", query: { id: "132" } });
+  computed: {
+    totalMoney() {
+      return (
+        Number(this.allInfo.newDatePrice) * Number(this.allInfo.goodsBuyNum)
+      ).toFixed(2);
     }
   },
-  mounted() {}
+  methods: {
+    ...mapActions(["setTosite", "setToSitePath"]),
+    turnSite() {
+      this.setTosite(true);
+      this.setToSitePath(`/guaconfirm/${this.orderId}`);
+      this.$router.push("/mysite");
+    },
+    submit() {
+      if (notNull(this.myAddress)) {
+        let _data = {
+          orderId: this.orderId,
+          isSale: this.isGuamai,
+          addressId: this.myAddress.addressId,
+          remarks: this.message
+        };
+        doSubmitSellOrder(_data).then(({ data }) => {
+          if (data.code == "1") {
+            this.$router.push({ path: `/orderpay/${data.orderId}` });
+          }
+        });
+      } else {
+        this.$notify("请填写收货地址");
+      }
+    },
+    onInit() {
+      toComfirmSellOrder({ orderId: this.orderId }).then(({ data }) => {
+        this.allInfo = data.data;
+        if (this.$store.state.isOrder.fromSite) {
+          this.myAddress = this.$store.state.isOrder.siteData;
+        } else {
+          this.myAddress = data.data.address;
+        }
+      });
+    }
+  },
+  mounted() {
+    this.orderId = this.$route.params.orderId;
+    this.onInit();
+  }
 };
 </script>
 
@@ -135,7 +199,7 @@ export default {
 .pg_confirm {
   .order {
     .detail {
-      width: 100%;
+      width: 100vw;
       padding: 15px;
       box-sizing: border-box;
       background: #f4f4f4;

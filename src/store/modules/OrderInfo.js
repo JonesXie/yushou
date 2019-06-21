@@ -4,7 +4,8 @@ const isOrder = {
     toSite: false,
     fromSite: false,
     siteData: null,
-    couponData: null
+    couponData: null,
+    toSitePath: "/center"
   },
   mutations: {
     SET_CONfIRMINFO: (state, opt) => {
@@ -21,6 +22,9 @@ const isOrder = {
     },
     SET_COUPONDATA: (state, opt) => {
       state.couponData = opt
+    },
+    SET_TOSITEPATH: (state, opt) => {
+      state.toSitePath = opt
     },
   },
   actions: {
@@ -44,10 +48,15 @@ const isOrder = {
     }, opt) {
       commit('SET_SITEDATA', opt);
     },
-    mapActions({
+    setCouponData({
       commit
     }, opt) {
       commit('SET_COUPONDATA', opt);
+    },
+    setToSitePath({
+      commit
+    }, opt) {
+      commit('SET_TOSITEPATH', opt);
     },
   }
 }

@@ -58,12 +58,12 @@ service.interceptors.response.use(
       }
     }
   },
-  error => {
+  () => {
     // eslint-disable-next-line no-console
     Toast.clear({
       clearAll: true
     });
-    alert(error);
+    alert("网络错误");
   })
 
 export default service

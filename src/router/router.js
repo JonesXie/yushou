@@ -195,7 +195,7 @@ const RouterMap = [
   },
   //商品分类
   {
-    path: '/goodstype/id=:id&codeName=:codeName',
+    path: '/goodstype?id=:id&codeName=:codeName',
     name: 'goodstype',
     component: () => import('@/pages/Goods/GoodsType.vue')
   },
