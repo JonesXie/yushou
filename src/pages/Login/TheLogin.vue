@@ -1,7 +1,7 @@
 <template>
   <div class="pg_login">
     <img src="@/assets/logo.png" alt class="logo">
-    <div class="pgl_input">
+    <div class="pgl_input" v-if="showPhone">
       <div class="num_input van-hairline--bottom">
         <img src="@/assets/img/login/pg_login_phone.png" alt class="num_img">
         <input
@@ -18,30 +18,30 @@
         <input type="password" placeholder="请输入登录密码" class="mima" v-model="psw">
       </div>
       <p class="tips">
-        <router-link to="/register">立即注册</router-link>
+        <router-link to="/register">立即绑定</router-link>
         <router-link to="/fixpassword">忘记密码?</router-link>
       </p>
       <div class="btn" @click="submit">登录</div>
-      <div class="wx_login">
-        <div class="title">第三方登录</div>
-        <div class="tx_login">
-          <div class="tx_login_w" @click="wxLogin">
-            <img src="@/assets/img/login/pg_login_wx.png" alt>
-            <p>微信</p>
-          </div>
-          <!-- qq登录 -->
-          <!-- <div class="tx_login_w tx_login_r">
+    </div>
+    <div class="wx_login" v-else>
+      <div class="title">第三方登录</div>
+      <div class="tx_login">
+        <div class="tx_login_w" @click="wxLogin">
+          <img src="@/assets/img/login/pg_login_wx.png" alt>
+          <p>微信</p>
+        </div>
+        <!-- qq登录 -->
+        <!-- <div class="tx_login_w tx_login_r">
             <img src="@/assets/img/login/pg_login_qq.png" alt>
             <p>QQ</p>
-          </div>-->
-        </div>
+        </div>-->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { doLogin, wxLoginPrepare } from "@/api/login.js";
+import { doLogin, getWXAccessToken } from "@/api/login.js";
 import { mapActions } from "vuex";
 import { Toast } from "vant";
 import { notNull } from "@/layout/methods.js";
@@ -50,11 +50,13 @@ export default {
   data() {
     return {
       phone: null,
-      psw: null
+      psw: null,
+      showPhone: false,
+      unionid: null
     };
   },
   methods: {
-    ...mapActions(["ChangeStatus"]),
+    ...mapActions(["ChangeStatus", "getWX", "setWxData"]),
     validPhone() {
       let reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
       if (this.phone === null) {
@@ -71,20 +73,17 @@ export default {
             userName: this.phone,
             password: this.psw,
             qqId: null,
-            wxId: null,
+            wxId: this.unionid,
             platform: "weixin"
           };
-          doLogin(_data).then(
-            ({ data }) => {
-              if (data.code === 1) {
-                this.$toast(data.msg);
-                localStorage.setItem("token", data.token);
-                this.$store.commit("SET_Token", data.token);
-                this.$router.push(this.$store.state.fromToLogin);
-              }
-            },
-            () => {}
-          );
+          doLogin(_data).then(({ data }) => {
+            if (data.code === 1) {
+              this.$toast(data.msg);
+              localStorage.setItem("token", data.token);
+              this.$store.commit("SET_Token", data.token);
+              this.$router.push(this.$store.state.fromToLogin);
+            }
+          });
         } else {
           Toast.fail("请填写密码");
         }
@@ -92,20 +91,42 @@ export default {
         Toast.fail("请填写手机号");
       }
     },
-    //微信
+    //微信登录授权
     wxLogin() {
-      wxLoginPrepare().then(({ data }) => {
-        let fixURL = data.data.url.split("redirect_uri=");
-        let fixURL01 = `${fixURL[1].split("&")[0]}/login`;
-        let url = `${fixURL[0]}redirect_uri=${fixURL01}&${
-          fixURL[1].split("&")[1]
-        }&${fixURL[1].split("&")[2]}&${fixURL[1].split("&")[3]}`;
-        window.location.href = url;
-      });
+      this.getWX();
     }
   },
   mounted() {
+    let That = this;
     this.ChangeStatus(false);
+    let getURL = window.location.href;
+    if (`${getURL}`.includes("code")) {
+      let start = getURL.indexOf("=") + 1;
+      let stop = getURL.indexOf("&");
+      let isCode = getURL.substring(start, stop);
+      let _data = {
+        type: 2,
+        code: isCode
+      };
+      getWXAccessToken(_data).then(({ data }) => {
+        this.setWxData(data.data.wxUserMsg);
+        localStorage.setItem("openId", data.data.openId);
+        this.unionid = data.data.unionid;
+        if (data.code === 1) {
+          doLogin({ wxId: data.data.unionid }).then(({ data }) => {
+            if (data.code === 1) {
+              this.$toast(data.msg);
+              localStorage.setItem("token", data.token);
+              this.$store.commit("SET_Token", data.token);
+              this.$router.push("/index");
+            } else if (data.code === 0) {
+              // this.$toast("请用手机号登录");
+              this.$router.push("/register");
+            }
+          });
+        }
+      });
+    }
   },
   beforeDestroy() {
     this.ChangeStatus(true);
@@ -177,31 +198,31 @@ $Color: #ea047b;
       border-radius: 22px;
       margin-top: 22px;
     }
-    .wx_login {
-      .title {
-        margin: 33px 0 25px;
-        text-align: center;
-        color: #999;
-        font-size: 13px;
-      }
-      .tx_login {
-        text-align: center;
+  }
+  .wx_login {
+    .title {
+      margin: 33px 0 25px;
+      text-align: center;
+      color: #999;
+      font-size: 13px;
+    }
+    .tx_login {
+      text-align: center;
 
-        .tx_login_w {
+      .tx_login_w {
+        width: 40px;
+        text-align: center;
+        display: inline-block;
+        img {
           width: 40px;
-          text-align: center;
-          display: inline-block;
-          img {
-            width: 40px;
-            height: 40px;
-          }
-          p {
-            margin-top: 9px;
-          }
+          height: 40px;
         }
-        .tx_login_r {
-          margin-left: 49px;
+        p {
+          margin-top: 9px;
         }
+      }
+      .tx_login_r {
+        margin-left: 49px;
       }
     }
   }

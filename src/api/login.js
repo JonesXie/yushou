@@ -16,7 +16,17 @@ export function toSendSms(data, isJson) {
   return post('/member/toSendSms.api', data, isJson)
 }
 
-//获取微信重定向
-export function wxLoginPrepare(data) {
-  return get('/api/member/wxLoginPrepare', data)
+//获取微信appid
+export function getWXAppId(data) {
+  return get('/api/member/getWXAppId?type=2', data)
+}
+
+// 通过code获取token
+export function getWXAccessToken(data) {
+  return get('/api/member/getWXAccessToken', data)
+}
+
+//用户三方注册
+export function thirdlyRegister(data, isJson) {
+  return post('/member/thirdlyRegister.api', data, isJson)
 }

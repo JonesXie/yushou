@@ -69,7 +69,7 @@
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Radio, RadioGroup, PasswordInput, NumberKeyboard, Popup } from "vant";
-import { toPayOrder, balancePay } from "@/api/order.js";
+import { toPayOrder, balancePay, doPayOrder } from "@/api/order.js";
 import { notNull } from "@/layout/methods.js";
 
 export default {
@@ -141,9 +141,93 @@ export default {
         }
       });
     },
+    //微信支付宝支付
     doPay() {
-      this.$notify("该功能正在实现");
+      let _data = {
+        orderId: this.orderId,
+        openId: localStorage.getItem("openId"),
+        payPlatformType: 2,
+        orderPayType: 2
+      };
+      doPayOrder(_data).then(({ data }) => {
+        if (data.code === 1) {
+          this.validWX(data.orderStr);
+        }
+      });
     },
+    //验证开启微信jssdk
+    validWX(val) {
+      if (typeof WeixinJSBridge === "undefined") {
+        if (document.addEventListener) {
+          document.addEventListener(
+            "WeixinJSBridgeReady",
+            this.onBridgeReady(val),
+            false
+          );
+        } else if (document.attachEvent) {
+          document.attachEvent("WeixinJSBridgeReady", this.onBridgeReady(val));
+          document.attachEvent(
+            "onWeixinJSBridgeReady",
+            this.onBridgeReady(val)
+          );
+        }
+      } else {
+        this.onBridgeReady(val);
+      }
+    },
+    //调用微信JSSDK
+    onBridgeReady(val) {
+      let THAT = this;
+      WeixinJSBridge.invoke(
+        "getBrandWCPayRequest",
+        {
+          appId: val.appId, //公众号名称，由商户传入
+          timeStamp: val.timeStamp, //时间戳，自1970年以来的秒数
+          nonceStr: val.nonceStr, //随机串
+          package: val.package,
+          signType: val.signType, //微信签名方式：
+          paySign: val.paySign //微信签名
+        },
+        function(res) {
+          if (res.err_msg == "get_brand_wcpay_request:ok") {
+            // THAT.getPayInfo(); // 获取支付信息
+            THAT.$router.replace(
+              `/paysuccess/${THAT.selected}/${THAT.orderPayPrice}`
+            );
+            THAT.$toast.fail("支付成功");
+          } else if (
+            res.err_msg == "get_brand_wcpay_request:cancel" ||
+            res.err_msg == "get_brand_wcpay_request:fail"
+          ) {
+            THAT.$toast.fail("支付取消");
+            console.log(res);
+          }
+        }
+      );
+    },
+    //验证支付
+    getPayInfo() {
+      this.$http
+        .get("/order/checkPaySuccess/?reqsn=" + this.orderId, {
+          timeout: 15000
+        })
+        .then(({ data }) => {
+          if (data.code == 200) {
+            // clearTimeout(timer);
+            this.$toast.success("支付成功");
+          } else {
+            this.getPayError();
+          }
+        })
+        .catch(() => {
+          this.getPayError();
+        });
+    },
+    //捕获异常
+    getPayError() {
+      this.$toast.fail("支付异常");
+    },
+
     getPayinfo() {
       toPayOrder({ orderId: this.orderId }).then(({ data }) => {
         this.goodsBuyNum = data.data.goodsBuyNum;

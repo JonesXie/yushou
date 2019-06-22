@@ -50,7 +50,8 @@ service.interceptors.response.use(
       Toast.fail('无权限')
     } else if (response.data.code === 0) {
       //无权限 -2
-      Toast.fail(response.data.msg)
+      Toast(response.data.msg)
+      return response;
     } else {
       //失败 0
       if (`${response.config.url}`.includes('selectArticleDetaile')) {

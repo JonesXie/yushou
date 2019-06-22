@@ -18,12 +18,12 @@
         <input type="text" placeholder="输入短信验证码" class="num" @blur="validMsn" v-model="msn">
         <p class="msn_tips" @click="getCode">{{msnTxt}}</p>
       </div>
-      <div class="mima_input van-hairline--bottom">
+      <!-- <div class="mima_input van-hairline--bottom">
         <img src="@/assets/img/login/pg_login_lock.png" alt class="mima_img">
         <input type="password" placeholder="请设置登录密码" class="mima" v-model="psw">
-      </div>
-      <div class="btn" @click="submit">注册</div>
-      <router-link to="/login" class="tips">已有账号，去登陆</router-link>
+      </div>-->
+      <div class="btn" @click="submit">立即绑定</div>
+      <!-- <router-link to="/login" class="tips">已有账号，去登陆</router-link> -->
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@
 <script>
 import { mapActions } from "vuex";
 import { Toast } from "vant";
-import { doRegister, toSendSms } from "@/api/login.js";
+import { toSendSms, thirdlyRegister } from "@/api/login.js";
 import { notNull } from "@/layout/methods.js";
 export default {
   name: "register",
@@ -97,29 +97,41 @@ export default {
       }
     },
     submit() {
-      if (notNull(this.phone)) {
-        if (notNull(this.psw)) {
+      let wxData = this.$store.state.wxData;
+      if (notNull(wxData)) {
+        if (notNull(this.phone)) {
+          // if (notNull(this.psw)) {
           if (notNull(this.msn)) {
             let _data = {
               phone: this.phone,
               vcode: this.msn,
-              password: this.psw,
-              inviter: null
+              // password: this.psw,
+              inviter: null,
+              nickName: wxData.nickname,
+              sex: wxData.sex,
+              wxId: wxData.unionid,
+              imagePath: wxData.headimgurl
             };
-            doRegister(_data).then(({ data }) => {
-              this.$notify("注册成功");
-              localStorage.setItem("token", data.token);
-              this.$store.commit("SET_Token", data.token);
-              this.$router.push("/index");
+            thirdlyRegister(_data).then(({ data }) => {
+              if (data.code === 1) {
+                this.$notify("绑定成功");
+                localStorage.setItem("token", data.token);
+                this.$store.commit("SET_Token", data.token);
+                this.$router.push("/index");
+              }
             });
           } else {
             this.$toast.fail("请填写短信验证码");
           }
+          // } else {
+          //   this.$toast.fail("请填写密码");
+          // }
         } else {
-          this.$toast.fail("请填写密码");
+          this.$toast.fail("请填写手机号码");
         }
       } else {
-        this.$toast.fail("请填写手机号码");
+        this.$toast("请先进行授权");
+        this.$router.push("/login");
       }
     }
   },
