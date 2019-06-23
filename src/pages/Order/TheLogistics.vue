@@ -1,13 +1,13 @@
 <template>
   <HeadFoot class="pg_logistics" :Title="title">
     <template #content>
-      <div class="pgl_h">
+      <div class="pgl_h" v-if="allInfo">
         <div class="pgl_h_l">
-          <img src="@/assets/logo.png" alt>
+          <img :src="allInfo.logo" alt>
         </div>
         <div class="pgl_h_r">
           <p class="van-ellipsis">韩国代购美艳产品（相宜本草）</p>
-          <p class="van-ellipsis">顺丰快递：756245987601</p>
+          <p class="van-ellipsis">{{allInfo.expTextName}}：{{allInfo.mailNo}}</p>
         </div>
       </div>
       <div class="pgl_status">
@@ -45,16 +45,30 @@
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Step, Steps } from "vant";
+import { selectOrderLogistics } from "@/api/order.js";
 export default {
   name: "TheLogistics",
   data() {
     return {
-      title: "物流信息"
+      title: "物流信息",
+      orderId: null,
+      allInfo: null
     };
   },
   components: { HeadFoot, [Step.name]: Step, [Steps.name]: Steps },
-  methods: {},
-  mounted() {}
+  methods: {
+    getInit() {
+      selectOrderLogistics({ orderId: this.orderId }).then(({ data }) => {
+        if (data.code === 1) {
+          this.allInfo = data.data.logistics;
+        }
+      });
+    }
+  },
+  mounted() {
+    this.orderId = this.$route.params.orderId;
+    this.getInit();
+  }
 };
 </script>
 

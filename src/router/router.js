@@ -161,12 +161,12 @@ const RouterMap = [
     component: () => import('@/pages/Order/OrderPay.vue')
   },
   {
-    path: '/paysuccess/:payType/:price',
+    path: '/paysuccess/:payType/:price/:needID',
     name: 'paysuccess',
     component: () => import('@/pages/Order/PaySuccess.vue')
   },
   {
-    path: '/editorconfig/:orderId',
+    path: '/editorconfig',
     name: 'editorconfig',
     component: () => import('@/pages/Order/EditorConfig.vue')
   },
@@ -183,7 +183,7 @@ const RouterMap = [
   },
   //物流
   {
-    path: '/logistics',
+    path: '/logistics/:orderId',
     name: 'logistics',
     component: () => import('@/pages/Order/TheLogistics.vue')
   },
@@ -195,7 +195,7 @@ const RouterMap = [
   },
   //商品分类
   {
-    path: '/goodstype?id=:id&codeName=:codeName',
+    path: '/goodstype/:id',
     name: 'goodstype',
     component: () => import('@/pages/Goods/GoodsType.vue')
   },

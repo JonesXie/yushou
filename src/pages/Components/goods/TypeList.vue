@@ -40,9 +40,9 @@
           >
             <div class="imgWrap" :style="{backgroundImage:'url('+ item.goodsImages +')'}"></div>
             <div class="txtWrap">
-              <div class="price ellipsis-line">
+              <div class="price">
                 <!-- <span>立减1000元</span> -->
-                <p>
+                <p class="ellipsis-line">
                   ￥
                   <em>{{item.newDatePrice}}</em>.00
                 </p>

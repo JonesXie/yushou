@@ -106,7 +106,10 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right" @click="turnGoodsType(HZPData[2].id,HZPData[2].brandName)">
+            <div
+              class="ifmz_li mode_right"
+              @click="turnGoodsType(HZPData[2].id,HZPData[2].brandName)"
+            >
               <p class="ifmz_li_h">{{HZPData[2].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[2].sign}}</p>
               <div class="img_two">
@@ -132,7 +135,10 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right" @click="turnGoodsType(HZPData[4].id,HZPData[4].brandName)">
+            <div
+              class="ifmz_li mode_right"
+              @click="turnGoodsType(HZPData[4].id,HZPData[4].brandName)"
+            >
               <p class="ifmz_li_h">{{HZPData[4].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[4].sign}}</p>
               <div class="img_two">
@@ -173,7 +179,10 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right" @click="turnGoodsType(HZPData[8].id,HZPData[8].brandName)">
+            <div
+              class="ifmz_li mode_right"
+              @click="turnGoodsType(HZPData[8].id,HZPData[8].brandName)"
+            >
               <p class="ifmz_li_h">{{HZPData[8].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[8].sign}}</p>
               <div class="img_two">
@@ -199,7 +208,10 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right" @click="turnGoodsType(HZPData[10].id,HZPData[10].brandName)">
+            <div
+              class="ifmz_li mode_right"
+              @click="turnGoodsType(HZPData[10].id,HZPData[10].brandName)"
+            >
               <p class="ifmz_li_h">{{HZPData[10].brandName}}</p>
               <p class="ifmz_li_title">{{HZPData[10].sign}}</p>
               <div class="img_two">
@@ -225,14 +237,20 @@
             </div>
           </div>
           <!-- 3 -->
-          <div class="ifmz_li ifmz-top" @click="turnGoodsType(HZPData[12].id,HZPData[12].brandName)">
+          <div
+            class="ifmz_li ifmz-top"
+            @click="turnGoodsType(HZPData[12].id,HZPData[12].brandName)"
+          >
             <p class="ifmz_li_h">{{HZPData[12].brandName}}</p>
             <p class="ifmz_li_title">{{HZPData[12].sign}}</p>
             <div class="img_one">
               <img :src="HZPData[12].brandProductMainImage" alt>
             </div>
           </div>
-          <div class="ifmz_li ifmz-top" @click="turnGoodsType(HZPData[13].id,HZPData[13].brandName)">
+          <div
+            class="ifmz_li ifmz-top"
+            @click="turnGoodsType(HZPData[13].id,HZPData[13].brandName)"
+          >
             <p class="ifmz_li_h">{{HZPData[13].brandName}}</p>
             <p class="ifmz_li_title">{{HZPData[13].sign}}</p>
             <div class="img_one">
@@ -249,7 +267,10 @@
         <div class="ifmz_list" v-if="SjData !==null">
           <!-- 2 -->
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right" @click="turnGoodsType(SjData[0].id,SjData[0].brandName)">
+            <div
+              class="ifmz_li mode_right"
+              @click="turnGoodsType(SjData[0].id,SjData[0].brandName)"
+            >
               <p class="ifmz_li_h">{{SjData[0].brandName}}</p>
               <p class="ifmz_li_title">{{SjData[0].sign}}</p>
               <div class="img_two">
@@ -275,7 +296,10 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right" @click="turnGoodsType(SjData[2].id,SjData[2].brandName)">
+            <div
+              class="ifmz_li mode_right"
+              @click="turnGoodsType(SjData[2].id,SjData[2].brandName)"
+            >
               <p class="ifmz_li_h">{{SjData[2].brandName}}</p>
               <p class="ifmz_li_title">{{SjData[2].sign}}</p>
               <div class="img_two">
@@ -301,7 +325,10 @@
             </div>
           </div>
           <div class="ifmz_wrap">
-            <div class="ifmz_li mode_right" @click="turnGoodsType(SjData[4].id,SjData[4].brandName)">
+            <div
+              class="ifmz_li mode_right"
+              @click="turnGoodsType(SjData[4].id,SjData[4].brandName)"
+            >
               <p class="ifmz_li_h">{{SjData[4].brandName}}</p>
               <p class="ifmz_li_title">{{SjData[4].sign}}</p>
               <div class="img_two">
@@ -389,13 +416,16 @@ export default {
     turnGoods(val) {
       if (notNull(val)) {
         this.$router.push(`/goods/${val}`);
-      }else{
-        this.$toast("该选项仅做展示")
+      } else {
+        this.$toast("该选项仅做展示");
       }
     },
     //跳转
-    turnGoodsType(id,name) {
-      this.$router.push(`/goodstype/id=${id}&codeName=${name}`);
+    turnGoodsType(id, name) {
+      this.$router.push({
+        path: `/goodstype/${id}`,
+        query: { codeName: name }
+      });
     },
 
     onLoad(val) {

@@ -80,13 +80,15 @@ export default {
       selected: null,
       backPath: "/",
       orderId: null,
+      addressId: null,
       goodsBuyNum: null,
       orderPayPrice: null,
       orderNo: null,
       allInfo: null,
       psw: "",
       balanceShow: false,
-      showKeyboard: false
+      showKeyboard: false,
+      needIdentityCard: 0 //0不需要，1需要已填写 2需要未填写
     };
   },
   components: {
@@ -125,6 +127,20 @@ export default {
         this.$notify("请选择支付方式");
       }
     },
+    //支付成功跳转
+    paySuccess() {
+      this.$toast.success("支付成功");
+      this.$router.replace({
+        path: `/paysuccess/${this.selected}/${this.orderPayPrice}/${
+          this.needIdentityCard
+        }`,
+        query: {
+          orderId: this.orderId,
+          addressId: this.addressId
+        }
+      });
+    },
+
     //余额支付
     yuPay() {
       let _data = {
@@ -133,9 +149,7 @@ export default {
       };
       balancePay(_data).then(({ data }) => {
         if (data.code === 1) {
-          this.$router.replace(
-            `/paysuccess/${this.selected}/${this.orderPayPrice}`
-          );
+          this.paySuccess();
         } else {
           this.psw = "";
         }
@@ -178,6 +192,7 @@ export default {
     //调用微信JSSDK
     onBridgeReady(val) {
       let THAT = this;
+      // eslint-disable-next-line
       WeixinJSBridge.invoke(
         "getBrandWCPayRequest",
         {
@@ -191,16 +206,13 @@ export default {
         function(res) {
           if (res.err_msg == "get_brand_wcpay_request:ok") {
             // THAT.getPayInfo(); // 获取支付信息
-            THAT.$router.replace(
-              `/paysuccess/${THAT.selected}/${THAT.orderPayPrice}`
-            );
-            THAT.$toast.fail("支付成功");
+            THAT.paySuccess();
           } else if (
             res.err_msg == "get_brand_wcpay_request:cancel" ||
             res.err_msg == "get_brand_wcpay_request:fail"
           ) {
             THAT.$toast.fail("支付取消");
-            console.log(res);
+            // console.log(res);
           }
         }
       );
@@ -239,6 +251,7 @@ export default {
   },
   mounted() {
     this.orderId = this.$route.params.orderId;
+    this.addressId = this.$route.query.addressId;
     this.getPayinfo();
   }
 };

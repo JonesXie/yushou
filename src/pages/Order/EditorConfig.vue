@@ -17,7 +17,11 @@
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Field } from "vant";
 import { notNull } from "@/layout/methods.js";
-import { selectOrderAddress, changeOrderIdentity } from "@/api/order.js";
+import {
+  selectOrderAddress,
+  changeOrderIdentity,
+  saveUserCard
+} from "@/api/order.js";
 export default {
   name: "EditorConfig",
   data() {
@@ -26,7 +30,8 @@ export default {
       backPath: "", //返回路由，可删除
       name: null,
       isID: null,
-      orderId: null
+      orderId: null,
+      editor: false
     };
   },
   components: { HeadFoot, [Field.name]: Field },
@@ -41,23 +46,42 @@ export default {
     submit() {
       if (notNull(this.name)) {
         if (notNull(this.isID)) {
-          let _data = {
-            orderId: this.orderId,
-            userCard: this.isID,
-            userName: this.name
-          };
-          changeOrderIdentity(_data).then(({ data }) => {
-            this.$toast(data.msg);
-            if (data.code === 1) {
-              this.$router.go(-1);
-            }
-          });
+          if (this.editor) {
+            this.isEdior();
+          } else {
+            this.isAdd();
+          }
         } else {
           this.$toast("请输入身份证号码");
         }
       } else {
         this.$toast("请输入姓名");
       }
+    },
+    isEdior() {
+      let _data = {
+        orderId: this.orderId,
+        userCard: this.isID,
+        userName: this.name
+      };
+      changeOrderIdentity(_data).then(({ data }) => {
+        this.$toast(data.msg);
+        if (data.code === 1) {
+          this.$router.go(-1);
+        }
+      });
+    },
+    isAdd() {
+      let _data = {
+        userCardId: this.isID,
+        userName: this.name
+      };
+      saveUserCard(_data).then(({ data }) => {
+        this.$toast(data.msg);
+        if (data.code === 1) {
+          this.$router.go(-1);
+        }
+      });
     },
     getInt() {
       selectOrderAddress({ orderId: this.orderId }).then(({ data }) => {
@@ -69,8 +93,13 @@ export default {
     }
   },
   mounted() {
-    this.orderId = this.$route.params.orderId;
-    this.getInt();
+    if (notNull(this.$route.query.orderId)) {
+      this.editor = true;
+      this.orderId = this.$route.query.orderId;
+      this.getInt();
+    } else {
+      this.editor = false;
+    }
   }
 };
 </script>

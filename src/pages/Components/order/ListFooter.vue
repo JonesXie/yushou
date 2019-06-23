@@ -8,7 +8,9 @@
       <p class="count">订单倒计时:{{itemData.hour}}时{{itemData.min}}分{{itemData.s}}秒</p>
       <span class="wuliu" @click="cancelOrder">取消订单</span>
       <span class="check">
-        <router-link :to="{path:`/orderpay/${itemData.id}`}">继续支付</router-link>
+        <router-link
+          :to="{path:`/orderpay/${itemData.id}`,query:{addressId:itemData.addressId}}"
+        >继续支付</router-link>
       </span>
     </div>
     <!-- 调货中 -->
@@ -20,22 +22,25 @@
     </div>
     <!-- 待发货 -->
     <div class="mol_f" v-else-if="isShow ==='03'">
-      <span class="wuliu">
-        <router-link :to="{path:`/editorconfig/${itemData.id}`}">修改身份信息</router-link>
+      <span class="wuliu" v-if="itemData.needIdentityCard == 0">
+        <router-link :to="{path:`/logistics/${itemData.id}`}">查看物流</router-link>
+      </span>
+      <span class="wuliu" v-else>
+        <router-link :to="{path:`/editorconfig/`,query:{orderId:itemData.id}}">修改身份信息</router-link>
       </span>
       <span class="check" @click="letDeliver">提醒发货</span>
     </div>
     <!-- 待收货-->
     <div class="mol_f" v-else-if="isShow ==='04'">
       <span class="wuliu">
-        <router-link to="/logistics">查看物流</router-link>
+         <router-link :to="{path:`/logistics/${itemData.id}`}">查看物流</router-link>
       </span>
       <span class="check">确认收货</span>
     </div>
     <!-- 交易成功-->
     <div class="mol_f" v-else-if="isShow ==='99'">
       <span class="check">
-        <router-link to="/logistics">查看物流</router-link>
+        <router-link :to="{path:`/logistics/${itemData.id}`}">查看物流</router-link>
       </span>
     </div>
   </div>

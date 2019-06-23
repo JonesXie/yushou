@@ -3,7 +3,7 @@
     <img :src="istype.codeImg" alt class="mdl_title">
     <ul class="mdl_ul">
       <li v-for="(v,i) in istype.codeList" :key="i">
-        <router-link :to="`/goodstype/id=${v.id}&codeName=${v.codeName}`">
+        <router-link :to="{path:`/goodstype/${v.id}`,query:{codeName:v.codeName}}">
           <img :src="v.codeImg" alt>
           <p>{{v.codeName}}</p>
         </router-link>

@@ -51,7 +51,7 @@ export default {
     return {
       phone: null,
       psw: null,
-      showPhone: false,
+      showPhone: true,
       unionid: null
     };
   },
@@ -97,7 +97,6 @@ export default {
     }
   },
   mounted() {
-    let That = this;
     this.ChangeStatus(false);
     let getURL = window.location.href;
     if (`${getURL}`.includes("code")) {

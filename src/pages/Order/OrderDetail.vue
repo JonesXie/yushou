@@ -27,7 +27,7 @@
             <p class="site_info">{{detailData.receivingAddress}}</p>
           </div>
         </van-cell>
-        <van-cell is-link :to="{path:'/logistics',query:{id:123}}">
+        <van-cell is-link :to="{path:`/logistics/${orderId}`}">
           <div slot="title" class="logistics">
             <p class="logistics_p">
               <img src="@/assets/img/components/pg_orderdetail_site.png" alt>

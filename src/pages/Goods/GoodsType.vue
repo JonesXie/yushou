@@ -20,7 +20,10 @@ export default {
   components: { HeadFoot, TypeList },
   created() {
     this.id = this.$route.params.id;
-    this.title = this.$route.params.codeName;
+    this.title =
+      this.$route.query.codeName === undefined
+        ? "暂无名称"
+        : this.$route.query.codeName;
     // this.onInit();
   }
 };

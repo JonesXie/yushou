@@ -159,7 +159,10 @@ export default {
         };
         doSubmitOrder(_data).then(({ data }) => {
           if (data.code == "1") {
-            this.$router.push({ path: `/orderpay/${data.orderId}` });
+            this.$router.push({
+              path: `/orderpay/${data.orderId}`,
+              query: { addressId: this.myAddress.addressId }
+            });
           }
         });
       } else {

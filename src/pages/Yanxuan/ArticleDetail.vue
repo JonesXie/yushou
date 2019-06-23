@@ -2,7 +2,16 @@
   <HeadFoot class="pg_article" :Title="title" :backPath="backPath">
     <template #content>
       <!-- do somethings -->
-      <div class="pga_html" v-html="htmlCotent"></div>
+      <!-- <div class="pga_html" v-html="htmlCotent"></div> -->
+      <!-- <iframe></iframe> -->
+      <iframe
+        id="pga_html"
+        frameborder="0"
+        width="100"
+        scrolling="auto"
+        name="showHere"
+        :src="getURL"
+      ></iframe>
       <div class="goods">
         <div class="goodsDetail" v-if="goodDetail">
           <img :src="goodDetail.goodsImages" class="gd_l" @click="trunPage" alt>
@@ -52,7 +61,8 @@ export default {
       id: null,
       htmlCotent: null,
       goodDetail: null,
-      goods: null
+      goods: null,
+      getURL: null
     };
   },
   components: { HeadFoot },
@@ -95,8 +105,19 @@ export default {
   },
   mounted() {
     this.id = this.$route.params.id;
-    this.getHTML();
+    // this.getHTML();
+    this.getURL = `https://www.fishmaimai.com/admin/article/selectArticleDetaile?id=${
+      this.id
+    }`;
     this.getGoods();
+    let frame = document.getElementById("pga_html");
+    frame.addEventListener("load", function() {
+      var test = frame.contentWindow.document.getElementsByClassName("img");
+      for (var i = 0; i < test.length; i++) {
+        var tmp = test[i];
+        tmp.style.width = "100vw";
+      }
+    });
   }
 };
 </script>
@@ -110,6 +131,13 @@ export default {
     background: #fff;
     width: 100vw;
     overflow: hidden;
+    & /deep/ img {
+      width: 100vw;
+    }
+  }
+  #pga_html {
+    width: 100vw;
+    height: calc(100vh - 50px);
     & /deep/ img {
       width: 100%;
     }

@@ -73,3 +73,23 @@ export function toComfirmSellOrder(data, isJson) {
 export function doSubmitSellOrder(data, isJson) {
   return post('/order/doSubmitSellOrder.api', data, isJson)
 }
+
+//用户-查询身份信息页面
+export function selectUserCardPage(data, isJson) {
+  return post('/api/member/selectUserCardPage', data, isJson)
+}
+
+//订单-订单绑定身份信息
+export function fillUpOrderIdentity(data, isJson) {
+  return post('/api/order/fillUpOrderIdentity', data, isJson)
+}
+
+//用户-保存身份证信息
+export function saveUserCard(data, isJson) {
+  return post('/api/member/saveUserCard', data, isJson)
+}
+
+//订单-获取订单物流信息
+export function selectOrderLogistics(data, isJson) {
+  return post('/api/order/selectOrderLogistics', data, isJson)
+}
