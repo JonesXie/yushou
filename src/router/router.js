@@ -217,6 +217,22 @@ const RouterMap = [
     name: 'actions',
     component: () => import('@/pages/Components/TheActions.vue')
   },
+  //分销
+  {
+    path: '/distribution',
+    name: 'distribution',
+    component: () => import('@/pages/Distribute/TheDistribute.vue')
+  },
+  {
+    path: '/applydistribution',
+    name: 'applydistribute',
+    component: () => import('@/pages/Distribute/ApplyDistribute.vue')
+  },
+  {
+    path: '/applyinfo/:type',
+    name: 'applyinfo',
+    component: () => import('@/pages/Distribute/ApplyInfo.vue')
+  },
   // 设置404页面
   {
     path: '/404',

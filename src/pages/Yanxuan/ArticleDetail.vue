@@ -2,16 +2,17 @@
   <HeadFoot class="pg_article" :Title="title" :backPath="backPath">
     <template #content>
       <!-- do somethings -->
-      <!-- <div class="pga_html" v-html="htmlCotent"></div> -->
-      <!-- <iframe></iframe> -->
-      <iframe
+      <div class="pga_html" v-html="htmlCotent"></div>
+      <!-- <iframe
+        height="100%"
+        width="100%"
         id="pga_html"
         frameborder="0"
-        width="100"
         scrolling="auto"
-        name="showHere"
+        allowfullscreen
+        name="pga_html"
         :src="getURL"
-      ></iframe>
+      ></iframe>-->
       <div class="goods">
         <div class="goodsDetail" v-if="goodDetail">
           <img :src="goodDetail.goodsImages" class="gd_l" @click="trunPage" alt>
@@ -101,23 +102,44 @@ export default {
     },
     trunPage() {
       this.$router.push({ path: `/goods/${this.goodDetail.id}` });
+    },
+    iFrameLoad() {
+      try {
+        let iframe = document.getElementById("pga_html");
+        iframe.height = "0";
+        if (iframe.attachEvent) {
+          iframe.attachEvent("onload", function() {
+            if (localStorage.getItem("articleR") != 1) {
+              localStorage.setItem("articleR", 1);
+              // pga_html.window.location.reload();
+            }
+          });
+          return false;
+        } else {
+          iframe.onload = function() {
+            if (localStorage.getItem("articleR") != 1) {
+              localStorage.setItem("articleR", 1);
+              // pga_html.window.location.reload();
+            }
+          };
+          return false;
+        }
+      } catch {
+        this.$toast("出现错误");
+      }
     }
   },
   mounted() {
     this.id = this.$route.params.id;
-    // this.getHTML();
+    this.getHTML();
     this.getURL = `https://www.fishmaimai.com/admin/article/selectArticleDetaile?id=${
       this.id
     }`;
     this.getGoods();
-    let frame = document.getElementById("pga_html");
-    frame.addEventListener("load", function() {
-      var test = frame.contentWindow.document.getElementsByClassName("img");
-      for (var i = 0; i < test.length; i++) {
-        var tmp = test[i];
-        tmp.style.width = "100vw";
-      }
-    });
+    this.iFrameLoad();
+  },
+  destroyed() {
+    localStorage.setItem("articleR", 0);
   }
 };
 </script>
@@ -127,16 +149,38 @@ export default {
 .pg_article {
   padding-top: 46px;
   .pga_html {
-    padding-top: 10px;
+    padding: 10px;
     background: #fff;
     width: 100vw;
+    box-sizing: border-box;
     overflow: hidden;
     & /deep/ img {
-      width: 100vw;
+      width: 100%;
+    }
+    & /deep/ base {
+      display: none;
+    }
+    & /deep/ p {
+      margin-left: 10px;
+      margin-right: 10px;
+      display: block;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+    }
+    & /deep/ h2 {
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+    & /deep/ .txp_player {
+      width: 100%;
     }
   }
   #pga_html {
     width: 100vw;
+    min-width: 100%;
+    *width: 100%;
     height: calc(100vh - 50px);
     & /deep/ img {
       width: 100%;

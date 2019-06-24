@@ -106,11 +106,11 @@ $Color: #ea047b;
 }
 
 //生成圆点
-@mixin myDot($width,$color:#ddd){
-  width: $width;      
-  height: $width;         
-  border-radius: $width;      
-  background-color: $color;      
+@mixin myDot($width, $color:#ddd) {
+  width: $width;
+  height: $width;
+  border-radius: $width;
+  background-color: $color;
 }
 
 //计算百分比  percentage(56 / 750)
@@ -121,4 +121,11 @@ $Color: #ea047b;
 //计算百分比  percentage(56 / 750)
 @function my-percent($px, $base) {
   @return ($px / $base) * 100%;
+}
+
+//背景图片
+@mixin myBG() {
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat
 }
