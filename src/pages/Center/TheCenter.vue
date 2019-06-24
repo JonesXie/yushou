@@ -94,7 +94,7 @@
       </div>
       <van-row class="pgco_list">
         <van-col span="6" class="utils">
-          <router-link to="/">
+          <router-link to="/mycollection">
             <img src="@/assets/img/center/pg_center_collect.png" alt>
             <p>我的收藏</p>
           </router-link>
@@ -106,13 +106,13 @@
           </router-link>
         </van-col>
         <van-col span="6" class="utils">
-          <router-link to="/">
+          <router-link to="/questions">
             <img src="@/assets/img/center/pg_center_questions.png" alt>
             <p>常见问题</p>
           </router-link>
         </van-col>
         <van-col span="6" class="utils">
-          <router-link to="/">
+          <router-link to="/about">
             <img src="@/assets/img/center/pg_center_owner.png" alt>
             <p>关于我们</p>
           </router-link>
@@ -171,6 +171,7 @@ export default {
 <style scoped lang="scss">
 $Color: #ea047b;
 .pg_center {
+  padding-bottom: 55px;
   .pgc_header {
     width: 100vw;
     height: 232px;

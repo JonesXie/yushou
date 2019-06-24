@@ -16,7 +16,7 @@ export function drawCouponPage(data) {
   return get('/member/drawCouponPage', data)
 }
 //领取优惠券
-export function drawCoupon(data,isJson) {
+export function drawCoupon(data, isJson) {
   return post('/member/drawCoupon', data, isJson)
 }
 
@@ -55,11 +55,14 @@ export function selectAllMsg(data) {
   return get('/member/msg/selectAllMsg.api', data)
 }
 //热门搜索
-export function selectGoodsSearch(data,isJson) {
+export function selectGoodsSearch(data, isJson) {
   return post('/goods/selectGoodsSearch', data, isJson)
 }
-
-
-export function doLogin(data, isJson) {
-  return post('/member/doLogin.api', data, isJson)
+//首页-限时首发商品列表
+export function findFlashSaleGoods(data, isJson) {
+  return post('/goods/findFlashSaleGoods', data, isJson)
+}
+//获取正品保证页面
+export function zpbz(data) {
+  return get('/zpbz.html', data)
 }

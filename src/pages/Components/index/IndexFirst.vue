@@ -9,13 +9,13 @@
         </van-swipe>
       </div>
       <div class="if_active">
-        <div class="if_active_h van-hairline--bottom"></div>
+        <a href="https://www.fishmaimai.com/zpbz.html" class="if_active_h van-hairline--bottom"></a>
         <ul class="if_active_f">
           <li>
-            <div class="iaf_wrap">
+            <router-link to="/limitrelease" class="iaf_wrap">
               <img src="@/assets/img/index/pg_index_first_sf.png" alt>
               <p>限时首发</p>
-            </div>
+            </router-link>
           </li>
           <li>
             <router-link to="/getcoupon" class="iaf_wrap">
@@ -24,16 +24,16 @@
             </router-link>
           </li>
           <li>
-            <div class="iaf_wrap">
+            <router-link to="/changetimer" class="iaf_wrap">
               <img src="@/assets/img/index/pg_index_first_hf.png" alt>
               <p>换季护肤</p>
-            </div>
+            </router-link>
           </li>
           <li>
-            <div class="iaf_wrap">
+            <router-link to="/earnmoney" class="iaf_wrap">
               <img src="@/assets/img/index/pg_index_first_zq.png" alt>
               <p>赚钱专区</p>
-            </div>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -500,6 +500,7 @@ export default {
       background-size: auto calc(100% - 19px);
       background-position: center;
       background-repeat: no-repeat;
+      display: block;
     }
 
     .if_active_f {

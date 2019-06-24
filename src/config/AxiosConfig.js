@@ -57,6 +57,9 @@ service.interceptors.response.use(
       if (`${response.config.url}`.includes('selectArticleDetaile')) {
         return response;
       }
+      if (`${response.config.url}`.includes('zpbz')) {
+        return response;
+      }
     }
   },
   () => {

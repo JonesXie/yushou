@@ -102,32 +102,32 @@ export default {
     },
     trunPage() {
       this.$router.push({ path: `/goods/${this.goodDetail.id}` });
-    },
-    iFrameLoad() {
-      try {
-        let iframe = document.getElementById("pga_html");
-        iframe.height = "0";
-        if (iframe.attachEvent) {
-          iframe.attachEvent("onload", function() {
-            if (localStorage.getItem("articleR") != 1) {
-              localStorage.setItem("articleR", 1);
-              // pga_html.window.location.reload();
-            }
-          });
-          return false;
-        } else {
-          iframe.onload = function() {
-            if (localStorage.getItem("articleR") != 1) {
-              localStorage.setItem("articleR", 1);
-              // pga_html.window.location.reload();
-            }
-          };
-          return false;
-        }
-      } catch {
-        this.$toast("出现错误");
-      }
     }
+    // iFrameLoad() {
+    //   try {
+    //     let iframe = document.getElementById("pga_html");
+    //     iframe.height = "0";
+    //     if (iframe.attachEvent) {
+    //       iframe.attachEvent("onload", function() {
+    //         if (localStorage.getItem("articleR") != 1) {
+    //           localStorage.setItem("articleR", 1);
+    //           // pga_html.window.location.reload();
+    //         }
+    //       });
+    //       return false;
+    //     } else {
+    //       iframe.onload = function() {
+    //         if (localStorage.getItem("articleR") != 1) {
+    //           localStorage.setItem("articleR", 1);
+    //           // pga_html.window.location.reload();
+    //         }
+    //       };
+    //       return false;
+    //     }
+    //   } catch {
+    //     this.$toast("出现错误");
+    //   }
+    // }
   },
   mounted() {
     this.id = this.$route.params.id;
@@ -136,7 +136,7 @@ export default {
       this.id
     }`;
     this.getGoods();
-    this.iFrameLoad();
+    // this.iFrameLoad();
   },
   destroyed() {
     localStorage.setItem("articleR", 0);

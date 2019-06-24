@@ -82,3 +82,13 @@ export function doUpdateOrderProfitDiscount(data, isJson) {
 export function doUpdateOrderSell(data, isJson) {
   return post('/order/doUpdateOrderSell.api', data, isJson)
 }
+
+//商品-我的收藏列表
+export function findUserCollect(data, isJson) {
+  return post('/member/findUserCollect.api', data, isJson)
+}
+
+//用户-常见问题列表
+export function findCommonProblem(data) {
+  return get('/info/findCommonProblem.api', data)
+}

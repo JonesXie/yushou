@@ -27,9 +27,29 @@ const RouterMap = [
     component: () => import('@/pages/Index/TheIndex.vue')
   },
   {
+    path: '/promise',
+    name: 'promise',
+    component: () => import('@/pages/Index/ThePromise.vue')
+  },
+  {
+    path: '/limitrelease',
+    name: 'limitrelease',
+    component: () => import('@/pages/Index/LimitRelease.vue')
+  },
+  {
     path: '/getcoupon',
     name: 'getcoupon',
     component: () => import('@/pages/Index/GetCoupon.vue')
+  },
+  {
+    path: '/changetimer',
+    name: 'changetimer',
+    component: () => import('@/pages/Index/ChangeTimer.vue')
+  },
+  {
+    path: '/earnmoney',
+    name: 'earnmoney',
+    component: () => import('@/pages/Index/EarnMoney.vue')
   },
   {
     path: '/thesearch',
@@ -131,7 +151,23 @@ const RouterMap = [
     name: 'setsite',
     component: () => import('@/pages/Site/SetSite.vue')
   },
-
+  {
+    path: '/mycollection',
+    name: 'mycollection',
+    component: () => import('@/pages/Center/MyCollection.vue')
+  },
+  {
+    path: '/questions',
+    name: 'questions',
+    component: () => import('@/pages/Center/TheQuestion.vue')
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: () => import('@/pages/Center/TheAbout.vue')
+  },
+  //收藏
+  //订单
   {
     path: '/myorder/:active',
     name: 'myorder',
