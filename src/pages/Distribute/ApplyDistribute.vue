@@ -51,7 +51,9 @@ export default {
     [Icon.name]: Icon
   },
   methods: {},
-  mounted() {}
+  mounted() {
+    this.selected = Number(this.$route.params.actived);
+  }
 };
 </script>
 

@@ -162,6 +162,11 @@ const RouterMap = [
     component: () => import('@/pages/Center/TheQuestion.vue')
   },
   {
+    path: '/invitation',
+    name: 'invitation',
+    component: () => import('@/pages/Center/MyInvitation.vue')
+  },
+  {
     path: '/about',
     name: 'about',
     component: () => import('@/pages/Center/TheAbout.vue')
@@ -260,7 +265,7 @@ const RouterMap = [
     component: () => import('@/pages/Distribute/TheDistribute.vue')
   },
   {
-    path: '/applydistribution',
+    path: '/applydistribution/:actived',
     name: 'applydistribute',
     component: () => import('@/pages/Distribute/ApplyDistribute.vue')
   },
@@ -268,6 +273,11 @@ const RouterMap = [
     path: '/applyinfo/:type',
     name: 'applyinfo',
     component: () => import('@/pages/Distribute/ApplyInfo.vue')
+  },
+  {
+    path: '/withdraw',
+    name: 'withdraw',
+    component: () => import('@/pages/Distribute/WithDraw.vue')
   },
   // 设置404页面
   {

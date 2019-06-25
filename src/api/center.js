@@ -92,3 +92,8 @@ export function findUserCollect(data, isJson) {
 export function findCommonProblem(data) {
   return get('/info/findCommonProblem.api', data)
 }
+
+//用户-邀请好友列表
+export function findMyInviter(data) {
+  return get('/member/findMyInviter.api', data)
+}

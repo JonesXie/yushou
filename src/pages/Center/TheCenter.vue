@@ -86,7 +86,7 @@
     <van-cell-group class="pgc_link">
       <van-cell title="我的挂卖" is-link to="/mysales"/>
       <van-cell title="我的地址" is-link to="/mysite"/>
-      <van-cell title="我的分销" is-link to="/applydistribution"/>
+      <van-cell title="我的分销" is-link to="/distribution"/>
     </van-cell-group>
     <div class="pgc_utils pgc_order">
       <div class="pgco_h">
@@ -100,7 +100,7 @@
           </router-link>
         </van-col>
         <van-col span="6" class="utils">
-          <router-link to="/">
+          <router-link to="/invitation">
             <img src="@/assets/img/center/pg_center_friends.png" alt>
             <p>邀请好友</p>
           </router-link>
