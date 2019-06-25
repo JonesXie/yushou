@@ -51,7 +51,7 @@ export default {
     return {
       phone: null,
       psw: null,
-      showPhone: true,
+      showPhone: false,
       unionid: null
     };
   },

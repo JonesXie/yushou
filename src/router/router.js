@@ -274,10 +274,41 @@ const RouterMap = [
     name: 'applyinfo',
     component: () => import('@/pages/Distribute/ApplyInfo.vue')
   },
+  //提现
   {
     path: '/withdraw',
     name: 'withdraw',
     component: () => import('@/pages/Distribute/WithDraw.vue')
+  },
+  //线上店长
+  {
+    path: '/salermember',
+    name: 'salermember',
+    component: () => import('@/pages/Distribute/SalerManage.vue')
+  },
+  //线上店长钱包
+  {
+    path: '/onlinewallet',
+    name: 'onlinewallet',
+    component: () => import('@/pages/Distribute/OnlineWallet.vue')
+  },
+  //报表
+  {
+    path: '/reportform',
+    name: 'reportform',
+    component: () => import('@/pages/Distribute/ReportForm.vue')
+  },
+  //客户管理
+  {
+    path: '/customermanage',
+    name: 'customermanage',
+    component: () => import('@/pages/Distribute/CustomerManage.vue')
+  },
+  //店长审核
+  {
+    path: '/thecheck',
+    name: 'thecheck',
+    component: () => import('@/pages/Distribute/TheCheck.vue')
   },
   // 设置404页面
   {

@@ -8,10 +8,10 @@
           <img src="@/assets/img/distribution/pg_distribute_getout.png" @click="zhuxiao">
         </div>
         <div class="head_panel">
-          <div class="panel_l">
+          <router-link to="/onlinewallet" class="panel_l">
             <p>总销售额</p>
             <em>￥12.33333</em>
-          </div>
+          </router-link>
           <div class="panel_r">
             <p>余额</p>
             <em>￥12.33333</em>
@@ -23,25 +23,25 @@
           <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_tixian.png" alt>
           <em class="cell_title">提现</em>
         </van-cell>
-        <van-cell is-link to="/mysales">
+        <van-cell is-link to="/reportform">
           <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_baobiao.png" alt>
           <em class="cell_title">报表</em>
         </van-cell>
       </van-cell-group>
       <van-cell-group class="pgtd_link">
-        <van-cell is-link to="/mysales">
+        <van-cell is-link to="/salermember">
           <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_dianzhang.png" alt>
           <em class="cell_title">线上店长</em>
         </van-cell>
-        <van-cell is-link to="/mysales">
+        <van-cell is-link to="/customermanage">
           <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_kehu.png" alt>
           <em class="cell_title">客户管理</em>
         </van-cell>
-        <van-cell is-link to="/mysales">
+        <van-cell is-link to="/">
           <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_order.png" alt>
           <em class="cell_title">订单管理</em>
         </van-cell>
-        <van-cell>
+        <van-cell is-link to="/thecheck">
           <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_shenhe.png" alt>
           <em class="cell_title">线上店长审核</em>
         </van-cell>
@@ -144,6 +144,7 @@ export default {
       .panel_r {
         flex: 1;
         display: inline-block;
+        color: #fff;
         em {
           font-size: 21px;
           margin-top: 24px;

@@ -4,9 +4,9 @@ import {
   notNull
 } from "@/layout/methods.js"
 router.beforeEach((to, from, next) => {
-  // if (!notNull(localStorage.getItem("openId"))) {
-  //   store.dispatch("getWX");
-  // }
+  if (!notNull(localStorage.getItem("openId"))) {
+    store.dispatch("getWX");
+  }
   if (to.path === '/login' || to.path === '/register') {
     if (notNull(localStorage.getItem('token'))) {
       store.commit('SET_FromToLogin', from.path)
