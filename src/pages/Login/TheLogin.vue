@@ -94,41 +94,18 @@ export default {
     },
     //微信登录授权
     wxLogin() {
-      this.getWX();
+      doLogin({ wxId: this.$store.state.wxData.unionid }).then(({ data }) => {
+        this.$toast(data.msg);
+        if (data.code === 1) {
+          localStorage.setItem("token", data.token);
+          this.$store.commit("SET_Token", data.token);
+          this.$router.push(this.$store.state.fromToLogin);
+        }
+      });
     }
   },
   mounted() {
     this.ChangeStatus(false);
-    let getURL = window.location.href;
-    if (`${getURL}`.includes("code")) {
-      let start = getURL.indexOf("=") + 1;
-      let stop = getURL.indexOf("&");
-      let isCode = getURL.substring(start, stop);
-      let _data = {
-        type: 2,
-        code: isCode
-      };
-      getWXAccessToken(_data).then(({ data }) => {
-        this.setWxData(data.data.wxUserMsg);
-        localStorage.setItem("openId", data.data.openId);
-        this.unionid = data.data.unionid;
-        if (data.code === 1) {
-          doLogin({ wxId: data.data.unionid }).then(({ data }) => {
-            if (data.code === 1) {
-              this.$toast(data.msg);
-              localStorage.setItem("token", data.token);
-              this.$store.commit("SET_Token", data.token);
-              this.$router.push("/index");
-            }
-            //  else if (data.code === 0) {
-            //   // this.$toast("请用手机号登录");
-            //   // this.$router.push("/register");
-            //   this.showPhone= true;
-            // }
-          });
-        }
-      });
-    }
   },
   beforeDestroy() {
     this.ChangeStatus(true);

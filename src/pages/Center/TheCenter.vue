@@ -86,7 +86,7 @@
     <van-cell-group class="pgc_link">
       <van-cell title="我的挂卖" is-link to="/mysales"/>
       <van-cell title="我的地址" is-link to="/mysite"/>
-      <van-cell title="我的分销" is-link to="/distribution"/>
+      <van-cell title="店长中心" is-link to="/distribution"/>
     </van-cell-group>
     <div class="pgc_utils pgc_order">
       <div class="pgco_h">

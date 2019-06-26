@@ -9,7 +9,7 @@ export function notNull(val) {
   }
 }
 
-// 时间转化
+// 时间转化 建议使用moment.js
 function add0(m) {
   return m < 10 ? '0' + m : m
 }

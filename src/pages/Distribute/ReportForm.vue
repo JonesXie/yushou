@@ -15,10 +15,10 @@
       </ul>
       <div class="list_wrap">
         <div class="list_date">
-          <p class="fl">2019.5.18</p>
+          <p class="fl">{{timeRange}}</p>
           <img
             class="fr"
-            @click="showDatepicker"
+            @click="showPicker"
             src="@/assets/img/distribution/pg_reportform_calendar.png"
             alt
           >
@@ -73,7 +73,7 @@
         </div>
       </div>
     </div>
-    <!-- datepicker -->
+    <!-- datepicker 日和月-->
     <van-popup v-model="dateShow" :close-on-click-overlay="false" position="bottom">
       <van-datetime-picker
         v-model="currentDate"
@@ -82,13 +82,24 @@
         @cancel="dateShow=false"
       />
     </van-popup>
+    <!-- datepicker 周和年-->
+    <van-popup v-model="dateShow2" :close-on-click-overlay="false" position="bottom">
+      <van-picker
+        show-toolbar
+        :columns="currentWY"
+        @cancel="dateShow2=false"
+        @confirm="chooseDate2"
+        ref="weekYear"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
+import moment from "moment";
 import { mapActions } from "vuex";
-import { Icon, DatetimePicker, Popup } from "vant";
-import { getTime } from "@/layout/methods.js";
+import { getLastWeek, getCurrentWeek } from "@/layout/DateTimeUtils.js";
+import { Icon, DatetimePicker, Popup, Picker } from "vant";
 export default {
   name: "ReportForm",
   data() {
@@ -96,37 +107,99 @@ export default {
       title: "报表",
       actived: 0,
       dateShow: false,
+      dateShow2: false,
       dateType: "date", //date 日，year-month 年月
-      // currentDate: new Date()
-      currentDate: new Date()
+      currentDate: new Date(), //日月选中
+      currentWY: [],
+      timeRange: null,
+      weeksList: [],
+      yearsList: [],
+      isPicker: false
     };
   },
   components: {
     [Icon.name]: Icon,
     [DatetimePicker.name]: DatetimePicker,
-    [Popup.name]: Popup
+    [Popup.name]: Popup,
+    [Picker.name]: Picker
+  },
+  watch: {
+    actived: {
+      handler: function(nv) {
+        if (nv === 0) {
+          this.dateType = "date";
+          this.timeRange = moment(this.currentDate).format("YYYY-MM-DD");
+          this.isPicker = false;
+        } else if (nv === 1) {
+          this.timeRange = getCurrentWeek().join("至");
+          this.isPicker = true;
+          if (this.weeksList.length === 0) {
+            this.getLastWeeks();
+          }
+          this.currentWY = this.weeksList;
+        } else if (nv === 2) {
+          this.dateType = "year-month";
+          this.timeRange = moment(this.currentDate).format("YYYY-MM");
+          this.isPicker = false;
+        } else if (nv === 3) {
+          this.isPicker = true;
+          this.timeRange = this.yearsList[0];
+          this.currentWY = this.yearsList;
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
     ...mapActions(["ChangeStatus"]),
     GoBack() {
       this.$router.back(-1);
     },
-    showDatepicker() {
-      this.dateShow = true;
+    showPicker() {
+      if (this.isPicker) {
+        this.dateShow2 = true;
+      } else {
+        this.dateShow = true;
+      }
     },
     chooseDate() {
+      if (this.dateType === "date") {
+        this.timeRange = moment(this.currentDate).format("YYYY-MM-DD");
+      } else {
+        this.timeRange = moment(this.currentDate).format("YYYY-MM");
+      }
       this.dateShow = false;
-      console.log(getTime(this.currentDate));
+    },
+    chooseDate2() {
+      // this.timeRange = this.$refs.weekYear.getValues();
+      if (this.actived === 1) {
+        this.timeRange = this.$refs.weekYear.getValues()[0];
+      } else {
+        this.timeRange = this.$refs.weekYear.getValues()[0];
+      }
+      this.dateShow2 = false;
+    },
+    //获取一年内的周数
+    getLastWeeks() {
+      for (let i = 0; i < 53; i++) {
+        let week = getLastWeek(i);
+        this.weeksList.splice(this.weeksList.length, 0, week.join("至"));
+      }
+    },
+    //获取年度
+    getLastYears() {
+      let cur = new Date();
+      let curY = cur.getFullYear();
+      for (let i = 0; i < 10; i++) {
+        let year = curY - i;
+        this.yearsList.splice(this.yearsList.length, 0, year);
+      }
     }
-    // dateFilter(type, value) {
-    //   if (type === "day") {
-    //     return options.filter(option => option % 5 === 0);
-    //   }
-    //   return options;
-    // }
   },
   mounted() {
     this.ChangeStatus(false);
+    //年度list
+    this.getLastYears();
   },
   beforeDestroy() {
     this.ChangeStatus(true);

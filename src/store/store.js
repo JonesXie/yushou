@@ -46,12 +46,12 @@ const actions = {
       data
     }) => {
       if (data.code === 1) {
-        localStorage.setItem("openId", "fishmaimai");
+        localStorage.setItem("openId", "www.fishmaimai.com");
         window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
           data.data.appId
         }&redirect_uri=${
           data.data.url
-        }/login&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
+        }/index&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
       }
     });
   }

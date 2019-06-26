@@ -37,7 +37,7 @@
           <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_kehu.png" alt>
           <em class="cell_title">客户管理</em>
         </van-cell>
-        <van-cell is-link to="/">
+        <van-cell is-link to="/distributeorder">
           <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_order.png" alt>
           <em class="cell_title">订单管理</em>
         </van-cell>

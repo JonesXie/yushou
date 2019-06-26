@@ -34,6 +34,7 @@ import IndexFirst from "../Components/index/IndexFirst.vue";
 import IndexSecond from "../Components/index/IndexSecond.vue";
 import { mapActions } from "vuex";
 import { findGoodsCode } from "@/api/index.js";
+import { getWXAccessToken } from "@/api/login.js";
 export default {
   data() {
     return {
@@ -57,6 +58,20 @@ export default {
     ...mapActions(["ChangeActive"])
   },
   mounted() {
+    let getURL = window.location.href;
+    if (`${getURL}`.includes("code")) {
+      let start = getURL.indexOf("=") + 1;
+      let stop = getURL.indexOf("&");
+      let isCode = getURL.substring(start, stop);
+      let _data = {
+        type: 2,
+        code: isCode
+      };
+      getWXAccessToken(_data).then(({ data }) => {
+        this.setWxData(data.data.wxUserMsg);
+        localStorage.setItem("openId", data.data.openId);
+      });
+    }
     this.ChangeActive(0);
     findGoodsCode().then(({ data }) => {
       this.tabList = data.data;

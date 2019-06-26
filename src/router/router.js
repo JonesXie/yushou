@@ -304,6 +304,12 @@ const RouterMap = [
     name: 'customermanage',
     component: () => import('@/pages/Distribute/CustomerManage.vue')
   },
+  //订单管理
+  {
+    path: '/distributeorder',
+    name: 'distributeorder',
+    component: () => import('@/pages/Distribute/DistributeOrder.vue')
+  },
   //店长审核
   {
     path: '/thecheck',
