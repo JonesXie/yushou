@@ -46,6 +46,7 @@ const actions = {
       data
     }) => {
       if (data.code === 1) {
+        localStorage.setItem("openId", "fishmaimai");
         window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${
           data.data.appId
         }&redirect_uri=${

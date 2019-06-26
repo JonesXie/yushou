@@ -18,7 +18,7 @@
         <input type="password" placeholder="请输入登录密码" class="mima" v-model="psw">
       </div>
       <p class="tips">
-        <router-link to="/register">立即绑定</router-link>
+        <router-link to="/register">立即注册</router-link>
         <router-link to="/fixpassword">忘记密码?</router-link>
       </p>
       <div class="btn" @click="submit">登录</div>
@@ -51,7 +51,7 @@ export default {
     return {
       phone: null,
       psw: null,
-      showPhone: false,
+      showPhone: true,
       unionid: null
     };
   },
@@ -118,10 +118,12 @@ export default {
               localStorage.setItem("token", data.token);
               this.$store.commit("SET_Token", data.token);
               this.$router.push("/index");
-            } else if (data.code === 0) {
-              // this.$toast("请用手机号登录");
-              this.$router.push("/register");
             }
+            //  else if (data.code === 0) {
+            //   // this.$toast("请用手机号登录");
+            //   // this.$router.push("/register");
+            //   this.showPhone= true;
+            // }
           });
         }
       });

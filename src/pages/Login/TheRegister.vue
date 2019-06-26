@@ -22,7 +22,7 @@
         <img src="@/assets/img/login/pg_login_lock.png" alt class="mima_img">
         <input type="password" placeholder="请设置登录密码" class="mima" v-model="psw">
       </div>-->
-      <div class="btn" @click="submit">立即绑定</div>
+      <div class="btn" @click="submit">立即注册</div>
       <!-- <router-link to="/login" class="tips">已有账号，去登陆</router-link> -->
     </div>
   </div>
