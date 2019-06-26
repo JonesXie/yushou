@@ -23,7 +23,8 @@
       </p>
       <div class="btn" @click="submit">登录</div>
     </div>
-    <div class="wx_login" v-else>
+    <!-- <div class="wx_login" v-else> -->
+    <div class="wx_login">
       <div class="title">第三方登录</div>
       <div class="tx_login">
         <div class="tx_login_w" @click="wxLogin">
