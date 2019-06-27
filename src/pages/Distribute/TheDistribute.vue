@@ -29,7 +29,7 @@
         </van-cell>
       </van-cell-group>
       <van-cell-group class="pgtd_link">
-        <van-cell is-link to="/salermember">
+        <van-cell is-link to="/onlineshopowner">
           <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_dianzhang.png" alt>
           <em class="cell_title">线上店长</em>
         </van-cell>

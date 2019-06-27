@@ -7,13 +7,18 @@
     <div class="head_bg"></div>
     <!-- content -->
     <div class="pg_model_content">
-      <ul class="pgdo_hlist">
+      <ul class="pgdo_hlist" v-if="isTab">
         <li :class="['pgdo_hlist_li',actived===0?'active':'']" @click="actived=0">全部</li>
         <li :class="['pgdo_hlist_li',actived===1?'active':'']" @click="actived=1">线上店长订单</li>
         <li :class="['pgdo_hlist_li',actived===2?'active':'']" @click="actived=2">普通用户订单</li>
-        <li class="pgdo_hlist_search">
+        <li class="pgdo_hlist_search" @click="isTab=false">
           <van-icon name="search"/>
         </li>
+      </ul>
+      <ul class="pgdo_hlist" v-else>
+        <!-- <van-icon name="search" class="search_icon"/> -->
+        <input type="text" placeholder="请输入收件人手机号、订单编号、商品名称" v-model="isSearch">
+        <em @click="isTab=true">取消</em>
       </ul>
       <dorder-list class="orderList"/>
     </div>
@@ -29,7 +34,9 @@ export default {
   data() {
     return {
       title: "订单管理",
-      actived: 0
+      actived: 0,
+      isTab: true,
+      isSearch: null
     };
   },
   components: {
@@ -122,6 +129,25 @@ export default {
       margin-left: 15px;
       position: relative;
       top: -2px;
+    }
+    input {
+      width: 270px;
+      height: 28px;
+      background: #fff;
+      border-radius: 5px;
+      box-sizing: border-box;
+      padding: 8px 11px;
+      margin-left: 30px;
+      font-size: 12px;
+      color: #9e9e9e;
+    }
+    em {
+      display: inline-block;
+      color: #fff;
+      font-size: 14px;
+      height: 28px;
+      line-height: 28px;
+      margin-left: 10px;
     }
   }
 }

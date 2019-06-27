@@ -282,6 +282,11 @@ const RouterMap = [
   },
   //线上店长
   {
+    path: '/onlineshopowner',
+    name: 'onlineshopowner',
+    component: () => import('@/pages/Distribute/OnlineShopowner.vue')
+  },
+  {
     path: '/salermember',
     name: 'salermember',
     component: () => import('@/pages/Distribute/SalerManage.vue')
