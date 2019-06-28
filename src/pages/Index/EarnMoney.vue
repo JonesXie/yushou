@@ -11,7 +11,7 @@
           :immediate-check="false"
           class="refresh"
         >
-          <img class="pgc_head" src="@/assets/img/components/pg_actions_head.png" alt>
+          <img class="pgc_head" :src="Banner" alt>
           <ul class="pgc_ul">
             <li v-for="(v,i) in dataList" :key="i" class="pgc_li" @click="turnPage(v.goodsId)">
               <img class="imgWrap" :src="v.goodsImages" alt>
@@ -44,14 +44,16 @@ export default {
   name: "EarnMoney",
   data() {
     return {
-      title: "赚钱专区",
+      title: "专区",
       backPath: "", //返回路由，可删除
       dataList: [],
       curPage: 1,
       isRefresh: false,
       loading: false,
       finished: false,
-      noLimit: true
+      noLimit: true,
+      activityId: 0,
+      Banner: null
     };
   },
   components: { HeadFoot, [List.name]: List, [PullRefresh.name]: PullRefresh },
@@ -72,7 +74,7 @@ export default {
       }
       let _data = {
         page: this.curPage,
-        activityId: 2
+        activityId: this.activityId
       };
       if (this.noLimit) {
         this.noLimit = false;
@@ -101,6 +103,9 @@ export default {
     }
   },
   mounted() {
+    this.activityId = this.$route.params.id;
+    this.Banner = this.$route.query.url;
+    this.title = this.$route.query.name;
     this.onInit();
   }
 };
@@ -118,7 +123,7 @@ export default {
     height: 175px;
   }
   .refresh {
-    background: #fe955d;
+    // background: #fe955d;
     min-height: calc(100vh - 46px);
   }
   .pgc_ul {

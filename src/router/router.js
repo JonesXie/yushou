@@ -47,7 +47,7 @@ const RouterMap = [
     component: () => import('@/pages/Index/ChangeTimer.vue')
   },
   {
-    path: '/earnmoney',
+    path: '/earnmoney/:id',
     name: 'earnmoney',
     component: () => import('@/pages/Index/EarnMoney.vue')
   },

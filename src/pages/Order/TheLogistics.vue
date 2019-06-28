@@ -1,17 +1,17 @@
 <template>
   <HeadFoot class="pg_logistics" :Title="title">
-    <template #content>
-      <div class="pgl_h" v-if="allInfo">
+    <template #content v-if="logisticsInfo">
+      <div class="pgl_h" v-if="orderInfo">
         <div class="pgl_h_l">
-          <img :src="allInfo.logo" alt>
+          <img :src="orderInfo.goodsImages" alt>
         </div>
         <div class="pgl_h_r">
-          <p class="van-ellipsis">韩国代购美艳产品（相宜本草）</p>
-          <p class="van-ellipsis">{{allInfo.expTextName}}：{{allInfo.mailNo}}</p>
+          <p class="van-ellipsis">{{orderInfo.goodsName}}</p>
+          <p class="van-ellipsis">{{logisticsInfo.expTextName}}：{{orderInfo.expressNo}}</p>
         </div>
       </div>
       <div class="pgl_status">
-        <van-steps :active="1" active-color="#ea047b">
+        <van-steps :active="logisticsInfo.status" active-color="#ea047b">
           <van-step>已发货</van-step>
           <van-step>运输中</van-step>
           <van-step>派件中</van-step>
@@ -19,25 +19,24 @@
         </van-steps>
       </div>
       <div class="pgl_site">
-        <van-steps direction="vertical" :active="0" active-color="#ea047b">
-          <van-step v-for="i in 6" :key="i">
-            <h3>【城市】物流状态1</h3>
-            <p>2016-07-12 12:40</p>
-          </van-step>
-          <van-step>
-            <h3>【城市】物流状态2</h3>
-            <p>2016-07-11 10:00</p>
-          </van-step>
-          <van-step>
-            <h3>快件已发货</h3>
-            <p>2016-07-10 09:30</p>
+        <van-steps
+          direction="vertical"
+          :active="0"
+          active-color="#ea047b"
+          v-if="ogisticsInfo.data.length >0"
+        >
+          <van-step v-for="(v,i) in logisticsInfo.data" :key="i">
+            <h3>{{v.context}}</h3>
+            <p>{{v.time}}</p>
           </van-step>
         </van-steps>
+        <van-steps direction="vertical" v-else class="none">
+          <van-step>暂无物流信息</van-step>
+        </van-steps>
       </div>
-      <div class="pgl_f">
-        <!-- <span>申请换货</span> -->
-        <span>购物愉快</span>
-      </div>
+      <!-- <div class="pgl_f">
+        <span>申请换货</span>
+      </div>-->
     </template>
   </HeadFoot>
 </template>
@@ -52,7 +51,8 @@ export default {
     return {
       title: "物流信息",
       orderId: null,
-      allInfo: null
+      logisticsInfo: null,
+      orderInfo: null
     };
   },
   components: { HeadFoot, [Step.name]: Step, [Steps.name]: Steps },
@@ -60,7 +60,8 @@ export default {
     getInit() {
       selectOrderLogistics({ orderId: this.orderId }).then(({ data }) => {
         if (data.code === 1) {
-          this.allInfo = data.data.logistics;
+          this.logisticsInfo = data.data.logistics;
+          this.orderInfo = data.data.order;
         }
       });
     }
@@ -80,6 +81,9 @@ export default {
   background: #fff;
   box-sizing: border-box;
   padding-top: 46px;
+  & /deep/ .van-nav-bar {
+    z-index: 9 !important;
+  }
   .pgl_h {
     width: 100vw;
     box-sizing: border-box;
@@ -115,13 +119,16 @@ export default {
     box-sizing: border-box;
   }
   .pgl_site {
-    height: 395px;
+    // height: 395px;
     width: 100vw;
     box-sizing: border-box;
     border-top: 1px dashed #ddd;
     border-bottom: 1px dashed #ddd;
     overflow-y: auto;
     padding: 0 15px;
+    p {
+      margin-top: 5px;
+    }
   }
   .pgl_f {
     position: fixed;

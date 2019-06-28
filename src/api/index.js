@@ -66,3 +66,8 @@ export function findFlashSaleGoods(data, isJson) {
 export function zpbz(data) {
   return get('/zpbz.html', data)
 }
+
+//获取活动图标
+export function getselectActivity(data) {
+  return get('/info/selectActivity', data)
+}

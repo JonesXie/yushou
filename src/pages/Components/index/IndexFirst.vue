@@ -23,16 +23,13 @@
               <p>领券优惠</p>
             </router-link>
           </li>
-          <li>
-            <router-link to="/changetimer" class="iaf_wrap">
-              <img src="@/assets/img/index/pg_index_first_hf.png" alt>
-              <p>换季护肤</p>
-            </router-link>
-          </li>
-          <li>
-            <router-link to="/earnmoney" class="iaf_wrap">
-              <img src="@/assets/img/index/pg_index_first_zq.png" alt>
-              <p>赚钱专区</p>
+          <li v-for="(v,i) in activeList" :key="i">
+            <router-link
+              :to="{path:`/earnmoney/${v.id}`,query:{url:v.activityImage,name:v.activityName}}"
+              class="iaf_wrap"
+            >
+              <img :src="v.activityLogo" alt>
+              <p>{{v.activityName}}</p>
             </router-link>
           </li>
         </ul>
@@ -365,7 +362,8 @@ import {
   getBanner,
   findGoods,
   selectCodeSubject,
-  selectBrandSubject
+  selectBrandSubject,
+  getselectActivity
 } from "@/api/index.js";
 import { Swipe, SwipeItem, PullRefresh } from "vant";
 import "swiper/dist/css/swiper.css";
@@ -396,7 +394,8 @@ export default {
         pagination: {
           el: ".swiper-pagination"
         }
-      }
+      },
+      activeList: []
     };
   },
   computed: {},
@@ -427,7 +426,14 @@ export default {
         query: { codeName: name }
       });
     },
-
+    //获取活动图标
+    getActive() {
+      getselectActivity().then(({ data }) => {
+        if (data.code === 1) {
+          this.activeList = data.data.page.dataList;
+        }
+      });
+    },
     onLoad(val) {
       getBanner().then(({ data }) => {
         this.BannerImg = data.data;
@@ -452,6 +458,7 @@ export default {
   },
   created() {
     this.onLoad();
+    this.getActive();
   },
   mounted() {
     this.$nextTick(() => {
