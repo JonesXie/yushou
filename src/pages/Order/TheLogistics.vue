@@ -1,7 +1,7 @@
 <template>
   <HeadFoot class="pg_logistics" :Title="title">
-    <template #content v-if="logisticsInfo">
-      <div class="pgl_h" v-if="orderInfo">
+    <template #content v-if="logisticsInfo!==null">
+      <div class="pgl_h" v-if="orderInfo!==null">
         <div class="pgl_h_l">
           <img :src="orderInfo.goodsImages" alt>
         </div>
@@ -23,7 +23,7 @@
           direction="vertical"
           :active="0"
           active-color="#ea047b"
-          v-if="ogisticsInfo.data.length >0"
+          v-if="logisticsInfo.data.length >0"
         >
           <van-step v-for="(v,i) in logisticsInfo.data" :key="i">
             <h3>{{v.context}}</h3>

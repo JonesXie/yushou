@@ -1,7 +1,7 @@
 <template>
   <div class="pg_index">
     <div class="pi_h">
-      <img src="@/assets/img/pg_index_scan.png" alt>
+      <img src="@/assets/img/pg_index_scan.png" alt @click="doScan">
       <router-link to="/thesearch" class="pi_h_input">
         <span>搜索商品</span>
       </router-link>
@@ -33,7 +33,7 @@ import { Tab, Tabs } from "vant";
 import IndexFirst from "../Components/index/IndexFirst.vue";
 import IndexSecond from "../Components/index/IndexSecond.vue";
 import { mapActions } from "vuex";
-import { findGoodsCode } from "@/api/index.js";
+import { findGoodsCode, WXSign } from "@/api/index.js";
 import { getWXAccessToken } from "@/api/login.js";
 export default {
   data() {
@@ -55,7 +55,31 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["ChangeActive"])
+    ...mapActions(["ChangeActive"]),
+    doScan() {
+      let isURL = window.location.href;
+      console.log(isURL);
+      // WXSign({ url: isURL }).then(({ data }) => {});
+    },
+    WXconfig(val) {
+      wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: "", // 必填，公众号的唯一标识
+        timestamp: "", // 必填，生成签名的时间戳
+        nonceStr: "", // 必填，生成签名的随机串
+        signature: "", // 必填，签名
+        jsApiList: ["scanQRCode"] // 必填，需要使用的JS接口列表
+      });
+      wx.ready(function() {
+        wx.scanQRCode({
+          needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+          scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+          success: function(res) {
+            var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+          }
+        });
+      });
+    }
   },
   mounted() {
     let getURL = window.location.href;

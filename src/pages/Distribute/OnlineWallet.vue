@@ -122,7 +122,7 @@ export default {
   .list_wrap {
     padding-top: 16px;
     width: 100vw;
-    height: calc(100vh - 88px);
+    height: calc(100vh - 94px);
     overflow-y: scroll;
   }
 }

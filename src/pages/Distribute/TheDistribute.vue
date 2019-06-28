@@ -1,20 +1,20 @@
 <template>
   <HeadFoot class="pg_TheDistribute" :Title="title" :backPath="backPath">
-    <template #content>
+    <template #content v-if="initInfo">
       <div class="pgtd_h">
         <div class="head_info">
-          <div class="user_icon" :style="{backgroudImage:'url('+asd+')'}"></div>
-          <div class="user_name">18256097403</div>
+          <div class="user_icon" :style="{backgroundImage:'url('+initInfo.userImg+')'}"></div>
+          <div class="user_name">{{initInfo.userName}}</div>
           <img src="@/assets/img/distribution/pg_distribute_getout.png" @click="zhuxiao">
         </div>
         <div class="head_panel">
           <router-link to="/onlinewallet" class="panel_l">
             <p>总销售额</p>
-            <em>￥12.33333</em>
+            <em>￥{{initInfo.userDistributorAccount.profit}}.00</em>
           </router-link>
           <div class="panel_r">
             <p>余额</p>
-            <em>￥12.33333</em>
+            <em>￥{{initInfo.userDistributorAccount.balance}}</em>
           </div>
         </div>
       </div>
@@ -47,8 +47,8 @@
         </van-cell>
       </van-cell-group>
       <div class="apply_wrap">
-        <router-link :to="{path:`/applydistribution/0`}" class="apply_l fl">申请线下店长</router-link>
-        <router-link :to="{path:`/applydistribution/1`}" class="apply_r fr">申请线上店长</router-link>
+        <router-link :to="{path:`/applyinfo/0`}" class="apply_l fl">申请线下店长</router-link>
+        <router-link :to="{path:`/applyinfo/1`}" class="apply_r fr">申请线上店长</router-link>
       </div>
     </template>
   </HeadFoot>
@@ -57,13 +57,14 @@
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Cell, CellGroup, Dialog } from "vant";
+import { selectDistributor } from "@/api/distribute.js";
 export default {
   name: "TheDistribute",
   data() {
     return {
       title: "店长中心",
       backPath: "", //返回路由，可删除
-      asd: null
+      initInfo: null
     };
   },
   components: {
@@ -85,7 +86,16 @@ export default {
         });
     }
   },
-  mounted() {}
+  mounted() {},
+  created() {
+    selectDistributor().then(({ data }) => {
+      if (data.code === 0) {
+        this.$router.replace("/applydistribution/0");
+      } else if (data.code === 1) {
+        this.initInfo = data.data.distributor;
+      }
+    });
+  }
 };
 </script>
 

@@ -71,3 +71,8 @@ export function zpbz(data) {
 export function getselectActivity(data) {
   return get('/info/selectActivity', data)
 }
+
+//微信-获取微信jssdk权限
+export function WXSign(data, isJson) {
+  return post('/api/member/WXSign', data, isJson)
+}

@@ -22,7 +22,7 @@
         <li class="input_phone">
           <label for="phone">留言:</label>
         </li>
-        <textarea class="text_area"></textarea>
+        <textarea class="text_area" v-model="remake"></textarea>
       </ul>
       <div class="pgai_tips" @click="readTips">
         <img v-if="selected" src="@/assets/img/ly_choosed.png" alt>
@@ -50,6 +50,7 @@ import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Radio, RadioGroup, Icon, Area, Popup } from "vant";
 import AreaList from "@/layout/area.js";
 import { notNull } from "@/layout/methods.js";
+import { saveUserDistributorApply } from "@/api/distribute.js";
 export default {
   name: "ApplyInfo",
   data() {
@@ -62,7 +63,9 @@ export default {
       chooseArea: [],
       name: null,
       phone: null,
-      detailSite: null
+      detailSite: null,
+      remake: null,
+      type: 0 //0线下，1线上
     };
   },
   components: {
@@ -109,7 +112,25 @@ export default {
           if (this.chooseArea.length > 0) {
             if (notNull(this.detailSite)) {
               if (this.selected) {
-                // do something
+                let _data = {
+                  userName: this.name,
+                  phone: this.phone,
+                  commonAddress: this.detailSite,
+                  type: this.type,
+                  remake: this.remake,
+                  province: this.chooseArea[0].name,
+                  city: this.chooseArea[1].name,
+                  district: this.chooseArea[2].name,
+                  distributorId: null
+                };
+                saveUserDistributorApply(_data).then(({ data }) => {
+                  if (data.code === 1) {
+                    this.$toast("申请成功，等待审核中");
+                    setTimeout(() => {
+                      this.$router.replace("/center");
+                    }, 3000);
+                  }
+                });
               } else {
                 this.$toast("请同意我们的协议");
               }
@@ -127,7 +148,9 @@ export default {
       }
     }
   },
-  mounted() {}
+  mounted() {
+    this.type = this.$route.params.type;
+  }
 };
 </script>
 
