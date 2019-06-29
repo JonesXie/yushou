@@ -5,6 +5,13 @@ import {
   notNull
 } from "@/layout/methods.js"
 router.beforeEach((to, from, next) => {
+  if (!notNull(sessionStorage.getItem('firstURL'))) {
+    if (to.path === "/index") {
+      sessionStorage.setItem("firstURL", `${window.location.href}index`)
+    } else {
+      sessionStorage.setItem("firstURL", window.location.href)
+    }
+  }
   //上线时放开注释
   // if (!notNull(localStorage.getItem("openId"))) {
   //   store.dispatch("getWX");
