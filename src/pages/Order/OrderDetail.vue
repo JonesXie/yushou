@@ -7,8 +7,8 @@
             v-if="detailData.orderState === '99'"
             src="@/assets/img/components/pg_orderdetail_pass.png"
             alt
-          >
-          <img v-else src="@/assets/img/components/pg_orderdetail_wait.png" alt>
+          />
+          <img v-else src="@/assets/img/components/pg_orderdetail_wait.png" alt />
           <span>{{orderStatus[detailData.orderState]}}</span>
         </p>
         <p class="pgod_h_p2" v-if="detailData.orderState === '99'">您的包裹已到达,祝您购物愉快</p>
@@ -20,24 +20,25 @@
         <van-cell :center="true">
           <div slot="title" class="site">
             <p class="site_owner">
-              <img src="@/assets/img/components/pg_orderdetail_car.png" alt>
+              <img src="@/assets/img/components/pg_orderdetail_car.png" alt />
               {{detailData.receivingPeople}}
               <span>{{detailData.receivingPhone}}</span>
             </p>
             <p class="site_info">{{detailData.receivingAddress}}</p>
           </div>
         </van-cell>
-        <van-cell is-link :to="{path:`/logistics/${orderId}`}">
+        <van-cell is-link @click="ToLogistics">
           <div slot="title" class="logistics">
             <p class="logistics_p">
-              <img src="@/assets/img/components/pg_orderdetail_site.png" alt>
+              <img src="@/assets/img/components/pg_orderdetail_site.png" alt />
               物流信息
             </p>
             <div class="logistics_info">
-              <img src="@/assets/img/components/pg_orderdetail_circle.png" alt>
-              <p class="site" v-if="detailData.exchangeExpressName === null">暂无物流信息</p>
-              <p class="site">{{detailData.exchangeExpressName}}</p>
-              <p class="time">{{nowTime}}</p>
+              <img src="@/assets/img/components/pg_orderdetail_circle.png" alt />
+              <p class="site" v-if="logisticsInfo.length === 0">暂无物流信息</p>
+              <p class="site" v-else>{{logisticsInfo[0].context}}</p>
+              <p class="time" v-if="logisticsInfo.length === 0">{{nowTime}}</p>
+              <p class="time" v-else>{{logisticsInfo[0].time}}</p>
             </div>
           </div>
         </van-cell>
@@ -48,7 +49,7 @@
           :to="{path:`/goods/${detailData.goodsId}`,query:{actived:false}}"
           class="detail"
         >
-          <img :src="detailData.goodsImages" alt>
+          <img :src="detailData.goodsImages" alt />
           <div class="wrap">
             <p>{{detailData.goodsName}}</p>
             <p class="guige">
@@ -90,10 +91,11 @@
 </template>
 
 <script>
-import { toOrderDetail } from "@/api/order.js";
+import { toOrderDetail, selectOrderLogistics } from "@/api/order.js";
 import { getTime } from "@/layout/methods.js";
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Icon, Cell, CellGroup } from "vant";
+import { notNull } from "@/layout/methods.js";
 export default {
   name: "OrderDetail",
   data() {
@@ -101,6 +103,7 @@ export default {
       title: "订单详情",
       orderId: null,
       detailData: "",
+      logisticsInfo: [],
       // 1支付宝 2微信 3余额
       orderPayType: {
         1: "支付宝",
@@ -137,7 +140,24 @@ export default {
       };
       toOrderDetail(_data).then(({ data }) => {
         this.detailData = data.data;
+        if (notNull(data.data.expressNo)) {
+          this.getLogistics();
+        }
       });
+    },
+    getLogistics() {
+      selectOrderLogistics({ orderId: this.orderId }).then(({ data }) => {
+        if (data.code === 1) {
+          this.logisticsInfo = data.data.logistics.data;
+        }
+      });
+    },
+    ToLogistics() {
+      if (this.logisticsInfo.length > 0) {
+        this.$router.push({ path: `/logistics/${this.orderId}` });
+      } else {
+        this.$toast("暂无物流信息");
+      }
     }
   },
   mounted() {

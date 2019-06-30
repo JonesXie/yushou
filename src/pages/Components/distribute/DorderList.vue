@@ -1,47 +1,149 @@
 <template>
   <ul class="mod_DorderList">
-    <li class="mdl_li" v-for="(v,i) in dataList" :key="i">
-      <div class="mdl_li_h">
-        <p class="fl">订单编号：456225632415651</p>
-        <p class="fr">2019-4-21</p>
-      </div>
-      <div class="mdl_l_c van-hairline--bottom">
-        <div class="mdl_l_c_img" :style="{backgrounImage:'url('+ v+')'}"></div>
-        <div class="mdl_l_c_info">
-          <div class="title">
-            <div class="fl ellipsis-three">雀巢（nestle）超启能恩幼儿配方奶粉 3段</div>
-            <div class="fr">￥328.0</div>
+    <!-- list -->
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+        finished-text="没有更多了"
+        :immediate-check="false"
+      >
+        <li class="mdl_li" v-for="(v,i) in dataList" :key="i" @click="turnPage(v.id)">
+          <div class="mdl_li_h">
+            <p class="fl">订单编号：{{v.orderNo}}</p>
+            <p class="fr">{{v.createtime}}</p>
           </div>
-          <div class="type">
-            <div class="fl">规格：3段 800g</div>
-            <div class="fr">×3</div>
+          <div class="mdl_l_c van-hairline--bottom">
+            <div class="mdl_l_c_img" :style="{backgroundImage:'url('+v.goodsImages+')'}"></div>
+            <div class="mdl_l_c_info">
+              <div class="title">
+                <div class="fl ellipsis-three">{{v.goodsName}}</div>
+                <div class="fr">￥{{v.goodsSalePrice}}.0</div>
+              </div>
+              <div class="type">
+                <div class="fl">{{v.skuParameter}}</div>
+                <div class="fr">×{{v.goodsBuyNum}}</div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="mdl_l_f">
-        <div class="money">
-          合计：
-          <em>984.0</em>元
-        </div>
-        <div class="cut">
-          <div>利润比例：88%&nbsp;&nbsp;&nbsp;&nbsp;88.0元</div>
-          <div>利润比例：88%&nbsp;&nbsp;&nbsp;&nbsp;88.0元</div>
-        </div>
-      </div>
-    </li>
+          <div class="mdl_l_f">
+            <div class="money">
+              合计：
+              <em>{{v.goodsSalePrice}}.0</em>元
+            </div>
+            <div class="cut">
+              <div>利润比例：{{v.scale}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.orderSellProfit}}元</div>
+              <div>佣金比例：{{v.scale}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.orderSellProfit}}元</div>
+            </div>
+          </div>
+        </li>
+      </van-list>
+    </van-pull-refresh>
+    <div v-if="dataList.length === 0" class="noData">
+      <img src="@/assets/img/ly_nodata.png" alt />
+    </div>
   </ul>
 </template>
 
 <script>
+import { List, PullRefresh } from "vant";
+import { selectDistributorOrder } from "@/api/distribute.js";
 export default {
   name: "DorderList",
+  props: {
+    actived: {
+      default: 0
+    },
+    isSearch: {
+      default: null
+    }
+  },
   data() {
     return {
-      dataList: [1, 2, 3]
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      noLimit: true
     };
   },
-  methods: {},
-  mounted() {}
+  components: { [List.name]: List, [PullRefresh.name]: PullRefresh },
+  computed: {
+    type() {
+      if (this.actived == 0) {
+        return null;
+      } else if (this.actived == 1) {
+        return 2;
+      } else {
+        return 1;
+      }
+    }
+  },
+  watch: {
+    actived: {
+      handler: function() {
+        this.onInit();
+      },
+      immediate: true
+    },
+    isSearch: {
+      handler: function() {
+        this.onInit();
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    turnPage(id) {
+      this.$router.push({ path: `/orderdetail/${id}` });
+    },
+    onRefresh() {
+      this.onInit(true);
+    },
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage,
+        searchString: this.isSearch,
+        type: this.isSearch === null ? this.type : null
+      };
+      if (this.noLimit) {
+        this.noLimit = false;
+        selectDistributorOrder(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList;
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
+    }
+  },
+  mounted() {
+    this.onInit();
+  }
 };
 </script>
 
@@ -50,7 +152,7 @@ export default {
 .mod_DorderList {
   width: 100vw;
   .mdl_li {
-    width: 335px;
+    width: 99%;
     height: 233px;
     background: #fff;
     border-radius: 5px;
@@ -71,7 +173,7 @@ export default {
         height: 80px;
         @include myBG;
         background-size: contain;
-        background: #f4f4f4;
+        background-color: #f4f4f4;
         border-radius: 5px;
         box-sizing: border-box;
       }
@@ -122,6 +224,23 @@ export default {
         }
       }
     }
+  }
+}
+
+.noData {
+  width: 100%;
+  height: calc(100vh - 120px);
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 227px;
+    height: 200px;
   }
 }
 </style>

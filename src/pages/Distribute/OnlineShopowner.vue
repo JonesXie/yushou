@@ -1,7 +1,7 @@
 <template>
   <div class="pg_OnlineShopowner">
     <div class="pg_h_nav">
-      <van-icon name="arrow-left" @click="GoBack()"/>
+      <van-icon name="arrow-left" @click="GoBack()" />
       <span>{{title}}</span>
     </div>
     <div class="head_bg"></div>
@@ -9,44 +9,58 @@
     <div class="pg_model_content">
       <ul class="pgdo_hlist">
         <div class="input_wrap">
-          <van-icon name="search" class="search_icon"/>
-          <input type="text" placeholder="请输入手机号添加线上店长" v-model="isSearch">
+          <van-icon name="search" class="search_icon" />
+          <input type="number" placeholder="请输入手机号添加线上店长" v-model="isSearch" />
         </div>
-        <em>添加</em>
+        <em @click="add">添加</em>
       </ul>
-      <ul class="pgdo_list">
-        <li class="pgdo_li" v-for="(v, i) in dataList" :key="i">
-          <div class="img_icon" :style="{backgroundImage:'url('+v+')'}"></div>
-          <div class="li_info">
-            <p class="li_info_h">
-              18726391509
-              <van-icon class="ellipsis fr" name="ellipsis" @click="handlerOpt(i)"></van-icon>
-            </p>
-            <p class="li_info_c">
-              分成比例：12%
-              <em>团队人数：20</em>
-            </p>
-            <p>加入时间：2019-06-28</p>
-            <div class="li_opt van-hairline--surround" v-if="v.opt">
-              <p @click="fixRate(v,i)">修改分成比例</p>
-              <p @click="delCount(v,i)">解除绑定</p>
-            </div>
-            <div class="tips">23333333</div>
-          </div>
-        </li>
-      </ul>
+      <!-- list -->
+      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          @load="onLoad"
+          finished-text="没有更多了"
+          :immediate-check="false"
+        >
+          <ul class="pgdo_list">
+            <li class="pgdo_li" v-for="(v, i) in dataList" :key="i" @click="turnPage(v.id)">
+              <div class="img_icon" :style="{backgroundImage:'url('+v.userImg+')'}"></div>
+              <div class="li_info">
+                <p class="li_info_h">
+                  {{v.name}}
+                  <van-icon class="ellipsis fr" name="ellipsis" @click="handlerOpt(i)"></van-icon>
+                </p>
+                <p class="li_info_c">
+                  分成比例：{{v.scale}}%
+                  <em>团队人数：{{v.userNum}}</em>
+                </p>
+                <p>加入时间：{{v.createDateLabel}}</p>
+                <div class="li_opt van-hairline--surround" v-if="v.opt">
+                  <p @click="fixRate(v.id,i)">修改分成比例</p>
+                  <p @click="delCount(v.id,i)">解除绑定</p>
+                </div>
+                <div class="tips">{{v.number}}</div>
+              </div>
+            </li>
+          </ul>
+        </van-list>
+      </van-pull-refresh>
+      <div v-if="dataList.length === 0" class="noData">
+        <img src="@/assets/img/ly_nodata.png" alt />
+      </div>
     </div>
     <!-- 设置比例弹窗 -->
     <van-popup v-model="ratePop" class="tips_wrap">
       <div class="tips_h">请重新设置该分销账户的分成比例</div>
       <div class="tips_c">
-        <input type="number" v-model="reRate" @blur="validRate">%
+        <input type="number" v-model="reRate" @blur="validRate" />%
       </div>
       <div class="tips_btn">
         <div class="tips_btn1" @click="confirmRate">确认</div>
       </div>
     </van-popup>
-    <!-- 设置比例弹窗 -->
+    <!-- 弹窗 -->
     <van-popup v-model="cancelPop" class="cancelPop">
       <div class="tips_h">是否确认解除该分销账户？</div>
       <div class="tips_btn_wrap van-hairline--top">
@@ -59,32 +73,46 @@
 
 <script>
 import { mapActions } from "vuex";
-import { Icon, Popup } from "vant";
+import { Icon, Popup, List, PullRefresh } from "vant";
 import { notNull } from "@/layout/methods.js";
+import {
+  selectDistributorCodeList,
+  saveDistributor
+} from "@/api/distribute.js";
 export default {
   name: "OnlineShopowner",
   data() {
     return {
       title: "线上店长",
       isSearch: null,
-      dataList: [
-        { 1: 0, opt: false },
-        { 1: 0, opt: false },
-        { 1: 0, opt: false }
-      ],
       ratePop: false,
       cancelPop: false,
-      reRate: null
+      reRate: null,
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      noLimit: true,
+      changeId: null
     };
   },
   components: {
     [Icon.name]: Icon,
-    [Popup.name]: Popup
+    [Popup.name]: Popup,
+    [List.name]: List,
+    [PullRefresh.name]: PullRefresh
   },
   methods: {
     ...mapActions(["ChangeStatus"]),
     GoBack() {
       this.$router.back(-1);
+    },
+    turnPage(v) {
+      this.$router.push({
+        path: "/customermanage",
+        query: { distributorId: v }
+      });
     },
     handlerOpt(index) {
       if (this.dataList[index].opt) {
@@ -94,10 +122,12 @@ export default {
       }
     },
     fixRate(v, i) {
+      this.changeId = v;
       this.ratePop = true;
       this.dataList[i].opt = false;
     },
     delCount(v, i) {
+      this.changeId = v;
       this.cancelPop = true;
       this.dataList[i].opt = false;
     },
@@ -129,11 +159,91 @@ export default {
         this.$toast("折扣应在0-100间");
       }
     },
-    confirmRate() {},
-    confirmCancel() {}
+    confirmRate() {
+      if (notNull(this.reRate)) {
+        saveDistributor({
+          id: this.changeId,
+          scale: this.reRate,
+          status: 1
+        }).then(({ data }) => {
+          this.$toast(data.msg);
+          if (data.code === 1) {
+            this.ratePop = false;
+            this.onInit();
+          }
+        });
+      }
+    },
+    confirmCancel() {
+      saveDistributor({
+        id: this.changeId,
+        status: 0
+      }).then(({ data }) => {
+        this.$toast(data.msg);
+        if (data.code === 1) {
+          this.cancelPop = false;
+          this.onInit();
+        }
+      });
+    },
+    add() {
+      saveDistributor({
+        userPhone: this.isSearch,
+        status: 1
+      }).then(({ data }) => {
+        this.$toast(data.msg);
+        if (data.code === 1) {
+          this.onInit();
+        }
+      });
+    },
+    onRefresh() {
+      this.onInit(true);
+    },
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage
+      };
+      if (this.noLimit) {
+        this.noLimit = false;
+        selectDistributorCodeList(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList.map(v => {
+            let m = v;
+            m.opt = false;
+            return m;
+          });
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
+    }
   },
   mounted() {
     this.ChangeStatus(false);
+    this.onInit();
   },
   beforeDestroy() {
     this.ChangeStatus(true);
@@ -223,7 +333,7 @@ export default {
     width: 100vw;
     .pgdo_li {
       background: #fff;
-      width: 345px;
+      width: 98%;
       height: 100px;
       border-radius: 5px;
       margin: 0 auto 9px;
@@ -263,6 +373,7 @@ export default {
           border-radius: 5px;
           font-size: 13px;
           padding: 15px;
+          z-index: 99;
           p {
             color: #333;
           }
@@ -275,8 +386,8 @@ export default {
           right: -15px;
           bottom: 4px;
           color: #fff;
-          font-size: 11px;
-          padding: 6px;
+          font-size: 10px;
+          padding: 6px 2px;
           border-top-left-radius: 12px;
           border-bottom-left-radius: 12px;
           background: #fc7dbf;
@@ -363,6 +474,22 @@ export default {
       flex: 1;
       color: $Color;
     }
+  }
+}
+.noData {
+  width: 100%;
+  height: calc(100vh - 120px);
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 227px;
+    height: 200px;
   }
 }
 </style>

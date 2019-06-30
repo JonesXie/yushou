@@ -22,6 +22,10 @@
           </div>
         </div>
       </div>
+      <van-popup v-model="showPopup" class="share_pop" @click.native="showPopup=false">
+        <img src="@/assets/img/ly_WXshareIcon.png" alt />
+        <div class="txt">点击右上角，立即分享！</div>
+      </van-popup>
     </template>
   </HeadFoot>
 </template>
@@ -31,6 +35,7 @@ import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { findMyInviter } from "@/api/center.js";
 import wx from "weixin-js-sdk";
 import { WXSign } from "@/api/index.js";
+import { Popup } from "vant";
 export default {
   name: "MyInvitation",
   data() {
@@ -39,10 +44,11 @@ export default {
       backPath: "", //返回路由，可删除
       code: "YQ0000088",
       phone: null,
-      datalist: []
+      datalist: [],
+      showPopup: false
     };
   },
-  components: { HeadFoot },
+  components: { HeadFoot, [Popup.name]: Popup },
   methods: {
     init() {
       findMyInviter().then(({ data }) => {
@@ -62,6 +68,7 @@ export default {
       }
       WXSign({ url: isURL }).then(({ data }) => {
         if (data.code === 1) {
+          this.showPopup = true;
           this.WXconfig(data.data);
         }
       });
@@ -85,6 +92,7 @@ export default {
           imgUrl: "", // 分享图标
           success: function() {
             That.$toast("分享成功");
+            That.showPopup = false;
           }
         });
         //分享到朋友圈
@@ -94,6 +102,7 @@ export default {
           imgUrl: "", // 分享图标
           success: function() {
             That.$toast("分享成功");
+            That.showPopup = false;
           }
         });
       });
@@ -183,6 +192,26 @@ export default {
       .phone {
         margin-right: 15px;
       }
+    }
+  }
+  .share_pop {
+    background: transparent;
+    width: 100vw;
+    height: 100vh;
+    img {
+      position: absolute;
+      right: 10vw;
+      top: 10vw;
+      width: 50%;
+      height: auto;
+    }
+    .txt {
+      position: absolute;
+      top: 300px;
+      color: #fff;
+      font-size: 20px;
+      text-align: center;
+      width: 100%;
     }
   }
 }

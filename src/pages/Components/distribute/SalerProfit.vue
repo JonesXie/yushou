@@ -1,29 +1,93 @@
 // 线上店长收益
 <template>
   <div class="mod_realprofit">
-    <div class="list_li van-hairline--bottom" v-for="(v,i) in dataList" :key="i">
-      <p class="li_title">
-        线上店长：18227765609
-        <em class="fr">+86.0元</em>
-      </p>
-      <p class="li_time li_title">
-        佣金比例：12%
-        <i class="fr">2019-4-9</i>
-      </p>
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad"
+        finished-text="没有更多了"
+        :immediate-check="false"
+      >
+        <div class="list_li van-hairline--bottom" v-for="(v,i) in dataList" :key="i">
+          <p class="li_title">
+            线上店长：{{v.distributorCodeName}}
+            <em class="fr">+{{v.amount}}元</em>
+          </p>
+          <p class="li_time li_title">
+            佣金比例：{{v.depositScale}}
+            <i class="fr">{{v.createDateLabel}}</i>
+          </p>
+        </div>
+      </van-list>
+    </van-pull-refresh>
+    <div v-if="dataList.length === 0" class="noData">
+      <img src="@/assets/img/ly_nodata.png" alt />
     </div>
   </div>
 </template>
 
 <script>
+import { selectUserDistributorBill } from "@/api/distribute.js";
+import { List, PullRefresh } from "vant";
 export default {
   name: "RealProfit",
   data() {
     return {
-      dataList: [1, 2, 3]
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      noLimit: true
     };
   },
-  methods: {},
-  mounted() {}
+  components: { [List.name]: List, [PullRefresh.name]: PullRefresh },
+  methods: {
+    onRefresh() {
+      this.onInit(true);
+    },
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage,
+        type: 2 //	1 自己 2 线上 3 提现
+      };
+      if (this.noLimit) {
+        this.noLimit = false;
+        selectUserDistributorBill(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList;
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
+    }
+  },
+  mounted() {
+    this.onInit();
+  }
 };
 </script>
 
@@ -35,6 +99,7 @@ export default {
   background: #fff;
   border-radius: 5px;
   box-sizing: border-box;
+  position: relative;
   .list_li {
     padding: 26px 2px 16px 15px;
     box-sizing: border-box;
@@ -56,6 +121,23 @@ export default {
         margin-right: 5px;
       }
     }
+  }
+}
+.noData {
+  width: 100%;
+  // height: calc(100vh - 120px);
+  padding-top: 40px;
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 227px;
+    height: 200px;
   }
 }
 </style>

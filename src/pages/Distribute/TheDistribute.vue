@@ -5,48 +5,57 @@
         <div class="head_info">
           <div class="user_icon" :style="{backgroundImage:'url('+initInfo.userImg+')'}"></div>
           <div class="user_name">{{initInfo.userName}}</div>
-          <img src="@/assets/img/distribution/pg_distribute_getout.png" @click="zhuxiao">
+          <img
+            src="@/assets/img/distribution/pg_distribute_getout.png"
+            @click="zhuxiao"
+            v-if="status"
+          />
         </div>
-        <div class="head_panel">
-          <router-link to="/onlinewallet" class="panel_l">
+        <router-link :to="{path:type?'offwallet':'onwallet'}" class="head_panel">
+          <div class="panel_l">
             <p>总销售额</p>
             <em>￥{{initInfo.userDistributorAccount.profit}}.00</em>
-          </router-link>
+          </div>
           <div class="panel_r">
             <p>余额</p>
             <em>￥{{initInfo.userDistributorAccount.balance}}</em>
           </div>
-        </div>
+        </router-link>
       </div>
       <van-cell-group class="pgtd_link">
         <van-cell is-link to="/withdraw">
-          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_tixian.png" alt>
+          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_tixian.png" alt />
           <em class="cell_title">提现</em>
         </van-cell>
         <van-cell is-link to="/reportform">
-          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_baobiao.png" alt>
+          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_baobiao.png" alt />
           <em class="cell_title">报表</em>
         </van-cell>
       </van-cell-group>
       <van-cell-group class="pgtd_link">
-        <van-cell is-link to="/onlineshopowner">
-          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_dianzhang.png" alt>
+        <!-- 线下店长才有 -->
+        <van-cell is-link to="/onlineshopowner" v-if="!type">
+          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_dianzhang.png" alt />
           <em class="cell_title">线上店长</em>
         </van-cell>
+
         <van-cell is-link to="/customermanage">
-          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_kehu.png" alt>
+          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_kehu.png" alt />
           <em class="cell_title">客户管理</em>
         </van-cell>
-        <van-cell is-link to="/distributeorder">
-          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_order.png" alt>
+        <van-cell is-link :to="{path:type?'/offdistributeorder':'/distributeorder'}">
+          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_order.png" alt />
           <em class="cell_title">订单管理</em>
         </van-cell>
-        <van-cell is-link to="/thecheck">
-          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_shenhe.png" alt>
+
+        <!-- 线下店长才有 -->
+        <van-cell is-link to="/thecheck" v-if="!type">
+          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_shenhe.png" alt />
           <em class="cell_title">线上店长审核</em>
+          <div class="num_icon" slot="right-icon">{{num}}</div>
         </van-cell>
       </van-cell-group>
-      <div class="apply_wrap">
+      <div class="apply_wrap" v-if="!status">
         <router-link :to="{path:`/applyinfo/0`}" class="apply_l fl">申请线下店长</router-link>
         <router-link :to="{path:`/applyinfo/1`}" class="apply_r fr">申请线上店长</router-link>
       </div>
@@ -57,14 +66,21 @@
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Cell, CellGroup, Dialog } from "vant";
-import { selectDistributor } from "@/api/distribute.js";
+import {
+  selectDistributor,
+  selectUserDistributorApplyNum,
+  cancelUserDistributorCode
+} from "@/api/distribute.js";
 export default {
   name: "TheDistribute",
   data() {
     return {
       title: "店长中心",
       backPath: "", //返回路由，可删除
-      initInfo: null
+      initInfo: null,
+      status: true, //	店铺状态  0关闭 false 1 开启  true
+      type: false, // 店铺类型 0线下店铺 false 1线上店铺 true
+      num: 0
     };
   },
   components: {
@@ -73,28 +89,56 @@ export default {
     [CellGroup.name]: CellGroup,
     [Dialog.name]: Dialog
   },
+  watch: {
+    type: {
+      handler: function(nv) {
+        if (!nv) {
+          this.getNumber();
+        }
+      },
+      immediate: true
+    }
+  },
   methods: {
     zhuxiao() {
       Dialog.confirm({
         message: "你正在注销线上店长身份，是否继续该操作？"
       })
         .then(() => {
-          // on confirm
+          cancelUserDistributorCode().then(({ data }) => {
+            if (data.code === 1) {
+              this.getInit();
+            }
+          });
         })
         .catch(() => {
           // on cancel
         });
+    },
+    // 获取线上店长审核数
+    getNumber() {
+      selectUserDistributorApplyNum().then(({ data }) => {
+        if (data.code === 1) {
+          this.num = data.data.userDistributorApplyNum;
+        }
+      });
+    },
+    getInit() {
+      selectDistributor().then(({ data }) => {
+        if (data.code === 0) {
+          this.$router.replace("/applydistribution/0");
+        } else if (data.code === 1) {
+          this.initInfo = data.data.distributor;
+          this.status = data.data.distributor.status === 0 ? false : true;
+          this.type = data.data.distributor.type === 0 ? false : true;
+        }
+      });
     }
   },
+
   mounted() {},
   created() {
-    selectDistributor().then(({ data }) => {
-      if (data.code === 0) {
-        this.$router.replace("/applydistribution/0");
-      } else if (data.code === 1) {
-        this.initInfo = data.data.distributor;
-      }
-    });
+    this.getInit();
   }
 };
 </script>
@@ -196,5 +240,19 @@ export default {
       border-radius: 3px;
     }
   }
+}
+.num_icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: $Color;
+  line-height: 18px;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+  font-size: 12px;
+  position: relative;
+  top: 3px;
 }
 </style>

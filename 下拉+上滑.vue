@@ -14,7 +14,7 @@
         </van-list>
       </van-pull-refresh>
       <div v-if="dataList.length === 0" class="noData">
-        <img src="@/assets/img/ly_nodata.png" alt>
+        <img src="@/assets/img/ly_nodata.png" alt />
       </div>
     </template>
   </HeadFoot>

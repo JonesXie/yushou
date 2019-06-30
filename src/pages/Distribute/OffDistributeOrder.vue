@@ -7,16 +7,15 @@
     <div class="head_bg"></div>
     <!-- content -->
     <div class="pg_model_content">
-      <ul class="pgdo_hlist" v-if="isTab">
+      <!-- <ul class="pgdo_hlist" v-if="isTab">
         <li :class="['pgdo_hlist_li',actived===0?'active':'']" @click="actived=0">全部</li>
         <li :class="['pgdo_hlist_li',actived===1?'active':'']" @click="actived=1">线上店长订单</li>
         <li :class="['pgdo_hlist_li',actived===2?'active':'']" @click="actived=2">普通用户订单</li>
         <li class="pgdo_hlist_search" @click="isTab=false">
           <van-icon name="search" />
         </li>
-      </ul>
-      <ul class="pgdo_hlist" v-else>
-        <!-- <van-icon name="search" class="search_icon"/> -->
+      </ul>-->
+      <ul class="pgdo_hlist">
         <input type="text" placeholder="请输入收件人手机号、订单编号、商品名称" v-model="isSearch" />
         <em @click="isTab=true">取消</em>
       </ul>

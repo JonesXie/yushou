@@ -274,6 +274,17 @@ const RouterMap = [
     name: 'applyinfo',
     component: () => import('@/pages/Distribute/ApplyInfo.vue')
   },
+  //店长钱包
+  {
+    path: '/onwallet',
+    name: 'onwallet',
+    component: () => import('@/pages/Distribute/OnWallet.vue')
+  },
+  {
+    path: '/offwallet',
+    name: 'offwallet',
+    component: () => import('@/pages/Distribute/OffWallet.vue')
+  },
   //提现
   {
     path: '/withdraw',
@@ -290,12 +301,6 @@ const RouterMap = [
     path: '/salermember',
     name: 'salermember',
     component: () => import('@/pages/Distribute/SalerManage.vue')
-  },
-  //线上店长钱包
-  {
-    path: '/onlinewallet',
-    name: 'onlinewallet',
-    component: () => import('@/pages/Distribute/OnlineWallet.vue')
   },
   //报表
   {
@@ -314,6 +319,11 @@ const RouterMap = [
     path: '/distributeorder',
     name: 'distributeorder',
     component: () => import('@/pages/Distribute/DistributeOrder.vue')
+  },
+  {
+    path: '/offdistributeorder',
+    name: 'offdistributeorder',
+    component: () => import('@/pages/Distribute/OffDistributeOrder.vue')
   },
   //店长审核
   {

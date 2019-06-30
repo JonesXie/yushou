@@ -1,7 +1,7 @@
 <template>
   <div class="pg_ReportForm pg_OnlineWallet">
     <div class="pg_h_nav">
-      <van-icon name="arrow-left" @click="GoBack()"/>
+      <van-icon name="arrow-left" @click="GoBack()" />
       <span>{{title}}</span>
     </div>
     <div class="head_bg"></div>
@@ -21,55 +21,60 @@
             @click="showPicker"
             src="@/assets/img/distribution/pg_reportform_calendar.png"
             alt
-          >
+          />
         </div>
-        <div class="list_li">
-          <div class="title">
-            <em></em>
-            营业额
+        <div v-if="allInfo.length >0">
+          <div class="list_li">
+            <div class="title">
+              <em></em>
+              营业额
+            </div>
+            <div class="type">
+              <div class="type0">总营业额</div>
+              <div class="type1">门店营业额</div>
+              <div class="type2">线上营业额</div>
+            </div>
+            <div class="type money">
+              <div class="type0">￥{{allInfo[0].allProfit}}</div>
+              <div class="type1">￥{{allInfo[0].directProfit}}</div>
+              <div class="type2">￥{{allInfo[0].indirectProfig}}</div>
+            </div>
           </div>
-          <div class="type">
-            <div class="type0">总营业额</div>
-            <div class="type1">门店营业额</div>
-            <div class="type2">线上营业额</div>
+          <div class="list_li profit">
+            <div class="title">
+              <em></em>
+              利润
+            </div>
+            <div class="type">
+              <div class="type0">总利润</div>
+              <div class="type1">门店利润</div>
+              <div class="type2">线上利润</div>
+            </div>
+            <div class="type money">
+              <div class="type0">￥{{allInfo[0].allRental}}</div>
+              <div class="type1">￥{{allInfo[0].directRental}}</div>
+              <div class="type2">￥{{allInfo[0].indirectRental}}</div>
+            </div>
           </div>
-          <div class="type money">
-            <div class="type0">￥4989.0</div>
-            <div class="type1">￥4989.0</div>
-            <div class="type2">￥4989.0</div>
+          <div class="list_li team">
+            <div class="title">
+              <em></em>
+              团队人数
+            </div>
+            <div class="type">
+              <div class="type0">总人数</div>
+              <div class="type1">线上店长数</div>
+              <div class="type2">普通用户数</div>
+            </div>
+            <div class="type money">
+              <div class="type0">{{allInfo[0].allUserNum}}人</div>
+              <div class="type1">{{allInfo[0].directUserNum}}人</div>
+              <div class="type2">{{allInfo[0].indirectUserNum}}人</div>
+            </div>
           </div>
         </div>
-        <div class="list_li profit">
-          <div class="title">
-            <em></em>
-            利润
-          </div>
-          <div class="type">
-            <div class="type0">总利润</div>
-            <div class="type1">门店利润</div>
-            <div class="type2">线上利润</div>
-          </div>
-          <div class="type money">
-            <div class="type0">￥4989.0</div>
-            <div class="type1">￥4989.0</div>
-            <div class="type2">￥4989.0</div>
-          </div>
-        </div>
-        <div class="list_li team">
-          <div class="title">
-            <em></em>
-            团队人数
-          </div>
-          <div class="type">
-            <div class="type0">总人数</div>
-            <div class="type1">线上店长数</div>
-            <div class="type2">普通用户数</div>
-          </div>
-          <div class="type money">
-            <div class="type0">23人</div>
-            <div class="type1">23人</div>
-            <div class="type2">23人</div>
-          </div>
+        <div class="noData" v-else>
+          <img src="@/assets/img/ly_nodata.png" alt />
         </div>
       </div>
     </div>
@@ -98,8 +103,9 @@
 <script>
 import moment from "moment";
 import { mapActions } from "vuex";
-import { getLastWeek, getCurrentWeek } from "@/layout/DateTimeUtils.js";
+import { getLastWeek } from "@/layout/DateTimeUtils.js";
 import { Icon, DatetimePicker, Popup, Picker } from "vant";
+import { selectUserDistributorReport } from "@/api/distribute.js";
 export default {
   name: "ReportForm",
   data() {
@@ -111,10 +117,11 @@ export default {
       dateType: "date", //date 日，year-month 年月
       currentDate: new Date(), //日月选中
       currentWY: [],
-      timeRange: null,
+      timeRange: null, //展示数据
       weeksList: [],
       yearsList: [],
-      isPicker: false
+      isPicker: false,
+      allInfo: []
     };
   },
   components: {
@@ -127,24 +134,32 @@ export default {
     actived: {
       handler: function(nv) {
         if (nv === 0) {
+          //日
           this.dateType = "date";
           this.timeRange = moment(this.currentDate).format("YYYY-MM-DD");
           this.isPicker = false;
+          this.getInit(1);
         } else if (nv === 1) {
-          this.timeRange = getCurrentWeek().join("至");
+          //周
           this.isPicker = true;
           if (this.weeksList.length === 0) {
             this.getLastWeeks();
           }
+          this.timeRange = this.weeksList[0];
           this.currentWY = this.weeksList;
+          this.getInit(2);
         } else if (nv === 2) {
+          //月
           this.dateType = "year-month";
-          this.timeRange = moment(this.currentDate).format("YYYY-MM");
+          this.timeRange = moment(this.currentDate).format("YYYY-MM-DD");
           this.isPicker = false;
+          this.getInit(3);
         } else if (nv === 3) {
+          //年
           this.isPicker = true;
           this.timeRange = this.yearsList[0];
           this.currentWY = this.yearsList;
+          this.getInit(4);
         }
       },
       immediate: true
@@ -194,6 +209,17 @@ export default {
         let year = curY - i;
         this.yearsList.splice(this.yearsList.length, 0, year);
       }
+    },
+    getInit(val) {
+      let _data = {
+        type: val, //	1 日 2 周 3 月 4年
+        time: this.timeRange
+      };
+      selectUserDistributorReport(_data).then(({ data }) => {
+        if (data.code === 1) {
+          this.allInfo = data.data.page.dataList;
+        }
+      });
     }
   },
   mounted() {
@@ -336,6 +362,23 @@ export default {
         color: #666;
       }
     }
+  }
+}
+.noData {
+  width: 100%;
+  // height: calc(100vh - 120px);
+  padding-top: 200px;
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 227px;
+    height: 200px;
   }
 }
 </style>

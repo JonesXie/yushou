@@ -2,13 +2,13 @@
   <HeadFoot class="pg_WithDraw pg_walletout" :Title="title" :backPath="backPath">
     <template #content>
       <!-- do somethings -->
-      <van-field v-model="alipay" label="提现账户" placeholder="支付宝(15221425895)"/>
+      <van-field v-model="alipay" label="提现账户" placeholder="支付宝(15221425895)" />
       <div class="cut_tip">因股权分配问题，您的实际到账金额为提现金额的50%</div>
       <div class="pgw_money">
         <div class="tips">提现金额</div>
         <div class="input">
           <em>￥</em>
-          <input type="number" v-model="outMoney" class="outMoney">
+          <input type="number" v-model="outMoney" class="outMoney" />
         </div>
       </div>
       <p class="tips">提示：额外扣除￥{{reduceM}}手续费(为微信及支付宝对本平台产生的手续费,费率0.75)</p>
@@ -20,7 +20,7 @@
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { notNull } from "@/layout/methods.js";
-import { doPresent } from "@/api/center.js";
+import { withdrawDeposit } from "@/api/distribute.js";
 import { Field } from "vant";
 export default {
   name: "WithDraw",
@@ -47,10 +47,10 @@ export default {
       if (notNull(this.alipay)) {
         if (notNull(this.outMoney)) {
           let _data = {
-            presentAccount: this.alipay,
+            cashAccount: this.alipay,
             money: this.outMoney
           };
-          doPresent(_data).then(({ data }) => {
+          withdrawDeposit(_data).then(({ data }) => {
             this.$toast.success(data.msg);
             this.$router.back(-1);
           });

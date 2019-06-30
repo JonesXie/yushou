@@ -1,33 +1,47 @@
 <template>
   <div class="pg_CustomerManage pg_SalerManege">
     <div class="pg_h_nav">
-      <van-icon name="arrow-left" @click="GoBack()"/>
+      <van-icon name="arrow-left" @click="GoBack()" />
       <span>{{title}}</span>
-      <img class="fr" src="@/assets/img/distribution/pg_customermanage_add.png" alt>
+      <img class="fr" src="@/assets/img/distribution/pg_customermanage_add.png" alt />
     </div>
     <div class="head_bg"></div>
     <!-- content -->
     <div class="pg_model_content">
-      <div class="list_li" v-for="(v,i) in dataList" :key="i">
-        <div class="list_li_l">
-          <div class="user_icon" :style="{backgroudImage:'url('+v+')'}">
-            <div class="user_icon_dailog">线上店长</div>
+      <!-- list -->
+      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          @load="onLoad"
+          finished-text="没有更多了"
+          :immediate-check="false"
+        >
+          <div class="list_li" v-for="(v,i) in dataList" :key="i">
+            <div class="list_li_l">
+              <div class="user_icon" :style="{backgroundImage:'url('+v.userImages+')'}">
+                <div class="user_icon_dailog">{{v.distributorTypeLabel}}</div>
+              </div>
+              <p class="user_name ellipsis-line">{{v.nickName}}</p>
+              <p class="user_time ellipsis-line">创建时间:{{v.createDateLabel}}</p>
+            </div>
+            <div class="list_li_r">
+              <div class="saler_title">累计销售额</div>
+              <div class="saler_money">
+                {{v.rental}}
+                <em>元</em>
+              </div>
+              <div class="oder_title">累计订单</div>
+              <div class="oder_num">
+                {{v.orderQuantity}}
+                <em>笔</em>
+              </div>
+            </div>
           </div>
-          <p class="user_name ellipsis-line">18265582981</p>
-          <p class="user_time ellipsis-line">创建时间：2019-5-28</p>
-        </div>
-        <div class="list_li_r">
-          <div class="saler_title">累计销售额</div>
-          <div class="saler_money">
-            210.111
-            <em>元</em>
-          </div>
-          <div class="oder_title">累计订单</div>
-          <div class="oder_num">
-            15
-            <em>笔</em>
-          </div>
-        </div>
+        </van-list>
+      </van-pull-refresh>
+      <div v-if="dataList.length === 0" class="noData">
+        <img src="@/assets/img/ly_nodata.png" alt />
       </div>
     </div>
   </div>
@@ -35,26 +49,80 @@
 
 <script>
 import { mapActions } from "vuex";
-import { Icon } from "vant";
+import { Icon, List, PullRefresh } from "vant";
+import { notNull } from "@/layout/methods.js";
+import { selectDistributorBindUser } from "@/api/distribute.js";
 export default {
   name: "CustomerManage",
   data() {
     return {
       title: "客户管理",
-      dataList: [1, 2, 3]
+      distributorId: null,
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      noLimit: true
     };
   },
   components: {
-    [Icon.name]: Icon
+    [Icon.name]: Icon,
+    [List.name]: List,
+    [PullRefresh.name]: PullRefresh
   },
   methods: {
     ...mapActions(["ChangeStatus"]),
     GoBack() {
       this.$router.back(-1);
+    },
+    onRefresh() {
+      this.onInit(true);
+    },
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage,
+        distributorId: this.distributorId
+      };
+      if (this.noLimit) {
+        this.noLimit = false;
+        selectDistributorBindUser(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList;
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
     }
   },
   mounted() {
     this.ChangeStatus(false);
+    if (notNull(this.$route.query.distributorId)) {
+      this.distributorId = this.$route.query.distributorId;
+    }
+    this.onInit();
   },
   beforeDestroy() {
     this.ChangeStatus(true);
@@ -114,14 +182,16 @@ export default {
     padding-top: 10px;
   }
   .list_li {
-    width: 350px;
+    width: 99%;
     height: 163px;
     margin: 0 auto;
     background: url("~@/assets/img/distribution/mod_manage_panel.png");
     @include myBG;
     display: flex;
     .list_li_l {
-      flex: 1;
+      // flex: 1;
+      width: 50%;
+      display: inline-block;
       text-align: center;
       .user_icon {
         width: 50px;
@@ -151,6 +221,7 @@ export default {
       }
       .user_time {
         font-size: 11px;
+        width: 100%;
       }
     }
     .list_li_r {
@@ -178,6 +249,23 @@ export default {
         }
       }
     }
+  }
+}
+
+.noData {
+  width: 100%;
+  height: calc(100vh - 120px);
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 227px;
+    height: 200px;
   }
 }
 </style>

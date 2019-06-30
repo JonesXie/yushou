@@ -1,35 +1,158 @@
 <template>
   <HeadFoot class="pg_TheCheck" :Title="title" :backPath="backPath">
     <template #content>
-      <ul class="pgtc_ul">
-        <li class="pgtc_li" v-for="(v,i) in dataList" :key="i">
-          <div class="user_icon" :style="{backgroudImage:'url('+v+')'}"></div>
-          <div class="user_name ellipsis-line">18256097403</div>
-          <div class="user_agree" @click="yes(v)">同意</div>
-          <div class="user_reject" @click="no(v)">拒绝</div>
-        </li>
-      </ul>
+      <!-- list -->
+      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          @load="onLoad"
+          finished-text="没有更多了"
+          :immediate-check="false"
+        >
+          <ul class="pgtc_ul">
+            <li class="pgtc_li" v-for="(v,i) in dataList" :key="i">
+              <div class="user_icon" :style="{backgroudImage:'url('+v+')'}"></div>
+              <div class="user_name ellipsis-line">18256097403</div>
+              <div class="user_agree" @click="yes(v.id)">同意</div>
+              <div class="user_reject" @click="no(v.id)">拒绝</div>
+            </li>
+          </ul>
+        </van-list>
+      </van-pull-refresh>
+      <div v-if="dataList.length === 0" class="noData">
+        <img src="@/assets/img/ly_nodata.png" alt />
+      </div>
+      <van-popup v-model="ratePop" class="tips_wrap">
+        <div class="tips_h">拒绝的理由</div>
+        <div class="tips_c">
+          <input type="text" v-model="reRate" />
+        </div>
+        <div class="tips_btn">
+          <div class="tips_btn1" @click="confirmRate">确认</div>
+        </div>
+      </van-popup>
     </template>
   </HeadFoot>
 </template>
 
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
+import { List, PullRefresh, Popup } from "vant";
+import {
+  selectUserDistributorApply,
+  rejectUserDistributorApply,
+  saveDistributor
+} from "@/api/distribute.js";
+import { notNull } from "@/layout/methods.js";
+import { setTimeout } from "timers";
 export default {
   name: "TheCheck",
   data() {
     return {
       title: "店长审核",
       backPath: "", //返回路由，可删除
-      dataList: [1, 2, 3]
+      dataList: [],
+      curPage: 1,
+      isRefresh: false,
+      loading: false,
+      finished: false,
+      noLimit: true,
+      ratePop: false,
+      reRate: null,
+      id: null
     };
   },
-  components: { HeadFoot },
-  methods: {
-    yes(val) {},
-    no(val) {}
+  components: {
+    HeadFoot,
+    [List.name]: List,
+    [PullRefresh.name]: PullRefresh,
+    [Popup.name]: Popup
   },
-  mounted() {}
+  methods: {
+    yes() {
+      let _data = {
+        applyId: this.id
+      };
+      saveDistributor(_data).then(({ data }) => {
+        this.$toast(data.msg);
+        if (data.code === 1) {
+          let That = this;
+          setTimeout(() => {
+            That.onInit();
+          }, 3000);
+        }
+      });
+    },
+    no(val) {
+      this.ratePop = true;
+      this.id = val;
+    },
+    confirmRate() {
+      if (notNull(this.reRate)) {
+        this.reFuse();
+      } else {
+        this.$toast("请输入拒绝理由");
+      }
+    },
+    reFuse() {
+      let _data = {
+        id: this.id,
+        remake: this.reRate
+      };
+      rejectUserDistributorApply(_data).then(({ data }) => {
+        this.$toast(data.msg);
+        if (data.code === 1) {
+          let That = this;
+          setTimeout(() => {
+            That.onInit();
+          }, 3000);
+        }
+      });
+    },
+    onRefresh() {
+      this.onInit(true);
+    },
+    onLoad() {
+      this.onInit(false, false);
+    },
+    onInit(reFresh = false, isInit = true) {
+      if (isInit) {
+        this.curPage = 1;
+        this.finished = false;
+      }
+      let _data = {
+        page: this.curPage
+      };
+      if (this.noLimit) {
+        this.noLimit = false;
+        selectUserDistributorApply(_data).then(({ data }) => {
+          this.loading = false; //list 加载动画
+          this.noLimit = true;
+          let getList = data.data.page.dataList;
+          //赋值
+          if (isInit) {
+            this.dataList = getList;
+            this.curPage = this.curPage + 1;
+          } else {
+            [...this.dataList] = [...this.dataList, ...getList];
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
+          }
+          if (reFresh) {
+            this.$toast("刷新成功");
+            this.isRefresh = false;
+          }
+        });
+      }
+    }
+  },
+  mounted() {
+    this.onInit();
+  }
 };
 </script>
 
@@ -89,6 +212,22 @@ export default {
         top: -12px;
       }
     }
+  }
+}
+.noData {
+  width: 100%;
+  height: calc(100vh - 120px);
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 227px;
+    height: 200px;
   }
 }
 </style>

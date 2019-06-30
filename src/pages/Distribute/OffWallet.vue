@@ -1,21 +1,21 @@
 <template>
   <div class="pg_OnlineWallet pg_SalerManege">
     <div class="pg_h_nav">
-      <van-icon name="arrow-left" @click="GoBack()"/>
+      <van-icon name="arrow-left" @click="GoBack()" />
       <span>{{title}}</span>
     </div>
     <div class="head_bg"></div>
     <!-- content -->
     <div class="pg_model_content">
       <ul class="pgow_hlist">
-        <li :class="['pgow_hlist_li',actived===0?'active':'']" @click="actived=0">直卖收益</li>
-        <li :class="['pgow_hlist_li',actived===1?'active':'']" @click="actived=1">线上店长收益</li>
+        <li :class="['pgow_hlist_li',actived===0?'active':'']" @click="actived=0">我的收益</li>
+        <!-- <li :class="['pgow_hlist_li',actived===1?'active':'']" @click="actived=1">线上店长收益</li> -->
         <li :class="['pgow_hlist_li',actived===2?'active':'']" @click="actived=2">提现记录</li>
       </ul>
       <div class="list_wrap">
-        <real-profit v-if="actived===0"/>
-        <saler-profit v-if="actived===1"/>
-        <withdraw-record v-if="actived===2"/>
+        <real-profit v-if="actived===0" />
+        <saler-profit v-if="actived===1" />
+        <withdraw-record v-if="actived===2" />
       </div>
     </div>
   </div>
@@ -28,7 +28,7 @@ import WithdrawRecord from "@/pages/Components/distribute/WithdrawRecord.vue";
 import { mapActions } from "vuex";
 import { Icon } from "vant";
 export default {
-  name: "OnlineWallet",
+  name: "OffWallet",
   data() {
     return {
       title: "店长钱包",
