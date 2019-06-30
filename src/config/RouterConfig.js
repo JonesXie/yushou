@@ -5,10 +5,10 @@ import {
 } from "@/layout/methods.js"
 router.beforeEach((to, from, next) => {
   //上线时放开注释
-  // if (!notNull(localStorage.getItem("openId"))) {
-  //   sessionStorage.setItem("enterURL", window.location.href)
-  //   store.dispatch("getWX");
-  // }
+  if (!notNull(localStorage.getItem("openId"))) {
+    sessionStorage.setItem("enterURL", window.location.href)
+    store.dispatch("getWX");
+  }
   if (!notNull(store.state.wxURL)) {
     if (to.path === "/index") {
       // sessionStorage.setItem("firstURL", `${window.location.href}index`)
