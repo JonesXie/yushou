@@ -5,7 +5,7 @@
       <div class="swipeWrap">
         <van-swipe @change="swipeChange" class="swipe" :autoplay="3000">
           <van-swipe-item v-for="(v,i) in swiperList" :key="i" class="swipeItem">
-            <img :src="v" alt>
+            <img :src="v" alt />
           </van-swipe-item>
           <div class="custom-indicator" slot="indicator">{{ current + 1 }}/{{swiperList.length}}</div>
         </van-swipe>
@@ -33,22 +33,22 @@
         </li>
       </ul>
       <van-cell-group class="info">
-        <van-cell title="物流" :value="logistics"/>
+        <van-cell title="物流" :value="logistics" />
         <van-cell title="服务" is-link @click="showPower=true">
           <ul class="info_ul">
             <li>
-              <img src="@/assets/img/goods/pg_goods_pei.png" alt>假一赔十
+              <img src="@/assets/img/goods/pg_goods_pei.png" alt />假一赔十
             </li>
             <li>
-              <img src="@/assets/img/goods/pg_goods_pei.png" alt>包含税费
+              <img src="@/assets/img/goods/pg_goods_pei.png" alt />包含税费
             </li>
             <li>
-              <img src="@/assets/img/goods/pg_goods_pei.png" alt>售后无忧
+              <img src="@/assets/img/goods/pg_goods_pei.png" alt />售后无忧
             </li>
           </ul>
         </van-cell>
         <!-- <van-cell title="规格" is-link value="选则规格" @click="showParams=true"/> -->
-        <van-cell title="说明" is-link :value="shuoming" @click="showPrice=true"/>
+        <van-cell title="说明" is-link :value="shuoming" @click="showPrice=true" />
       </van-cell-group>
 
       <!-- 评论 -->
@@ -62,18 +62,18 @@
       <div class="detail">
         <div class="head">商品详情</div>
         <div class="content">
-          <img v-for="(v,i) in goodsInfo.goodsDesc" :key="i" :src="v" alt>
+          <img v-for="(v,i) in goodsInfo.goodsDesc" :key="i" :src="v" alt />
         </div>
       </div>
       <div class="buy_wrap">
         <div class="buy_L" @click="changeCollect">
-          <img v-if="goodsInfo.isCollect ===1" src="@/assets/img/goods/pg_goods_collected.png" alt>
-          <img v-else src="@/assets/img/goods/pg_goods_collect.png" alt>
+          <img v-if="goodsInfo.isCollect ===1" src="@/assets/img/goods/pg_goods_collected.png" alt />
+          <img v-else src="@/assets/img/goods/pg_goods_collect.png" alt />
           <p>收藏</p>
         </div>
         <div class="buy_C" v-if="goodsInfo.quickBuy === 1" @click="paramsPop('now')">
           <div class="buy_C_wrap">
-            <img src="@/assets/img/goods/pg_goods_flash.png" alt>
+            <img src="@/assets/img/goods/pg_goods_flash.png" alt />
             <div class="bcw_right">
               <p>￥{{goodsInfo.goodsPrice}}</p>
               <p>立即发货</p>
@@ -311,7 +311,10 @@ export default {
     }
   },
   created() {
-    findGoodsDetail({ goodsId: this.goodsId }).then(({ data }) => {
+    findGoodsDetail({
+      goodsId: this.goodsId,
+      distributorId: sessionStorage.getItem("distributorId")
+    }).then(({ data }) => {
       this.goodsInfo = data.data;
       this.commentAllNum = data.data.commentAllNum;
       this.commentNum = data.data.commentNum;

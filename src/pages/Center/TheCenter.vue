@@ -5,7 +5,7 @@
       <div class="pgch_content">
         <p class="title">
           <router-link to="/setting">
-            <img src="@/assets/img/center/pg_center_set.png" alt>
+            <img src="@/assets/img/center/pg_center_set.png" alt />
           </router-link>
           <!-- <router-link to="/">
             <img src="@/assets/img/center/pg_center_kefu.png" alt>
@@ -15,8 +15,8 @@
           <div class="tip">购物达人</div>
           <div class="info_cent">
             <div class="ic_tx">
-              <img src="@/assets/img/center/pg_center_dec.png" alt>
-              <img :src="userInfo.images" alt>
+              <img src="@/assets/img/center/pg_center_dec.png" alt />
+              <img :src="userInfo.images" alt />
             </div>
             <div class="ic_btn">{{userInfo.nickName}}</div>
             <van-row class="ic_row">
@@ -52,41 +52,41 @@
         <p class="pgco_h_my">我的订单</p>
         <router-link :to="`/myorder/0`" class="pgco_h_all">
           全部订单
-          <van-icon name="arrow"/>
+          <van-icon name="arrow" />
         </router-link>
       </div>
       <ul class="pgco_list">
         <li v-on:click="turnOrder(1)">
-          <img src="@/assets/img/center/pg_center_fukuan.png" alt>
+          <img src="@/assets/img/center/pg_center_fukuan.png" alt />
           <div class="tip" v-if="userInfo.waitPay >0">{{userInfo.waitPay}}</div>
           <p>待付款</p>
         </li>
         <li v-on:click="turnOrder(2)">
-          <img src="@/assets/img/center/pg_center_wait.png" alt>
+          <img src="@/assets/img/center/pg_center_wait.png" alt />
           <div class="tip" v-if="userInfo.waiting >0">{{userInfo.waiting}}</div>
           <p>调货中</p>
         </li>
         <li v-on:click="turnOrder(3)">
-          <img src="@/assets/img/center/pg_center_fahuo.png" alt>
+          <img src="@/assets/img/center/pg_center_fahuo.png" alt />
           <div class="tip" v-if="userInfo.waitDeliver >0">{{userInfo.waitDeliver}}</div>
           <p>待发货</p>
         </li>
         <li v-on:click="turnOrder(4)">
-          <img src="@/assets/img/center/pg_center_shouhuo.png" alt>
+          <img src="@/assets/img/center/pg_center_shouhuo.png" alt />
           <div class="tip" v-if="userInfo.waitReceipt >0">{{userInfo.waitReceipt}}</div>
           <p>待收货</p>
         </li>
         <li v-on:click="turnOrder(5)">
-          <img src="@/assets/img/center/pg_center_suc.png" alt>
+          <img src="@/assets/img/center/pg_center_suc.png" alt />
           <div class="tip" v-if="userInfo.totalProfit >0">{{userInfo.totalProfit}}</div>
           <p>交易成功</p>
         </li>
       </ul>
     </div>
     <van-cell-group class="pgc_link">
-      <van-cell title="我的挂卖" is-link to="/mysales"/>
-      <van-cell title="我的地址" is-link to="/mysite"/>
-      <van-cell title="店长中心" is-link to="/distribution"/>
+      <van-cell title="我的挂卖" is-link to="/mysales" />
+      <van-cell title="我的地址" is-link to="/mysite" />
+      <van-cell title="店长中心" is-link to="/distribution" />
     </van-cell-group>
     <div class="pgc_utils pgc_order">
       <div class="pgco_h">
@@ -95,25 +95,25 @@
       <van-row class="pgco_list">
         <van-col span="6" class="utils">
           <router-link to="/mycollection">
-            <img src="@/assets/img/center/pg_center_collect.png" alt>
+            <img src="@/assets/img/center/pg_center_collect.png" alt />
             <p>我的收藏</p>
           </router-link>
         </van-col>
         <van-col span="6" class="utils">
-          <router-link to="/invitation">
-            <img src="@/assets/img/center/pg_center_friends.png" alt>
+          <router-link :to="{path:`/invitation/${userInfo.userName}/${userInfo.phone}`}">
+            <img src="@/assets/img/center/pg_center_friends.png" alt />
             <p>邀请好友</p>
           </router-link>
         </van-col>
         <van-col span="6" class="utils">
           <router-link to="/questions">
-            <img src="@/assets/img/center/pg_center_questions.png" alt>
+            <img src="@/assets/img/center/pg_center_questions.png" alt />
             <p>常见问题</p>
           </router-link>
         </van-col>
         <van-col span="6" class="utils">
           <router-link to="/about">
-            <img src="@/assets/img/center/pg_center_owner.png" alt>
+            <img src="@/assets/img/center/pg_center_owner.png" alt />
             <p>关于我们</p>
           </router-link>
         </van-col>

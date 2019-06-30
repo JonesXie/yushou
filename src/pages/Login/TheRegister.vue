@@ -1,9 +1,9 @@
 <template>
   <div class="pg_register pg_login">
-    <img src="@/assets/logo.png" alt class="logo">
+    <img src="@/assets/logo.png" alt class="logo" />
     <div class="pgl_input">
       <div class="num_input van-hairline--bottom">
-        <img src="@/assets/img/login/pg_login_phone.png" alt class="num_img">
+        <img src="@/assets/img/login/pg_login_phone.png" alt class="num_img" />
         <input
           type="tel"
           placeholder="请输入手机号码"
@@ -11,11 +11,11 @@
           @blur="validPhone"
           v-model="phone"
           maxlength="11"
-        >
+        />
       </div>
       <div class="msn_input van-hairline--bottom">
-        <img src="@/assets/img/login/pg_login_safe.png" alt class="msn_img">
-        <input type="text" placeholder="输入短信验证码" class="num" @blur="validMsn" v-model="msn">
+        <img src="@/assets/img/login/pg_login_safe.png" alt class="msn_img" />
+        <input type="text" placeholder="输入短信验证码" class="num" @blur="validMsn" v-model="msn" />
         <p class="msn_tips" @click="getCode">{{msnTxt}}</p>
       </div>
       <!-- <div class="mima_input van-hairline--bottom">
@@ -23,7 +23,7 @@
         <input type="password" placeholder="请设置登录密码" class="mima" v-model="psw">
       </div>-->
       <div class="btn" @click="submit">立即注册</div>
-      <!-- <router-link to="/login" class="tips">已有账号，去登陆</router-link> -->
+      <router-link to="/login" class="tips">已有账号，去登陆</router-link>
     </div>
   </div>
 </template>
@@ -33,6 +33,7 @@ import { mapActions } from "vuex";
 import { Toast } from "vant";
 import { toSendSms, thirdlyRegister } from "@/api/login.js";
 import { notNull } from "@/layout/methods.js";
+import { setTimeout } from "timers";
 export default {
   name: "register",
   data() {
@@ -42,7 +43,8 @@ export default {
       msn: null,
       msnTxt: "获取验证码",
       isClick: true,
-      time: 60
+      time: 60,
+      inviter: null
     };
   },
   methods: {
@@ -106,7 +108,7 @@ export default {
               phone: this.phone,
               vcode: this.msn,
               // password: this.psw,
-              inviter: null,
+              inviter: this.inviter,
               nickName: wxData.nickname,
               sex: wxData.sex,
               wxId: wxData.unionid,
@@ -114,7 +116,7 @@ export default {
             };
             thirdlyRegister(_data).then(({ data }) => {
               if (data.code === 1) {
-                this.$notify("绑定成功");
+                this.$notify("注册成功");
                 localStorage.setItem("token", data.token);
                 this.$store.commit("SET_Token", data.token);
                 this.$router.push("/index");
@@ -130,12 +132,19 @@ export default {
           this.$toast.fail("请填写手机号码");
         }
       } else {
-        this.$toast("请先进行授权");
-        this.$router.push("/login");
+        this.$toast("请先进行微信授权");
+        let That = this;
+        setTimeout(() => {
+          sessionStorage.setItem("enterURL", window.location.href);
+          That.$store.dispatch("getWX");
+        }, 2500);
       }
     }
   },
   mounted() {
+    if (notNull(this.$route.query.inviter)) {
+      this.inviter = this.$route.query.inviter;
+    }
     this.ChangeStatus(false);
   },
   beforeDestroy() {

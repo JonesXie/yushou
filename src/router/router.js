@@ -162,7 +162,7 @@ const RouterMap = [
     component: () => import('@/pages/Center/TheQuestion.vue')
   },
   {
-    path: '/invitation',
+    path: '/invitation/:code/:phone',
     name: 'invitation',
     component: () => import('@/pages/Center/MyInvitation.vue')
   },

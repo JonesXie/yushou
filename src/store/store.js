@@ -14,6 +14,8 @@ const state = {
   fromToLogin: "/index",
   Token: null,
   wxData: null,
+  wxURL: null,
+  enterURL: null
 };
 const mutations = {
   SET_STICKTOP: (state, val) => {
@@ -27,7 +29,15 @@ const mutations = {
   },
   SET_WxData: (state, val) => {
     state.wxData = val
-  }
+  },
+  //微信jssdkURL
+  SET_WxURL: (state, val) => {
+    state.wxURL = val
+  },
+  //进入时URL
+  SET_EnterURL: (state, val) => {
+    state.enterURL = val
+  },
 };
 const actions = {
   ChangeStickTop: ({
@@ -39,6 +49,12 @@ const actions = {
     commit
   }, val) => {
     commit('SET_WxData', val)
+  },
+  //进入时URL
+  setEnterURL: ({
+    commit
+  }, val) => {
+    commit('SET_EnterURL', val)
   },
   //微信登录
   getWX: () => {

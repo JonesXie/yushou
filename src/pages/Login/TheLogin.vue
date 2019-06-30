@@ -1,9 +1,9 @@
 <template>
   <div class="pg_login">
-    <img src="@/assets/logo.png" alt class="logo">
+    <img src="@/assets/logo.png" alt class="logo" />
     <div class="pgl_input" v-if="showPhone">
       <div class="num_input van-hairline--bottom">
-        <img src="@/assets/img/login/pg_login_phone.png" alt class="num_img">
+        <img src="@/assets/img/login/pg_login_phone.png" alt class="num_img" />
         <input
           type="tel"
           placeholder="请输入手机号码"
@@ -11,11 +11,11 @@
           @blur="validPhone"
           v-model="phone"
           maxlength="11"
-        >
+        />
       </div>
       <div class="mima_input van-hairline--bottom">
-        <img src="@/assets/img/login/pg_login_lock.png" alt class="mima_img">
-        <input type="password" placeholder="请输入登录密码" class="mima" v-model="psw">
+        <img src="@/assets/img/login/pg_login_lock.png" alt class="mima_img" />
+        <input type="password" placeholder="请输入登录密码" class="mima" v-model="psw" />
       </div>
       <p class="tips">
         <router-link to="/register">立即注册</router-link>
@@ -28,7 +28,7 @@
       <div class="title">第三方登录</div>
       <div class="tx_login">
         <div class="tx_login_w" @click="wxLogin">
-          <img src="@/assets/img/login/pg_login_wx.png" alt>
+          <img src="@/assets/img/login/pg_login_wx.png" alt />
           <p>微信</p>
         </div>
         <!-- qq登录 -->
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { doLogin, getWXAccessToken } from "@/api/login.js";
+import { doLogin } from "@/api/login.js";
 import { mapActions } from "vuex";
 import { Toast } from "vant";
 import { notNull } from "@/layout/methods.js";
@@ -94,14 +94,24 @@ export default {
     },
     //微信登录授权
     wxLogin() {
-      doLogin({ wxId: this.$store.state.wxData.unionid }).then(({ data }) => {
-        this.$toast(data.msg);
-        if (data.code === 1) {
-          localStorage.setItem("token", data.token);
-          this.$store.commit("SET_Token", data.token);
-          this.$router.push(this.$store.state.fromToLogin);
-        }
-      });
+      let wxData = this.$store.state.wxData;
+      if (notNull(wxData)) {
+        doLogin({ wxId: this.$store.state.wxData.unionid }).then(({ data }) => {
+          this.$toast(data.msg);
+          if (data.code === 1) {
+            localStorage.setItem("token", data.token);
+            this.$store.commit("SET_Token", data.token);
+            this.$router.push(this.$store.state.fromToLogin);
+          }
+        });
+      } else {
+        this.$toast("请先进行微信授权");
+        let That = this;
+        setTimeout(() => {
+          sessionStorage.setItem("enterURL", window.location.href);
+          That.$store.dispatch("getWX");
+        }, 2500);
+      }
     }
   },
   mounted() {

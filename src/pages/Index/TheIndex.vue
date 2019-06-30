@@ -1,12 +1,12 @@
 <template>
   <div class="pg_index">
     <div class="pi_h">
-      <img src="@/assets/img/pg_index_scan.png" alt @click="doScan">
+      <img src="@/assets/img/pg_index_scan.png" alt @click="doScan" />
       <router-link to="/thesearch" class="pi_h_input">
         <span>搜索商品</span>
       </router-link>
       <router-link to="/thenotices">
-        <img src="@/assets/img/pg_index_msg.png" alt>
+        <img src="@/assets/img/pg_index_msg.png" alt />
       </router-link>
     </div>
     <div class="pi_list">
@@ -56,14 +56,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["ChangeActive"]),
+    ...mapActions(["ChangeActive", "setWxData"]),
     doScan() {
       let Nav = window.navigator.userAgent.toLowerCase();
       // let isAndroid = `${Nav}`.includes("android");
       let isIphone = `${Nav}`.includes("iphone");
       let isURL = window.location.href;
       if (isIphone) {
-        isURL = sessionStorage.getItem("firstURL");
+        // isURL = sessionStorage.getItem("firstURL");
+        isURL = this.$store.state.wxURL;
       }
       WXSign({ url: isURL }).then(({ data }) => {
         if (data.code === 1) {
@@ -72,6 +73,7 @@ export default {
       });
     },
     WXconfig(val) {
+      let That = this;
       wx.config({
         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: val.appId, // 必填，公众号的唯一标识
@@ -86,7 +88,12 @@ export default {
           scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
           success: function(res) {
             var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-            console.log(result);
+            if (`${result}`.includes("m.fishmaimai.com")) {
+              let path = result.split("m.fishmaimai.com")[1];
+              That.$router.push(path);
+            } else {
+              That.$toast("二维码不规范");
+            }
           }
         });
       });
@@ -103,8 +110,9 @@ export default {
         code: isCode
       };
       getWXAccessToken(_data).then(({ data }) => {
-        this.setWxData(data.data.wxUserMsg);
-        localStorage.setItem("openId", data.data.openId);
+        this.setWxData(data.data.wxUserMsg); //vuex存储
+        localStorage.setItem("openId", data.data.openId); //vuex存储
+        this.$router.replace(sessionStorage.getItem("enterURL")); //跳转到进来时的URL
       });
     }
     this.ChangeActive(0);

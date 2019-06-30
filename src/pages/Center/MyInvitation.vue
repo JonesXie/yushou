@@ -4,7 +4,7 @@
       <div class="pgmi_h">
         <div class="pgmi_code">
           <p>您的邀请码</p>
-          <p>YQ0000000</p>
+          <p>{{code}}</p>
         </div>
         <p class="tips01">通过邀请码成功邀请1位好友加入</p>
         <p class="tips02">您将获得积分，优惠劵和现金奖励。</p>
@@ -37,6 +37,8 @@ export default {
     return {
       title: "好友邀请",
       backPath: "", //返回路由，可删除
+      code: "YQ0000088",
+      phone: null,
       datalist: []
     };
   },
@@ -55,7 +57,8 @@ export default {
       let isIphone = `${Nav}`.includes("iphone");
       let isURL = window.location.href;
       if (isIphone) {
-        isURL = sessionStorage.getItem("firstURL");
+        // isURL = sessionStorage.getItem("firstURL");
+        isURL = this.$store.state.wxURL;
       }
       WXSign({ url: isURL }).then(({ data }) => {
         if (data.code === 1) {
@@ -64,26 +67,41 @@ export default {
       });
     },
     WXconfig(val) {
+      let That = this;
       wx.config({
         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: val.appId, // 必填，公众号的唯一标识
         timestamp: val.timestamp, // 必填，生成签名的时间戳
         nonceStr: val.noncestr, // 必填，生成签名的随机串
         signature: val.signature, // 必填，签名
-        jsApiList: ["scanQRCode"] // 必填，需要使用的JS接口列表
+        jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"] // 必填，需要使用的JS接口列表
       });
       wx.ready(function() {
-        wx.scanQRCode({
-          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-          scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-          success: function(res) {
-            var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+        //分享到朋友
+        wx.updateAppMessageShareData({
+          title: "【预兽】不赚差价的电商，你见过？", // 分享标题
+          desc: "低价预售，不怕比价。大牌正品，质量保证。订单挂卖，获取盈利。", // 分享描述
+          link: `https://m.fishmaimai.com/register?inviter=${That.phone}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: "", // 分享图标
+          success: function() {
+            That.$toast("分享成功");
+          }
+        });
+        //分享到朋友圈
+        wx.updateTimelineShareData({
+          title: "【预兽】不赚差价的电商，你见过？", // 分享标题
+          link: `https://m.fishmaimai.com/register?inviter=${That.phone}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: "", // 分享图标
+          success: function() {
+            That.$toast("分享成功");
           }
         });
       });
     }
   },
   mounted() {
+    this.code = this.$route.params.code;
+    this.phone = this.$route.params.phone;
     this.init();
   }
 };

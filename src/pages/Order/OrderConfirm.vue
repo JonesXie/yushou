@@ -17,11 +17,11 @@
 
       <van-cell-group class="order">
         <van-cell class="order_head_home">
-          <van-icon name="wap-home"/>
+          <van-icon name="wap-home" />
           <span>{{allInfo.storeName}}</span>
         </van-cell>
         <div class="detail">
-          <img :src="allInfo.goodsImages" alt>
+          <img :src="allInfo.goodsImages" alt />
           <div class="wrap">
             <p>{{allInfo.goodsName}}</p>
             <p class="guige">
@@ -43,7 +43,7 @@
           <van-radio name="01" checked-color="#ea047b">是</van-radio>
           <van-radio name="02" checked-color="#ea047b">否</van-radio>
         </van-radio-group>
-        <van-icon name="question-o" class="guamai_tips" @click="tips=true"/>
+        <van-icon name="question-o" class="guamai_tips" @click="tips=true" />
       </div>
       <van-cell title="发货时间">
         <span>{{allInfo.goodsDeliverytime}}</span>
@@ -79,7 +79,7 @@
       </div>
       <van-popup v-model="tips" class="tips_wrap">
         <div class="tips_h">
-          <img class="tips_img" src="@/assets/img/order/pg_orderconfirm_tips.png" alt>
+          <img class="tips_img" src="@/assets/img/order/pg_orderconfirm_tips.png" alt />
           <span>选择挂卖可以赚钱哦！</span>
         </div>
         <div class="tips_c">通过挂卖功能，在您等待发货的过程中如若有人购买了您的订单，您将获得订单差价的收益。</div>
@@ -155,7 +155,8 @@ export default {
           couponId: _couponId,
           goodsPrivilege: null,
           skuId: this.allInfo.skuId,
-          buyType: this.allInfo.buyType
+          buyType: this.allInfo.buyType,
+          distributorId: sessionStorage.getItem("distributorId")
         };
         doSubmitOrder(_data).then(({ data }) => {
           if (data.code == "1") {
