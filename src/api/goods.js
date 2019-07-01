@@ -32,3 +32,8 @@ export function insertComment(data, isJson) {
 export function toComfirmOrder(data, isJson) {
   return post('/order/toComfirmOrder.api', data, isJson)
 }
+
+//商品分享链接获取
+// export function toComfirmOrder(data, isJson) {
+//   return get('/order/toComfirmOrder.api', data, isJson)
+// }

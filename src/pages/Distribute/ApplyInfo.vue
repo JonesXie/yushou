@@ -5,19 +5,19 @@
       <ul class="pgai_content">
         <li class="input input_name van-hairline--bottom">
           <label for="name">姓名:</label>
-          <input type="text" id="name" v-model="name" class="name_input">
+          <input type="text" id="name" v-model="name" class="name_input" />
         </li>
         <li class="input input_phone van-hairline--bottom">
           <label for="phone">手机:</label>
-          <input type="text" id="phone" @blur="validPhone" v-model="phone" class="phone_input">
+          <input type="text" id="phone" @blur="validPhone" v-model="phone" class="phone_input" />
         </li>
         <li class="input input_name" @click="siteShow=true">
           <label>地址:</label>
           <em class="area">{{showArea}}</em>
-          <van-icon class="area_icon" name="arrow-down"/>
+          <van-icon class="area_icon" name="arrow-down" />
         </li>
         <li class="input input_site van-hairline--bottom">
-          <input type="text" class="site_input" v-model="detailSite" placeholder="请输入详细地址">
+          <input type="text" class="site_input" v-model="detailSite" placeholder="请输入详细地址" />
         </li>
         <li class="input_phone">
           <label for="phone">留言:</label>
@@ -25,8 +25,8 @@
         <textarea class="text_area" v-model="remake"></textarea>
       </ul>
       <div class="pgai_tips" @click="readTips">
-        <img v-if="selected" src="@/assets/img/ly_choosed.png" alt>
-        <img v-else src="@/assets/img/ly_choose.png" alt>
+        <img v-if="selected" src="@/assets/img/ly_choosed.png" alt />
+        <img v-else src="@/assets/img/ly_choose.png" alt />
         我已阅读预兽
         <a style="color:#fa4ba6">母婴门店</a>店长细则
       </div>
@@ -65,7 +65,8 @@ export default {
       phone: null,
       detailSite: null,
       remake: null,
-      type: 0 //0线下，1线上
+      type: 0, //0线下，1线上
+      distributorId: null
     };
   },
   components: {
@@ -121,7 +122,7 @@ export default {
                   province: this.chooseArea[0].name,
                   city: this.chooseArea[1].name,
                   district: this.chooseArea[2].name,
-                  distributorId: null
+                  distributorId: this.distributorId
                 };
                 saveUserDistributorApply(_data).then(({ data }) => {
                   if (data.code === 1) {
@@ -150,6 +151,9 @@ export default {
   },
   mounted() {
     this.type = this.$route.params.type;
+    if (notNull(this.$route.query.distributorId)) {
+      this.distributorId = this.$route.query.distributorId;
+    }
   }
 };
 </script>

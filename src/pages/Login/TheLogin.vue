@@ -108,9 +108,12 @@ export default {
         this.$toast("请先进行微信授权");
         let That = this;
         setTimeout(() => {
-          sessionStorage.setItem("enterURL", window.location.href);
+          sessionStorage.setItem(
+            "enterURL",
+            `${window.location.href}`.split(document.domain)[1]
+          );
           That.$store.dispatch("getWX");
-        }, 2500);
+        }, 1500);
       }
     }
   },

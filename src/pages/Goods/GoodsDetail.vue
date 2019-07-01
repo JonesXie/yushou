@@ -51,7 +51,7 @@
         <van-cell title="说明" is-link :value="shuoming" @click="showPrice=true" />
       </van-cell-group>
 
-      <!-- 评论 -->
+      <!-- 评论 模板-->
       <goods-judge
         :commentNum="commentNum"
         :commentPageInfo="commentPageInfo"
@@ -66,27 +66,45 @@
         </div>
       </div>
       <div class="buy_wrap">
-        <div class="buy_L" @click="changeCollect">
-          <img v-if="goodsInfo.isCollect ===1" src="@/assets/img/goods/pg_goods_collected.png" alt />
-          <img v-else src="@/assets/img/goods/pg_goods_collect.png" alt />
-          <p>收藏</p>
-        </div>
-        <div class="buy_C" v-if="goodsInfo.quickBuy === 1" @click="paramsPop('now')">
-          <div class="buy_C_wrap">
-            <img src="@/assets/img/goods/pg_goods_flash.png" alt />
-            <div class="bcw_right">
-              <p>￥{{goodsInfo.goodsPrice}}</p>
-              <p>立即发货</p>
-            </div>
+        <div class="buy_L">
+          <div class="buy_L_L" @click="changeCollect">
+            <img
+              v-if="goodsInfo.isCollect ===1"
+              src="@/assets/img/goods/pg_goods_collected.png"
+              alt
+            />
+            <img v-else src="@/assets/img/goods/pg_goods_collect.png" alt />
+            <p>收藏</p>
+          </div>
+          <div class="buy_L_R" @click="getShareLink">
+            <img class="shareIcon" src="@/assets/img/ly_goods_share.png" alt />
+            <p>分享</p>
           </div>
         </div>
-
-        <div class="buy_R" @click="paramsPop('yu')">
-          <p>￥{{goodsInfo.goodsSalePrice}}</p>
-          <p>预售</p>
+        <div class="buy_btn" v-if="goodsInfo.goodsType === 1">
+          <div class="buy_C" v-if="goodsInfo.quickBuy === 1" @click="paramsPop('now')">
+            <div class="buy_C_wrap">
+              <img src="@/assets/img/goods/pg_goods_flash.png" alt />
+              <div class="bcw_right">
+                <p>￥{{goodsInfo.goodsPrice}}</p>
+                <p>立即发货</p>
+              </div>
+            </div>
+          </div>
+          <div class="buy_R" @click="paramsPop('yu')">
+            <p>￥{{goodsInfo.goodsSalePrice}}</p>
+            <p>预售</p>
+          </div>
+        </div>
+        <div class="buy_btn">
+          <div class="buy_submit" @click="paramsPop('now')">立即购买</div>
         </div>
       </div>
     </div>
+    <van-popup v-model="showPopup" class="share_pop" @click.native="showPopup=false">
+      <img src="@/assets/img/ly_WXshareIcon.png" alt />
+      <div class="txt">点击右上角，立即分享！</div>
+    </van-popup>
     <!-- 参数选择弹窗 01-->
     <van-actionsheet v-model="showParams01" :close-on-click-overlay="false" class="params_pop">
       <params-choose
@@ -186,13 +204,16 @@ import {
   Icon,
   Radio,
   RadioGroup,
-  Stepper
+  Stepper,
+  Popup
 } from "vant";
 import GoodsJudge from "./GoodsJudge";
 import { findGoodsDetail } from "@/api/goods.js";
 import { doAddCollect, doDelUserCollect } from "@/api/yanxuan.js";
 import ParamsChoose from "./ParamsChoose.vue";
 import { notNull } from "@/layout/methods.js";
+import wx from "weixin-js-sdk";
+import { WXSign } from "@/api/index.js";
 export default {
   name: "GoodsDetail",
   props: ["goodsId"],
@@ -224,7 +245,8 @@ export default {
       showParams01: false,
       showParams02: false,
       showPrice: false,
-      showPower: false
+      showPower: false,
+      showPopup: false
     };
   },
   components: {
@@ -238,7 +260,8 @@ export default {
     [Icon.name]: Icon,
     [Radio.name]: Radio,
     [RadioGroup.name]: RadioGroup,
-    [Stepper.name]: Stepper
+    [Stepper.name]: Stepper,
+    [Popup.name]: Popup
   },
   computed: {
     shuoming() {
@@ -308,6 +331,68 @@ export default {
         ];
         this.paramsLimit = [{ goodsId: val.id }];
       }
+    },
+    //分享
+    share(isLink) {
+      let Nav = window.navigator.userAgent.toLowerCase();
+      // let isAndroid = `${Nav}`.includes("android");
+      let isIphone = `${Nav}`.includes("iphone");
+      let isURL = window.location.href;
+      if (isIphone) {
+        // isURL = sessionStorage.getItem("firstURL");
+        isURL = this.$store.state.wxURL;
+      }
+      WXSign({ url: isURL }).then(({ data }) => {
+        if (data.code === 1) {
+          this.showPopup = true;
+          this.WXconfig(data.data, isLink);
+        }
+      });
+    },
+    getShareLink() {
+      // findGoodsDetail({
+      //   goodsId: this.goodsId,
+      //   distributorId: sessionStorage.getItem("distributorId")
+      // }).then(({ data }) => {
+      //   if (data.code === 1) {
+      //     this.goodsInfo = data.data;
+      //     this.share();
+      //   }
+      // });
+    },
+    WXconfig(val, isLink) {
+      let That = this;
+      wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: val.appId, // 必填，公众号的唯一标识
+        timestamp: val.timestamp, // 必填，生成签名的时间戳
+        nonceStr: val.noncestr, // 必填，生成签名的随机串
+        signature: val.signature, // 必填，签名
+        jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"] // 必填，需要使用的JS接口列表
+      });
+      wx.ready(function() {
+        //分享到朋友
+        wx.updateAppMessageShareData({
+          title: That.goodsInfo.goodsName, // 分享标题
+          desc: "低价预售，不怕比价。大牌正品，质量保证。订单挂卖，获取盈利。", // 分享描述
+          link: isLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: That.goodsInfo.goodsImages, // 分享图标
+          success: function() {
+            // That.$toast("分享成功");
+            // That.showPopup = false;
+          }
+        });
+        //分享到朋友圈
+        wx.updateTimelineShareData({
+          title: That.goodsInfo.goodsName, // 分享标题
+          link: isLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: That.goodsInfo.goodsImages, // 分享图标
+          success: function() {
+            // That.$toast("分享成功");
+            // That.showPopup = false;
+          }
+        });
+      });
     }
   },
   created() {
@@ -520,44 +605,63 @@ export default {
         height: 20px;
         margin-bottom: 5px;
       }
-    }
-    .buy_C {
-      flex: my-percent(130, 375);
-      background: #333;
-      font-size: 15px;
-      color: #fff;
-      text-align: center;
-      padding-top: 10px;
-      box-sizing: border-box;
-      .buy_C_wrap {
+      .buy_L_L {
+        width: 50%;
         display: inline-block;
+      }
+      .buy_L_R {
+        width: 50%;
+        display: inline-block;
+      }
+    }
+    .buy_btn {
+      flex: my-percent(260, 375);
+      .buy_C {
+        width: 50%;
+        display: inline-block;
+        background: #333;
+        font-size: 15px;
+        color: #fff;
+        text-align: center;
+        padding-top: 10px;
         box-sizing: border-box;
-        img {
-          width: 17px;
-          height: 31px;
-          vertical-align: top;
-        }
-        .bcw_right {
+        height: 100%;
+        .buy_C_wrap {
           display: inline-block;
-          margin-left: 3px;
-          p:last-child {
-            font-size: 14px;
-            margin-top: 5px;
+          box-sizing: border-box;
+          img {
+            width: 17px;
+            height: 31px;
+            vertical-align: top;
+          }
+          .bcw_right {
+            display: inline-block;
+            margin-left: 3px;
+            p:last-child {
+              font-size: 14px;
+              margin-top: 5px;
+            }
           }
         }
       }
-    }
-    .buy_R {
-      flex: my-percent(130, 375);
-      font-size: 15px;
-      background: $Color;
-      color: #fff;
-      text-align: center;
-      padding-top: 10px;
-      box-sizing: border-box;
-      p:last-child {
-        font-size: 14px;
-        margin-top: 5px;
+      .buy_R {
+        width: 50%;
+        display: inline-block;
+        font-size: 15px;
+        background: $Color;
+        color: #fff;
+        text-align: center;
+        padding-top: 10px;
+        box-sizing: border-box;
+        height: 100%;
+        p:last-child {
+          font-size: 14px;
+          margin-top: 5px;
+        }
+      }
+      .buy_submit {
+        @include btn(90%, 40px);
+        margin: 7px 5%;
       }
     }
   }
@@ -608,6 +712,26 @@ export default {
       box-sizing: border-box;
       margin-top: 10px;
     }
+  }
+}
+.share_pop {
+  background: transparent;
+  width: 100vw;
+  height: 100vh;
+  img {
+    position: absolute;
+    right: 10vw;
+    top: 10vw;
+    width: 50%;
+    height: auto;
+  }
+  .txt {
+    position: absolute;
+    top: 300px;
+    color: #fff;
+    font-size: 20px;
+    text-align: center;
+    width: 100%;
   }
 }
 </style>

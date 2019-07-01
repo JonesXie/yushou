@@ -201,6 +201,7 @@ export default {
         margin-top: 23px;
         display: inline-block;
         position: relative;
+        @include myBG;
         .user_icon_dailog {
           font-size: 9px;
           height: 15px;

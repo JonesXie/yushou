@@ -33,8 +33,8 @@
               <em>{{v.goodsSalePrice}}.0</em>元
             </div>
             <div class="cut">
-              <div>利润比例：{{v.scale}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.orderSellProfit}}元</div>
-              <div>佣金比例：{{v.scale}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.orderSellProfit}}元</div>
+              <div>利润比例：{{100 - Number(v.scale)}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.mainIncome}}元</div>
+              <div>佣金比例：{{v.scale}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.income}}元</div>
             </div>
           </div>
         </li>

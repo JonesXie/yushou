@@ -24,24 +24,22 @@
           :immediate-check="false"
         >
           <ul class="pgdo_list">
-            <li class="pgdo_li" v-for="(v, i) in dataList" :key="i" @click="turnPage(v.id)">
+            <li class="pgdo_li" v-for="(v, i) in dataList" :key="i">
               <div class="img_icon" :style="{backgroundImage:'url('+v.userImg+')'}"></div>
-              <div class="li_info">
-                <p class="li_info_h">
-                  {{v.name}}
-                  <van-icon class="ellipsis fr" name="ellipsis" @click="handlerOpt(i)"></van-icon>
-                </p>
+              <div class="li_info" @click="turnPage(v.id)">
+                <p class="li_info_h">{{v.name}}</p>
                 <p class="li_info_c">
                   分成比例：{{v.scale}}%
                   <em>团队人数：{{v.userNum}}</em>
                 </p>
                 <p>加入时间：{{v.createDateLabel}}</p>
-                <div class="li_opt van-hairline--surround" v-if="v.opt">
-                  <p @click="fixRate(v.id,i)">修改分成比例</p>
-                  <p @click="delCount(v.id,i)">解除绑定</p>
-                </div>
                 <div class="tips">{{v.number}}</div>
               </div>
+              <div class="li_opt van-hairline--surround" v-if="v.opt">
+                <p @click="fixRate(v.id,i)">修改分成比例</p>
+                <p @click="delCount(v.id,i)">解除绑定</p>
+              </div>
+              <van-icon class="ellipsis" name="ellipsis" @click="handlerOpt(i)"></van-icon>
             </li>
           </ul>
         </van-list>
@@ -341,6 +339,7 @@ export default {
       padding: 15px;
       display: flex;
       align-items: center;
+      position: relative;
       .img_icon {
         width: 50px;
         height: 50px;
@@ -361,25 +360,6 @@ export default {
           font-weight: bold;
           overflow: hidden;
           color: #333;
-          .ellipsis {
-            transform: rotate(90deg);
-          }
-        }
-        .li_opt {
-          position: absolute;
-          top: -2px;
-          right: 10px;
-          background: #f4f4f4;
-          border-radius: 5px;
-          font-size: 13px;
-          padding: 15px;
-          z-index: 99;
-          p {
-            color: #333;
-          }
-          p:last-child {
-            margin-top: 15px;
-          }
         }
         .tips {
           position: absolute;
@@ -402,6 +382,28 @@ export default {
       p {
         font-size: 12px;
         color: #999;
+      }
+      .ellipsis {
+        transform: rotate(90deg);
+        position: absolute;
+        top: 15px;
+        right: 11px;
+      }
+      .li_opt {
+        position: absolute;
+        top: 13px;
+        right: 22px;
+        background: #f4f4f4;
+        border-radius: 5px;
+        font-size: 13px;
+        padding: 15px;
+        z-index: 99;
+        p {
+          color: #333;
+        }
+        p:last-child {
+          margin-top: 15px;
+        }
       }
     }
   }
