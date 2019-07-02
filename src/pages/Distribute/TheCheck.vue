@@ -70,9 +70,9 @@ export default {
     [Popup.name]: Popup
   },
   methods: {
-    yes() {
+    yes(val) {
       let _data = {
-        applyId: this.id
+        applyId: val
       };
       saveDistributor(_data).then(({ data }) => {
         this.$toast(data.msg);
@@ -90,6 +90,7 @@ export default {
     },
     confirmRate() {
       if (notNull(this.reRate)) {
+        this.ratePop = false;
         this.reFuse();
       } else {
         this.$toast("请输入拒绝理由");
@@ -102,7 +103,7 @@ export default {
       };
       rejectUserDistributorApply(_data).then(({ data }) => {
         this.$toast(data.msg);
-        if (data.code === 1) {
+        if (data.msg === "拒绝成功") {
           let That = this;
           setTimeout(() => {
             That.onInit();
@@ -211,6 +212,46 @@ export default {
         position: relative;
         top: -12px;
       }
+    }
+  }
+}
+.tips_wrap {
+  width: 310px;
+  height: 190px;
+  background: #fff;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 38px 35px 0 35px;
+  .tips_h {
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+  }
+  .tips_c {
+    width: 100%;
+    border: 1px solid #999;
+    height: 33px;
+    box-sizing: border-box;
+    margin: 36px 0 24px;
+    input {
+      width: 90%;
+      height: 100%;
+      padding-left: 10px;
+      box-sizing: border-box;
+    }
+  }
+  .tips_btn {
+    width: 100%;
+    text-align: center;
+    .tips_btn1 {
+      display: inline-block;
+      width: 70px;
+      height: 26px;
+      line-height: 26px;
+      background: $Color;
+      color: #fff;
+      font-size: 15px;
+      border-radius: 5px;
     }
   }
 }

@@ -3,7 +3,8 @@
     <div class="pg_h_nav">
       <van-icon name="arrow-left" @click="GoBack()" />
       <span>{{title}}</span>
-      <img class="fr" src="@/assets/img/distribution/pg_customermanage_add.png" alt />
+      <!-- 添加店长图片 -->
+      <!-- <img class="fr" src="@/assets/img/distribution/pg_customermanage_add.png" alt /> -->
     </div>
     <div class="head_bg"></div>
     <!-- content -->
@@ -17,7 +18,12 @@
           finished-text="没有更多了"
           :immediate-check="false"
         >
-          <div class="list_li" v-for="(v,i) in dataList" :key="i">
+          <div
+            class="list_li"
+            v-for="(v,i) in dataList"
+            :key="i"
+            @click="turnPage(v.id,v.distributorType,v.orderQuantity,v.rental)"
+          >
             <div class="list_li_l">
               <div class="user_icon" :style="{backgroundImage:'url('+v.userImages+')'}">
                 <div class="user_icon_dailog">{{v.distributorTypeLabel}}</div>
@@ -73,6 +79,12 @@ export default {
   },
   methods: {
     ...mapActions(["ChangeStatus"]),
+    turnPage(val, type, num, money) {
+      this.$router.push({
+        path: `/distributeorderdetail/${val}`,
+        query: { type: type, num: num, money: money }
+      });
+    },
     GoBack() {
       this.$router.back(-1);
     },

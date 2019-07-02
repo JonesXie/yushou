@@ -325,6 +325,12 @@ const RouterMap = [
     name: 'offdistributeorder',
     component: () => import('@/pages/Distribute/OffDistributeOrder.vue')
   },
+  //订单明细
+  {
+    path: '/distributeorderdetail/:userId',
+    name: 'distributeorderdetail',
+    component: () => import('@/pages/Distribute/DistributeOrderDetail.vue')
+  },
   //店长审核
   {
     path: '/thecheck',

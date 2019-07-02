@@ -208,7 +208,7 @@ import {
   Popup
 } from "vant";
 import GoodsJudge from "./GoodsJudge";
-import { findGoodsDetail } from "@/api/goods.js";
+import { findGoodsDetail, getGoodsShareLink } from "@/api/goods.js";
 import { doAddCollect, doDelUserCollect } from "@/api/yanxuan.js";
 import ParamsChoose from "./ParamsChoose.vue";
 import { notNull } from "@/layout/methods.js";
@@ -350,15 +350,11 @@ export default {
       });
     },
     getShareLink() {
-      // findGoodsDetail({
-      //   goodsId: this.goodsId,
-      //   distributorId: sessionStorage.getItem("distributorId")
-      // }).then(({ data }) => {
-      //   if (data.code === 1) {
-      //     this.goodsInfo = data.data;
-      //     this.share();
-      //   }
-      // });
+      getGoodsShareLink(this.goodsId).then(({ data }) => {
+        if (data.code === 1) {
+          this.share(data.data.shareUrl);
+        }
+      });
     },
     WXconfig(val, isLink) {
       let That = this;

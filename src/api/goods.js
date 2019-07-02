@@ -33,7 +33,7 @@ export function toComfirmOrder(data, isJson) {
   return post('/order/toComfirmOrder.api', data, isJson)
 }
 
-//商品分享链接获取
-// export function toComfirmOrder(data, isJson) {
-//   return get('/order/toComfirmOrder.api', data, isJson)
-// }
+//商品-商品分享链接
+export function getGoodsShareLink(data) {
+  return post(`/goods/getGoodsShareLink/${data}`)
+}

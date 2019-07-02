@@ -33,3 +33,12 @@ export function getNextWeek(i) {
   let next_sunday = moment().add((7 - weekOfDay) + 7 * i, 'days').format('YYYY-MM-DD'); //周日日期
   return [next_monday, next_sunday]
 }
+
+// 传入指定日期
+//返回传入日期的月份开始日期和结束日期
+// 返回数组
+export function getOnMonth(valDate) {
+  let start = moment(valDate).startOf("month").format("YYYY-MM-DD"); //计算指定日期月份第一天
+  let end = moment(valDate).endOf("month").format("YYYY-MM-DD"); //计算指定日期月份最后一天
+  return [start, end]
+}

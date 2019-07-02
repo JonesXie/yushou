@@ -103,7 +103,7 @@
 <script>
 import moment from "moment";
 import { mapActions } from "vuex";
-import { getLastWeek } from "@/layout/DateTimeUtils.js";
+import { getLastWeek, getOnMonth } from "@/layout/DateTimeUtils.js";
 import { Icon, DatetimePicker, Popup, Picker } from "vant";
 import { selectUserDistributorReport } from "@/api/distribute.js";
 export default {
@@ -138,7 +138,6 @@ export default {
           this.dateType = "date";
           this.timeRange = moment(this.currentDate).format("YYYY-MM-DD");
           this.isPicker = false;
-          this.getInit(1);
         } else if (nv === 1) {
           //周
           this.isPicker = true;
@@ -147,20 +146,23 @@ export default {
           }
           this.timeRange = this.weeksList[0];
           this.currentWY = this.weeksList;
-          this.getInit(2);
         } else if (nv === 2) {
           //月
           this.dateType = "year-month";
-          this.timeRange = moment(this.currentDate).format("YYYY-MM-DD");
+          this.timeRange = getOnMonth(this.currentDate).join("至");
           this.isPicker = false;
-          this.getInit(3);
         } else if (nv === 3) {
           //年
           this.isPicker = true;
           this.timeRange = this.yearsList[0];
           this.currentWY = this.yearsList;
-          this.getInit(4);
         }
+      },
+      immediate: true
+    },
+    timeRange: {
+      handler: function() {
+        this.getInit(this.actived + 1);
       },
       immediate: true
     }
@@ -181,17 +183,12 @@ export default {
       if (this.dateType === "date") {
         this.timeRange = moment(this.currentDate).format("YYYY-MM-DD");
       } else {
-        this.timeRange = moment(this.currentDate).format("YYYY-MM");
+        this.timeRange = getOnMonth(this.currentDate).join("至");
       }
       this.dateShow = false;
     },
     chooseDate2() {
-      // this.timeRange = this.$refs.weekYear.getValues();
-      if (this.actived === 1) {
-        this.timeRange = this.$refs.weekYear.getValues()[0];
-      } else {
-        this.timeRange = this.$refs.weekYear.getValues()[0];
-      }
+      this.timeRange = this.$refs.weekYear.getValues()[0];
       this.dateShow2 = false;
     },
     //获取一年内的周数
@@ -212,9 +209,14 @@ export default {
     },
     getInit(val) {
       let _data = {
-        type: val, //	1 日 2 周 3 月 4年
-        time: this.timeRange
+        type: val //	1 日 2 周 3 月 4年
       };
+      if (val == 1 || val == 4) {
+        _data.time = this.timeRange;
+      } else {
+        _data.startTime = this.timeRange.split("至")[0];
+        _data.endTime = this.timeRange.split("至")[1];
+      }
       selectUserDistributorReport(_data).then(({ data }) => {
         if (data.code === 1) {
           this.allInfo = data.data.page.dataList;

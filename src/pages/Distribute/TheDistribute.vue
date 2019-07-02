@@ -102,7 +102,7 @@ export default {
   methods: {
     zhuxiao() {
       Dialog.confirm({
-        message: "你正在注销线上店长身份，是否继续该操作？"
+        message: "您正在注销店长身份，是否继续该操作？"
       })
         .then(() => {
           cancelUserDistributorCode().then(({ data }) => {
