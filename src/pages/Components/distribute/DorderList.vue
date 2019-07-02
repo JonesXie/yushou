@@ -57,6 +57,12 @@ export default {
     },
     isSearch: {
       default: null
+    },
+    status: {
+      default: null
+    },
+    userId: {
+      default: null
     }
   },
   data() {
@@ -93,6 +99,12 @@ export default {
         this.onInit();
       },
       immediate: true
+    },
+    status: {
+      handler: function() {
+        this.onInit();
+      },
+      immediate: true
     }
   },
   methods: {
@@ -113,7 +125,9 @@ export default {
       let _data = {
         page: this.curPage,
         searchString: this.isSearch,
-        type: this.isSearch === null ? this.type : null
+        type: this.isSearch === null ? this.type : null,
+        userId: this.userId,
+        status: this.status
       };
       if (this.noLimit) {
         this.noLimit = false;

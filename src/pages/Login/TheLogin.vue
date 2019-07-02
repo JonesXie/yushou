@@ -110,7 +110,7 @@ export default {
         setTimeout(() => {
           sessionStorage.setItem(
             "enterURL",
-            `${window.location.href}`.split(document.domain)[1]
+            `${window.location.href}`.split("/")[3]
           );
           That.$store.dispatch("getWX");
         }, 1500);

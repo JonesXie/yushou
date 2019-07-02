@@ -24,23 +24,37 @@
           </em>
         </div>
         <div class="DOD_h_r" v-if="showOnline">
-          <div class="set_online">设为线上店长</div>
+          <div class="set_online" @click="ratePop = true;">设为线上店长</div>
         </div>
       </div>
       <ul class="list_choose">
         <li :class="[actived===0?'active':'']" @click="actived=0">全部</li>
         <li :class="[actived===1?'active':'']" @click="actived=1">待发货</li>
         <li :class="[actived===2?'active':'']" @click="actived=2">待收货</li>
-        <li :class="[actived===3?'active':'']" @click="actived=3">已完成</li>
+        <li :class="[actived===3?'active':'']" @click="actived=3">已取消</li>
+        <li :class="[actived===4?'active':'']" @click="actived=4">已完成</li>
       </ul>
+      <dorder-list class="orderList" :userId="userId" :status="status" />
     </div>
+    <!-- 设置分成比例弹窗 -->
+    <van-popup v-model="ratePop" class="tips_wrap">
+      <div class="tips_h">请设置该分销账户的分成比例</div>
+      <div class="tips_c">
+        <input type="number" v-model="reRate" @blur="validRate" />%
+      </div>
+      <div class="tips_btn">
+        <div class="tips_btn1" @click="confirmRate">确认</div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
-import { Icon } from "vant";
+import { Icon, Popup } from "vant";
 import { notNull } from "@/layout/methods.js";
+import DorderList from "@/pages/Components/distribute/DorderList.vue";
+import { saveDistributor } from "@/api/distribute.js";
 export default {
   name: "DistributeOrderDetail",
   data() {
@@ -49,16 +63,53 @@ export default {
       type: 0,
       num: 0,
       money: 0,
-      actived: 0
+      actived: 0,
+      userId: null,
+      ratePop: false,
+      reRate: null
     };
   },
   components: {
-    [Icon.name]: Icon
+    [Icon.name]: Icon,
+    [Popup.name]: Popup,
+    DorderList
   },
   methods: {
     ...mapActions(["ChangeStatus"]),
     GoBack() {
       this.$router.back(-1);
+    },
+    validRate() {
+      let _data = this.reRate;
+      if (`${_data}`.includes(".")) {
+        let dotArr = _data.split(".");
+        if (dotArr[1].length > 2) {
+          let dotTwo = dotArr[1].substring(0, 2);
+          this.reRate = Number(`${dotArr[0]}.${dotTwo}`);
+          this.$toast("请保留小数点后两位");
+        } else {
+          this.validMax(_data);
+        }
+      } else {
+        this.validMax(_data);
+      }
+    },
+    validMax(val) {
+      if (0 <= val && val <= 100) {
+        return true;
+      } else {
+        this.reRate = null;
+        this.$toast("折扣应在0-100间");
+      }
+    },
+    confirmRate() {
+      saveDistributor({
+        addUserId: this.userId,
+        scale: this.reRate,
+        status: 1
+      }).then(({ data }) => {
+        this.$toast(data.msg);
+      });
     }
   },
   computed: {
@@ -68,15 +119,32 @@ export default {
       } else {
         return true;
       }
+    },
+    status() {
+      switch (this.actived) {
+        case 1:
+          return "待发货";
+        case 2:
+          return "待收货";
+        case 3:
+          return "已取消";
+        case 4:
+          return "已完成";
+        default:
+          return null;
+      }
     }
   },
-  mounted() {
-    this.ChangeStatus(false);
+  created() {
+    this.userId = this.$route.params.userId;
     if (notNull(this.$route.query.type)) {
       this.num = this.$route.query.num;
       this.type = this.$route.query.type;
       this.money = this.$route.query.money;
     }
+  },
+  mounted() {
+    this.ChangeStatus(false);
   },
   beforeDestroy() {
     this.ChangeStatus(true);
@@ -171,7 +239,7 @@ export default {
   background-color: #fff;
   border-radius: 20px;
   margin: 10px auto;
-  padding: 0 30px;
+  padding: 0 15px;
   display: flex;
   li {
     flex: 1;
@@ -190,5 +258,11 @@ export default {
       transform: translateX(-50%);
     }
   }
+}
+.orderList {
+  margin-top: 14px;
+  height: calc(100vh - 187px);
+  overflow-y: scroll;
+  position: relative;
 }
 </style>
