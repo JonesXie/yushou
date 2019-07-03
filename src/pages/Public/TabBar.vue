@@ -2,19 +2,19 @@
   <van-tabbar v-model="active" active-color="#ea047b" :z-index="99" v-if="showBar">
     <van-tabbar-item to="/index">
       <span>主页</span>
-      <img slot="icon" slot-scope="props" :src="props.active ? zhuye.active : zhuye.normal">
+      <img slot="icon" slot-scope="props" :src="props.active ? zhuye.active : zhuye.normal" />
     </van-tabbar-item>
-    <van-tabbar-item to="/yanxuan">
+    <!-- <van-tabbar-item to="/yanxuan">
       <span>严选</span>
       <img slot="icon" slot-scope="props" :src="props.active ? yanxuan.active : yanxuan.normal">
-    </van-tabbar-item>
+    </van-tabbar-item>-->
     <van-tabbar-item to="/thetype">
       <span>分类</span>
-      <img slot="icon" slot-scope="props" :src="props.active ? fenlei.active : fenlei.normal">
+      <img slot="icon" slot-scope="props" :src="props.active ? fenlei.active : fenlei.normal" />
     </van-tabbar-item>
     <van-tabbar-item to="/center">
       <span>我的</span>
-      <img slot="icon" slot-scope="props" :src="props.active ? my.active : my.normal">
+      <img slot="icon" slot-scope="props" :src="props.active ? my.active : my.normal" />
     </van-tabbar-item>
   </van-tabbar>
 </template>

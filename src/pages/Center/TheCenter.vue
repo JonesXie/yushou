@@ -163,7 +163,7 @@ export default {
   },
   mounted() {
     this.getInfo();
-    this.ChangeActive(3);
+    this.ChangeActive(2); //激活当前tabbar
   }
 };
 </script>

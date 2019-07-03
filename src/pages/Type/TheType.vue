@@ -44,7 +44,7 @@ export default {
     }
   },
   mounted() {
-    this.ChangeActive(2);
+    this.ChangeActive(1); //激活当前tabbar
     findGoodsCode().then(({ data }) => {
       this.barList = data.data;
       this.getType = this.barList[0];

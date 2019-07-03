@@ -14,7 +14,7 @@ export default {
     return {};
   },
   watch: {
-    "$store.state.isBar.showBar": function() {}
+    // "$store.state.isBar.showBar": function() {}
   },
   mounted() {
     this.$nextTick(() => {
