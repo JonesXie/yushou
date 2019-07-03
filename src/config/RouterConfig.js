@@ -6,7 +6,8 @@ import {
 router.beforeEach((to, from, next) => {
   //上线时放开注释
   if (!notNull(localStorage.getItem("openId"))) {
-    sessionStorage.setItem("enterURL", `${window.location.href}`.split("/")[3])
+    let domain = document.domain || window.location.host
+    sessionStorage.setItem("enterURL", `${window.location.href}`.split(domain)[1])
     store.dispatch("getWX");
   }
   if (!notNull(store.state.wxURL)) {

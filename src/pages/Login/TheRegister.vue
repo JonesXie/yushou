@@ -134,10 +134,11 @@ export default {
       } else {
         this.$toast("请先进行微信授权");
         let That = this;
+        let domain = document.domain || window.location.host;
         setTimeout(() => {
           sessionStorage.setItem(
             "enterURL",
-            `${window.location.href}`.split("/")[3]
+            `${window.location.href}`.split(domain)[1]
           );
           That.$store.dispatch("getWX");
         }, 1500);
