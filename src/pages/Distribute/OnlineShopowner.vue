@@ -337,6 +337,7 @@ export default {
     height: calc(100vh - 86px);
     box-sizing: border-box;
     padding-top: 15px;
+    overflow-y: scroll;
   }
   .pgdo_list {
     width: 100vw;

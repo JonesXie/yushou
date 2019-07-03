@@ -1,7 +1,7 @@
 //提现记录
 <template>
   <div class="pg_WithdrawRecord">
-    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" class="isfresh">
       <van-list
         v-model="loading"
         :finished="finished"
@@ -112,6 +112,8 @@ export default {
 @import "~@/layout/public.scss";
 .pg_WithdrawRecord {
   position: relative;
+  width: 100%;
+  height: 100%;
   .list_li {
     background: #fff;
     width: 345px;
@@ -152,6 +154,11 @@ export default {
   .li_tips {
     padding-top: 20px;
     font-size: 12px;
+  }
+  .isfresh {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
   }
 }
 .noData {

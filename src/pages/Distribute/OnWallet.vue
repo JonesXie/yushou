@@ -122,9 +122,10 @@ export default {
   .list_wrap {
     padding-top: 16px;
     width: 100vw;
-    height: calc(100vh - 94px);
+    height: calc(100vh - 88px);
     overflow-y: scroll;
     position: relative;
+    box-sizing: border-box;
   }
 }
 </style>

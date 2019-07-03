@@ -1,7 +1,7 @@
 // 线上店长收益
 <template>
   <div class="mod_realprofit">
-    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" class="isfresh">
       <van-list
         v-model="loading"
         :finished="finished"
@@ -104,6 +104,7 @@ export default {
   border-radius: 5px;
   box-sizing: border-box;
   position: relative;
+  height: 100%;
   .list_li {
     padding: 26px 2px 16px 15px;
     box-sizing: border-box;
@@ -125,6 +126,11 @@ export default {
         margin-right: 5px;
       }
     }
+  }
+  .isfresh {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
   }
 }
 .noData {

@@ -33,8 +33,11 @@
               <em>{{v.goodsSalePrice}}.0</em>元
             </div>
             <div class="cut">
-              <div>利润比例：{{100 - Number(v.scale)}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.mainIncome}}元</div>
-              <div>佣金比例：{{v.scale}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.income}}元</div>
+              <div
+                v-if="isOnline"
+                class="profit"
+              >利润比例：{{100 - Number(v.scale)}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.mainIncome}}元</div>
+              <div class="rental">佣金比例：{{Number(v.scale)}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.income}}元</div>
             </div>
           </div>
         </li>
@@ -85,6 +88,13 @@ export default {
         return 2;
       } else {
         return 1;
+      }
+    },
+    isOnline() {
+      if (sessionStorage.getItem("onOroff")) {
+        return false;
+      } else {
+        return true;
       }
     }
   },
@@ -172,6 +182,7 @@ export default {
   width: 100vw;
   .isfresh {
     height: 100%;
+    overflow-y: scroll;
   }
   .mdl_li {
     width: 99%;
@@ -241,8 +252,14 @@ export default {
         flex: 1;
         height: 66px;
         text-align: right;
-        div {
+        .profit {
           margin-top: 15px;
+          & ~ .rental {
+            margin-top: 15px;
+          }
+        }
+        .rental {
+          margin-top: 28px;
         }
       }
     }

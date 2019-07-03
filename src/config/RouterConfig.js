@@ -10,6 +10,7 @@ router.beforeEach((to, from, next) => {
     sessionStorage.setItem("enterURL", `${window.location.href}`.split(domain)[1])
     store.dispatch("getWX");
   }
+  //兼容WX ios首次进入
   if (!notNull(store.state.wxURL)) {
     if (from.path === "/") {
       // sessionStorage.setItem("firstURL", `${window.location.href}index`)
@@ -19,11 +20,13 @@ router.beforeEach((to, from, next) => {
       store.commit('SET_WxURL', window.location.href)
     }
   }
+  //记录去登录的url，登陆后返回
   if (to.path === '/login') {
     if (!`${from.path}`.includes('/registor')) {
       store.commit('SET_FromToLogin', from.path)
     }
   }
+  //记录通过分享获取到的distributorId
   if (`${to.path}`.includes('/goods/')) {
     if (notNull(to.query.distributorId)) {
       sessionStorage.setItem("distributorId", to.query.distributorId)

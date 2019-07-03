@@ -198,6 +198,7 @@ export default {
   box-sizing: border-box;
   .isFresh {
     min-height: 100%;
+    overflow-y: scroll;
   }
 }
 .pg_SalerManege {

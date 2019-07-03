@@ -131,6 +131,7 @@ export default {
           this.initInfo = data.data.distributor;
           this.status = data.data.distributor.status === 0 ? false : true;
           this.type = data.data.distributor.type === 0 ? false : true;
+          sessionStorage.setItem("onOroff", this.type);
         }
       });
     }
