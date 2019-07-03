@@ -10,7 +10,7 @@ router.beforeEach((to, from, next) => {
     store.dispatch("getWX");
   }
   if (!notNull(store.state.wxURL)) {
-    if (to.path === "/index") {
+    if (from.path === "/") {
       // sessionStorage.setItem("firstURL", `${window.location.href}index`)
       store.commit('SET_WxURL', `${window.location.href}index`)
     } else {
