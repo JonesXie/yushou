@@ -4,6 +4,12 @@ import {
   notNull
 } from "@/layout/methods.js"
 router.beforeEach((to, from, next) => {
+  //记录通过分享获取到的distributorId
+  if (`${to.path}`.includes('/goods/')) {
+    if (notNull(to.query.distributorId)) {
+      sessionStorage.setItem("distributorId", to.query.distributorId)
+    }
+  }
   //上线时放开注释
   if (!notNull(localStorage.getItem("openId"))) {
     let domain = document.domain || window.location.host
@@ -24,12 +30,6 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
     if (!`${from.path}`.includes('/registor')) {
       store.commit('SET_FromToLogin', from.path)
-    }
-  }
-  //记录通过分享获取到的distributorId
-  if (`${to.path}`.includes('/goods/')) {
-    if (notNull(to.query.distributorId)) {
-      sessionStorage.setItem("distributorId", to.query.distributorId)
     }
   }
   next()
