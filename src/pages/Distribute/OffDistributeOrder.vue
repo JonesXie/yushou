@@ -16,8 +16,8 @@
         </li>
       </ul>-->
       <ul class="pgdo_hlist">
-        <input type="text" placeholder="请输入收件人手机号、订单编号、商品名称" v-model="isSearch" />
-        <em @click="isTab=true">取消</em>
+        <input type="text" placeholder="请输入收件人手机号、订单编号、商品名称" v-model="isTab" />
+        <em @click="isSearch=isTab">搜索</em>
       </ul>
       <dorder-list class="orderList" :isSearch="isSearch" :actived="actived" />
     </div>
@@ -34,7 +34,7 @@ export default {
     return {
       title: "订单管理",
       actived: 0,
-      isTab: true,
+      isTab: null,
       isSearch: null
     };
   },
@@ -95,7 +95,9 @@ export default {
 .pg_model_content {
   width: 100vw;
   position: absolute;
-  top: 46px;
+  height: 100vh;
+  padding-top: 46px;
+  box-sizing: border-box;
 }
 .pg_DistributeOrder {
   .pgdo_hlist {
@@ -152,7 +154,7 @@ export default {
 }
 .orderList {
   margin-top: 14px;
-  height: calc(100vh - 106px);
+  height: calc(100vh - 114px);
   overflow-y: scroll;
   position: relative;
 }

@@ -6,7 +6,7 @@
           v-model="loading"
           :finished="finished"
           @load="onLoad"
-          finished-text="没有更多了"
+          :finished-text="dataList.length===0?'':'没有更多了'"
           :immediate-check="false"
         >
           <div class="pgs_ul_wrap" v-for="(v,i) in dataList" :key="i">
@@ -35,7 +35,7 @@
       </van-pull-refresh>
 
       <div v-if="dataList.length === 0" class="noData">
-        <img src="@/assets/img/ly_nodata.png" alt>
+        <img src="@/assets/img/ly_nodata.png" alt />
       </div>
       <router-link to="/setsite" class="pgs_add">新增地址</router-link>
     </template>
@@ -269,22 +269,6 @@ $Color: #ea047b;
         border-radius: 14px;
         margin-left: 50px;
       }
-    }
-  }
-  .noData {
-    width: 100%;
-    height: calc(100vh - 120px);
-    text-align: center;
-    position: absolute;
-    top: 120px;
-    img {
-      position: absolute;
-      top: 40%;
-      transform: translate(-50%, -50%);
-      left: 50%;
-      display: inline-block;
-      width: 227px;
-      height: 200px;
     }
   }
 }

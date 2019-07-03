@@ -35,9 +35,9 @@
               <div class="type2">线上营业额</div>
             </div>
             <div class="type money">
-              <div class="type0">￥{{allInfo[0].allProfit}}</div>
-              <div class="type1">￥{{allInfo[0].directProfit}}</div>
-              <div class="type2">￥{{allInfo[0].indirectProfig}}</div>
+              <div class="type0">￥{{allInfo[0].allRental}}</div>
+              <div class="type1">￥{{allInfo[0].directRental}}</div>
+              <div class="type2">￥{{allInfo[0].indirectRental}}</div>
             </div>
           </div>
           <div class="list_li profit">
@@ -51,9 +51,9 @@
               <div class="type2">线上利润</div>
             </div>
             <div class="type money">
-              <div class="type0">￥{{allInfo[0].allRental}}</div>
-              <div class="type1">￥{{allInfo[0].directRental}}</div>
-              <div class="type2">￥{{allInfo[0].indirectRental}}</div>
+              <div class="type0">￥{{allInfo[0].allProfit}}</div>
+              <div class="type1">￥{{allInfo[0].directProfit}}</div>
+              <div class="type2">￥{{allInfo[0].indirectProfig}}</div>
             </div>
           </div>
           <div class="list_li team">
@@ -136,7 +136,9 @@ export default {
         if (nv === 0) {
           //日
           this.dateType = "date";
-          this.timeRange = moment(this.currentDate).format("YYYY-MM-DD");
+          this.timeRange = moment()
+            .add(-1, "days")
+            .format("YYYY-MM-DD"); //获取前一天时间
           this.isPicker = false;
         } else if (nv === 1) {
           //周
@@ -240,6 +242,7 @@ export default {
 .pg_ReportForm {
   position: relative;
   width: 100vw;
+  box-sizing: border-box;
   .head_bg {
     width: 100vw;
     height: 90px;
@@ -279,7 +282,8 @@ export default {
     display: flex;
     text-align: center;
     margin-top: 28px;
-
+    box-sizing: border-box;
+    overflow: hidden;
     .pgow_hlist_li {
       flex: 1;
       position: relative;
@@ -302,6 +306,7 @@ export default {
     padding: 13px 15px 0 15px;
     width: 100vw;
     box-sizing: border-box;
+    overflow: hidden;
     // height: calc(100vh - 88px);
     // overflow-y: scroll;
     .list_date {
@@ -379,8 +384,7 @@ export default {
     transform: translate(-50%, -50%);
     left: 50%;
     display: inline-block;
-    width: 227px;
-    height: 200px;
+    width: 150px;
   }
 }
 </style>

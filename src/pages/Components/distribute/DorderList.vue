@@ -1,12 +1,12 @@
 <template>
   <ul class="mod_DorderList">
     <!-- list -->
-    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+    <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" class="isfresh">
       <van-list
         v-model="loading"
         :finished="finished"
         @load="onLoad"
-        finished-text="没有更多了"
+        :finished-text="dataList.length===0?'':finshTxt"
         :immediate-check="false"
       >
         <li class="mdl_li" v-for="(v,i) in dataList" :key="i" @click="turnPage(v.id)">
@@ -72,6 +72,7 @@ export default {
       isRefresh: false,
       loading: false,
       finished: false,
+      finshTxt: "没有更多了",
       noLimit: true
     };
   },
@@ -138,7 +139,11 @@ export default {
           //赋值
           if (isInit) {
             this.dataList = getList;
-            this.curPage = this.curPage + 1;
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
             if (getList.length === 0) {
@@ -165,6 +170,9 @@ export default {
 @import "~@/layout/public.scss";
 .mod_DorderList {
   width: 100vw;
+  .isfresh {
+    height: 100%;
+  }
   .mdl_li {
     width: 99%;
     height: 233px;
@@ -243,7 +251,7 @@ export default {
 
 .noData {
   width: 100%;
-  height: calc(100vh - 120px);
+  // height: calc(100vh - 120px);
   text-align: center;
   position: absolute;
   top: 120px;
@@ -253,8 +261,7 @@ export default {
     transform: translate(-50%, -50%);
     left: 50%;
     display: inline-block;
-    width: 227px;
-    height: 200px;
+    width: 150px;
   }
 }
 </style>

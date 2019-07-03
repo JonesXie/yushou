@@ -101,21 +101,5 @@ export default {
       }
     }
   }
-  .noData {
-    width: 100%;
-    height: calc(100vh - 120px);
-    text-align: center;
-    position: absolute;
-    top: 120px;
-    img {
-      position: absolute;
-      top: 40%;
-      transform: translate(-50%, -50%);
-      left: 50%;
-      display: inline-block;
-      width: 227px;
-      height: 200px;
-    }
-  }
 }
 </style>

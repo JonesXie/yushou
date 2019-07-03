@@ -22,7 +22,7 @@
           :finished="finished"
           @load="onLoad"
           :immediate-check="false"
-          finished-text="没有更多了"
+          :finished-text="dataList.length===0?'':'没有更多了'"
         >
           <ul>
             <li class="pggt_li" v-for="(item,index) in dataList" :key="index">
@@ -48,11 +48,11 @@
         </van-list>
       </van-pull-refresh>
       <div v-if="dataList.length === 0" class="noData">
-        <img src="@/assets/img/ly_nodata.png" alt>
+        <img src="@/assets/img/ly_nodata.png" alt />
       </div>
       <van-popup v-model="popup" class="tips_wrap">
         <div class="tip_header">请输入转增手机号码</div>
-        <input type="number" v-model="phone" class="tips_input" placeholder="手机号码" v-validtel>
+        <input type="number" v-model="phone" class="tips_input" placeholder="手机号码" v-validtel />
         <div class="tips_btn">
           <div class="tips_btn2" @click="popup=false">取消</div>
           <div class="tips_btn1" @click="donate">确认</div>
@@ -303,22 +303,6 @@ export default {
     background: #e5e5e5;
     font-size: 12px;
     text-align: center;
-  }
-}
-.noData {
-  width: 100%;
-  height: calc(100vh - 120px);
-  text-align: center;
-  position: absolute;
-  top: 120px;
-  img {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    display: inline-block;
-    width: 227px;
-    height: 200px;
   }
 }
 </style>

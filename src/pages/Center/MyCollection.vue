@@ -7,17 +7,17 @@
           v-model="loading"
           :finished="finished"
           @load="onLoad"
-          finished-text
+          :finished-text="dataList.length===0?'':'没有更多了'"
           :immediate-check="false"
         >
           <ul class="pgmc_ul">
             <li class="pgmc_li" v-for="(v,i) in dataList" :key="i">
-              <img class="pgmc_li_l" :src="v.goodsImages" alt>
+              <img class="pgmc_li_l" :src="v.goodsImages" alt />
               <div class="pgmc_li_c">
                 <p class="ellipsis-three">{{v.goodsName}}</p>
                 <p class="price">￥{{v.goodsPrice}}.0</p>
                 <div class="collection" @click="cancelCellected(v.collectId)">
-                  <img src="@/assets/img/goods/pg_goods_collected.png" alt>
+                  <img src="@/assets/img/goods/pg_goods_collected.png" alt />
                   <p>取消收藏</p>
                 </div>
               </div>
@@ -26,7 +26,7 @@
         </van-list>
       </van-pull-refresh>
       <div v-if="dataList.length === 0" class="noData">
-        <img src="@/assets/img/ly_nodata.png" alt>
+        <img src="@/assets/img/ly_nodata.png" alt />
       </div>
     </template>
   </HeadFoot>
@@ -150,22 +150,6 @@ export default {
         }
       }
     }
-  }
-}
-.noData {
-  width: 100%;
-  height: calc(100vh - 120px);
-  text-align: center;
-  position: absolute;
-  top: 120px;
-  img {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    display: inline-block;
-    width: 227px;
-    height: 200px;
   }
 }
 </style>

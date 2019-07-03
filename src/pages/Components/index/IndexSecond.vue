@@ -24,7 +24,7 @@
             :key="i"
             @click="turnPage(v.goodsId)"
           >
-            <img :src="v.goodsImages" alt>
+            <img :src="v.goodsImages" alt />
             <div class="fl_li_r">
               <p class="fl_li_rP1">{{v.goodsName}}</p>
               <p class="fl_li_rP2">
@@ -117,7 +117,11 @@ export default {
           //赋值
           if (isInit) {
             this.dataList = getList;
-            this.curPage = this.curPage + 1;
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
             if (getList.length === 0) {

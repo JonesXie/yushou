@@ -15,12 +15,12 @@
         <em @click="add">添加</em>
       </ul>
       <!-- list -->
-      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" class="isfresh">
         <van-list
           v-model="loading"
           :finished="finished"
           @load="onLoad"
-          finished-text="没有更多了"
+          :finished-text="dataList.length===0?'':'没有更多了'"
           :immediate-check="false"
         >
           <ul class="pgdo_list">
@@ -222,7 +222,11 @@ export default {
           //赋值
           if (isInit) {
             this.dataList = getList;
-            this.curPage = this.curPage + 1;
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
             if (getList.length === 0) {
@@ -287,7 +291,10 @@ export default {
 .pg_model_content {
   width: 100vw;
   position: absolute;
-  top: 46px;
+  height: 100vh;
+  padding-top: 46px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .pg_OnlineShopowner {
   .pgdo_hlist {
@@ -326,8 +333,12 @@ export default {
       margin-left: 15px;
     }
   }
+  .isfresh {
+    height: calc(100vh - 86px);
+    box-sizing: border-box;
+    padding-top: 15px;
+  }
   .pgdo_list {
-    margin-top: 15px;
     width: 100vw;
     .pgdo_li {
       background: #fff;
@@ -476,22 +487,6 @@ export default {
       flex: 1;
       color: $Color;
     }
-  }
-}
-.noData {
-  width: 100%;
-  height: calc(100vh - 120px);
-  text-align: center;
-  position: absolute;
-  top: 120px;
-  img {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    display: inline-block;
-    width: 227px;
-    height: 200px;
   }
 }
 </style>

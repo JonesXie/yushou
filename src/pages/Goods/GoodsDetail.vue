@@ -96,7 +96,7 @@
             <p>预售</p>
           </div>
         </div>
-        <div class="buy_btn">
+        <div class="buy_btn" v-else>
           <div class="buy_submit" @click="paramsPop('now')">立即购买</div>
         </div>
       </div>

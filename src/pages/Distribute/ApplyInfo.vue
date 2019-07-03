@@ -2,34 +2,38 @@
   <HeadFoot class="pg_ApplyInfo pg_applydistribute" :Title="title" :backPath="backPath">
     <template #content>
       <div class="pgad_head"></div>
-      <ul class="pgai_content">
-        <li class="input input_name van-hairline--bottom">
-          <label for="name">姓名:</label>
-          <input type="text" id="name" v-model="name" class="name_input" />
-        </li>
-        <li class="input input_phone van-hairline--bottom">
-          <label for="phone">手机:</label>
-          <input type="text" id="phone" @blur="validPhone" v-model="phone" class="phone_input" />
-        </li>
-        <li class="input input_name" @click="siteShow=true">
-          <label>地址:</label>
-          <em class="area">{{showArea}}</em>
-          <van-icon class="area_icon" name="arrow-down" />
-        </li>
-        <li class="input input_site van-hairline--bottom">
-          <input type="text" class="site_input" v-model="detailSite" placeholder="请输入详细地址" />
-        </li>
-        <li class="input_phone">
-          <label for="phone">留言:</label>
-        </li>
-        <textarea class="text_area" v-model="remake"></textarea>
-      </ul>
-      <div class="pgai_tips" @click="readTips">
-        <img v-if="selected" src="@/assets/img/ly_choosed.png" alt />
-        <img v-else src="@/assets/img/ly_choose.png" alt />
-        我已阅读预兽
-        <a style="color:#fa4ba6">母婴门店</a>店长细则
+      <div class="pgai_wrap">
+        <ul class="pgai_content">
+          <li class="input input_name van-hairline--bottom">
+            <label for="name">姓名:</label>
+            <input type="text" id="name" v-model="name" class="name_input" />
+          </li>
+          <li class="input input_phone van-hairline--bottom">
+            <label for="phone">手机:</label>
+            <input type="text" id="phone" @blur="validPhone" v-model="phone" class="phone_input" />
+          </li>
+          <li class="input input_name" @click="siteShow=true">
+            <label>地址:</label>
+            <em class="area">{{showArea}}</em>
+            <van-icon class="area_icon" name="arrow-down" />
+          </li>
+          <li class="input input_site van-hairline--bottom">
+            <input type="text" class="site_input" v-model="detailSite" placeholder="请输入详细地址" />
+          </li>
+          <li class="input_phone">
+            <label for="phone">留言:</label>
+          </li>
+          <textarea class="text_area" v-model="remake"></textarea>
+        </ul>
+        <div class="pgai_tips" @click="readTips">
+          <img v-if="selected" src="@/assets/img/ly_choosed.png" alt />
+          <img v-else src="@/assets/img/ly_choose.png" alt />
+          我已阅读预兽
+          <a style="color:#fa4ba6">母婴门店</a>店长细则
+        </div>
+        <div class="next_btn" @click="submit">提交</div>
       </div>
+
       <!-- Area -->
       <van-popup v-model="siteShow" :close-on-click-overlay="false" position="bottom">
         <van-area
@@ -39,8 +43,6 @@
           :area-list="areaList"
         />
       </van-popup>
-
-      <div class="next_btn" @click="submit">提交</div>
     </template>
   </HeadFoot>
 </template>
@@ -178,20 +180,24 @@ export default {
     background: $Color;
     border-radius: 5px;
     text-align: center;
-    position: fixed;
-    bottom: 45px;
-    left: 15px;
+    margin-top: 50px;
+    margin-left: 15px;
     display: inline-block;
   }
 }
-.pg_ApplyInfo {
+.pgai_wrap {
+  position: absolute;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  padding-top: 146px;
+  box-sizing: border-box;
+  min-height: 100vh;
   .pgai_content {
     width: 345px;
     height: 350px;
     background: #fff;
-    left: 15px;
-    top: 146px;
-    position: absolute;
+    margin: 0 auto;
     border-radius: 5px;
     box-shadow: 0px 4px 6px 1px #cccccc59;
     padding: 17px 24px;
@@ -238,9 +244,8 @@ export default {
   }
   .pgai_tips {
     font-size: 11px;
-    left: 15px;
-    top: 520px;
-    position: absolute;
+    margin-left: 15px;
+    margin-top: 15px;
     img {
       width: 14px;
       height: 14px;

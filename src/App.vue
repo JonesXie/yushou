@@ -23,7 +23,7 @@ export default {
       //顶部菜单固定
       let rate = document.documentElement.style.fontSize.split("px")[0];
       let stickTop = Number((rate * 1.22667).toFixed(0));
-      this.$store.dispatch('ChangeStickTop',stickTop)
+      this.$store.dispatch("ChangeStickTop", stickTop);
     });
   }
 };
@@ -35,6 +35,22 @@ $Color: #ea047b;
   min-height: 100vh;
   background: #f4f4f4;
   font-size: 14px;
+}
+//无数据
+.noData {
+  width: 100%;
+  height: calc(100vh - 120px);
+  text-align: center;
+  position: absolute;
+  top: 120px;
+  img {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    display: inline-block;
+    width: 150px;
+  }
 }
 </style>
 

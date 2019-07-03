@@ -26,22 +26,27 @@
             v-model="loading"
             :finished="finished"
             @load="onLoad"
-            finished-text="没有更多了"
+            :finished-text="judgeList.length===0?'':'没有更多了'"
             :immediate-check="false"
           >
             <ul class="judge_list">
-              <li class="judge_list_li" v-for="(v,i) in judgeList" :key="i" @click="judgeDetail(v.id)">
+              <li
+                class="judge_list_li"
+                v-for="(v,i) in judgeList"
+                :key="i"
+                @click="judgeDetail(v.id)"
+              >
                 <div class="user_info">
-                  <img class="user_info_img" :src="v.createUserImage" alt>
+                  <img class="user_info_img" :src="v.createUserImage" alt />
                   <span>{{v.createUserName}}</span>
-                  <van-rate v-model="v.goodsStar" :size="14" readonly class="myRate"/>
+                  <van-rate v-model="v.goodsStar" :size="14" readonly class="myRate" />
                   <p class="fr">{{v.createDateLabel}}</p>
                 </div>
                 <div class="content">
                   <p>{{v.goodsComment}}</p>
                   <p style="color:#9b9b9b">{{v.skuParameter}}</p>
                   <div class="contentIMG">
-                    <img v-for="(val,ind) in v.commentImgList " :key="ind" :src="val" alt>
+                    <img v-for="(val,ind) in v.commentImgList " :key="ind" :src="val" alt />
                   </div>
                 </div>
               </li>
@@ -49,7 +54,7 @@
           </van-list>
         </van-pull-refresh>
         <div v-if="judgeList.length === 0" class="noData">
-          <img src="@/assets/img/ly_nodata.png" alt>
+          <img src="@/assets/img/ly_nodata.png" alt />
         </div>
       </div>
     </template>
@@ -140,7 +145,11 @@ export default {
           //赋值
           if (isInit) {
             this.judgeList = getList;
-            this.curPage = this.curPage + 1;
+            if (getList.length === 0) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
           } else {
             [...this.judgeList] = [...this.judgeList, ...getList];
             if (getList.length === 0) {
@@ -265,22 +274,6 @@ export default {
         font-size: 12px;
       }
     }
-  }
-}
-.noData {
-  width: 100%;
-  height: calc(100vh - 120px);
-  text-align: center;
-  position: absolute;
-  top: 120px;
-  img {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    display: inline-block;
-    width: 227px;
-    height: 200px;
   }
 }
 </style>

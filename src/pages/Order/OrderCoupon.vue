@@ -8,7 +8,7 @@
           :finished="finished"
           @load="onLoad"
           :immediate-check="false"
-          finished-text="没有更多了"
+          :finished-text="dataList.length===0?'':'没有更多了'"
         >
           <van-radio-group v-model="chooseCoupon" class="pt_content">
             <van-radio class="ptc_li" v-for="(item,index) in dataList" :key="index" :name="index">
@@ -30,14 +30,14 @@
                     <p class="limit ellipsis-line">有效期至：{{item.endtime}}</p>
                   </div>
                 </div>
-                <img class="selected" src="@/assets/img/order/pg_coupon_selected.png" alt>
+                <img class="selected" src="@/assets/img/order/pg_coupon_selected.png" alt />
               </div>
             </van-radio>
           </van-radio-group>
         </van-list>
       </van-pull-refresh>
       <div v-if="dataList.length === 0" class="noData">
-        <img src="@/assets/img/ly_nodata.png" alt>
+        <img src="@/assets/img/ly_nodata.png" alt />
       </div>
       <div class="pgc_bottom">
         <div class="pgcb_l" @click="$router.go(-1)">不使用优惠券</div>
@@ -284,22 +284,6 @@ export default {
     background: #e5e5e5;
     font-size: 12px;
     text-align: center;
-  }
-}
-.noData {
-  width: 100%;
-  height: calc(100vh - 120px);
-  text-align: center;
-  position: absolute;
-  top: 120px;
-  img {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    display: inline-block;
-    width: 227px;
-    height: 200px;
   }
 }
 .ptc_li {
