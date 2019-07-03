@@ -16,9 +16,9 @@
       <van-tab>
         <div slot="title" class="price" @click="changeRange">
           价格
-          <img v-if="priceActive === 1" src="@/assets/img/goods/pg_goodstype_down.png" alt>
-          <img v-else-if="priceActive === 2" src="@/assets/img/goods/pg_goodstype_up.png" alt>
-          <img v-else src="@/assets/img/goods/pg_goodstype_default.png" alt>
+          <img v-if="priceActive === 1" src="@/assets/img/goods/pg_goodstype_down.png" alt />
+          <img v-else-if="priceActive === 2" src="@/assets/img/goods/pg_goodstype_up.png" alt />
+          <img v-else src="@/assets/img/goods/pg_goodstype_default.png" alt />
         </div>
       </van-tab>
     </van-tabs>
@@ -29,7 +29,7 @@
         :finished="finished"
         @load="onLoad"
         :immediate-check="false"
-        finished-text="没有更多了"
+        :finished-text="dataList.length===0?'':'没有更多了'"
       >
         <ul class="pggt_ul">
           <li
@@ -55,7 +55,7 @@
       </van-list>
     </van-pull-refresh>
     <div v-if="dataList.length === 0" class="noData">
-      <img src="@/assets/img/ly_nodata.png" alt>
+      <img src="@/assets/img/ly_nodata.png" alt />
     </div>
   </div>
 </template>
@@ -257,22 +257,6 @@ export default {
         color: #999;
         font-size: 10px;
       }
-    }
-  }
-  .noData {
-    width: 100%;
-    height: calc(100vh - 120px);
-    text-align: center;
-    position: absolute;
-    top: 120px;
-    img {
-      position: absolute;
-      top: 40%;
-      transform: translate(-50%, -50%);
-      left: 50%;
-      display: inline-block;
-      width: 227px;
-      height: 200px;
     }
   }
 }

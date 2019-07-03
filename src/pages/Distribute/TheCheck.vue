@@ -7,7 +7,7 @@
           v-model="loading"
           :finished="finished"
           @load="onLoad"
-          finished-text="没有更多了"
+          :finished-text="dataList.length===0?'':'没有更多了'"
           :immediate-check="false"
         >
           <ul class="pgtc_ul">
@@ -134,10 +134,14 @@ export default {
           //赋值
           if (isInit) {
             this.dataList = getList;
-            this.curPage = this.curPage + 1;
+            if (getList.length < 10) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
-            if (getList.length === 0) {
+            if (getList.length < 10) {
               this.finished = true;
             } else {
               this.curPage = this.curPage + 1;
@@ -253,22 +257,6 @@ export default {
       font-size: 15px;
       border-radius: 5px;
     }
-  }
-}
-.noData {
-  width: 100%;
-  height: calc(100vh - 120px);
-  text-align: center;
-  position: absolute;
-  top: 120px;
-  img {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    display: inline-block;
-    width: 227px;
-    height: 200px;
   }
 }
 </style>

@@ -96,7 +96,10 @@ export default {
 .pg_model_content {
   width: 100vw;
   position: absolute;
-  top: 46px;
+  height: 100vh;
+  padding-top: 46px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .pg_DistributeOrder {
   .pgdo_hlist {
@@ -132,11 +135,11 @@ export default {
     }
     input {
       width: 270px;
-      height: 28px;
+      height: 24px;
       background: #fff;
       border-radius: 5px;
       box-sizing: border-box;
-      padding: 8px 11px;
+      padding: 7px 11px;
       margin-left: 30px;
       font-size: 12px;
       color: #9e9e9e;
@@ -145,15 +148,15 @@ export default {
       display: inline-block;
       color: #fff;
       font-size: 14px;
-      height: 28px;
-      line-height: 28px;
+      height: 24px;
+      line-height: 24px;
       margin-left: 10px;
     }
   }
 }
 .orderList {
   margin-top: 14px;
-  height: calc(100vh - 106px);
+  height: calc(100vh - 110px);
   overflow-y: scroll;
   position: relative;
 }

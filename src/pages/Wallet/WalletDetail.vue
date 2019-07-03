@@ -6,7 +6,7 @@
           v-model="loading"
           :finished="finished"
           @load="onLoad"
-          finished-text="没有更多了"
+          :finished-text="dataList.length===0?'':'没有更多了'"
           :immediate-check="false"
         >
           <ul class="pgwd_ul">
@@ -24,7 +24,7 @@
         </van-list>
       </van-pull-refresh>
       <div v-if="dataList.length === 0" class="noData">
-        <img src="@/assets/img/ly_nodata.png" alt>
+        <img src="@/assets/img/ly_nodata.png" alt />
       </div>
     </template>
   </HeadFoot>
@@ -78,10 +78,14 @@ export default {
           //赋值
           if (isInit) {
             this.dataList = getList;
-            this.curPage = this.curPage + 1;
+            if (getList.length < 10) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
-            if (getList.length === 0) {
+            if (getList.length < 10) {
               this.finished = true;
             } else {
               this.curPage = this.curPage + 1;
@@ -154,22 +158,6 @@ $Color: #ea047b;
         }
       }
     }
-  }
-}
-.noData {
-  width: 100%;
-  height: calc(100vh - 120px);
-  text-align: center;
-  position: absolute;
-  top: 120px;
-  img {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    display: inline-block;
-    width: 227px;
-    height: 200px;
   }
 }
 </style>

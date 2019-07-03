@@ -31,7 +31,7 @@
         <li :class="[actived===0?'active':'']" @click="actived=0">全部</li>
         <li :class="[actived===1?'active':'']" @click="actived=1">待发货</li>
         <li :class="[actived===2?'active':'']" @click="actived=2">待收货</li>
-        <li :class="[actived===3?'active':'']" @click="actived=3">已取消</li>
+        <!-- <li :class="[actived===3?'active':'']" @click="actived=3">已取消</li> -->
         <li :class="[actived===4?'active':'']" @click="actived=4">已完成</li>
       </ul>
       <dorder-list class="orderList" :userId="userId" :status="status" />
@@ -66,7 +66,8 @@ export default {
       actived: 0,
       userId: null,
       ratePop: false,
-      reRate: null
+      reRate: null,
+      pass: true
     };
   },
   components: {
@@ -87,6 +88,7 @@ export default {
           let dotTwo = dotArr[1].substring(0, 2);
           this.reRate = Number(`${dotArr[0]}.${dotTwo}`);
           this.$toast("请保留小数点后两位");
+          this.pass = false;
         } else {
           this.validMax(_data);
         }
@@ -96,20 +98,25 @@ export default {
     },
     validMax(val) {
       if (0 <= val && val <= 100) {
-        return true;
+        this.pass = true;
       } else {
         this.reRate = null;
         this.$toast("折扣应在0-100间");
+        this.pass = false;
       }
     },
     confirmRate() {
-      saveDistributor({
-        addUserId: this.userId,
-        scale: this.reRate,
-        status: 1
-      }).then(({ data }) => {
-        this.$toast(data.msg);
-      });
+      if (this.pass) {
+        saveDistributor({
+          addUserId: this.userId,
+          scale: this.reRate,
+          status: 1
+        }).then(({ data }) => {
+          this.$toast(data.msg);
+        });
+      } else {
+        this.$toast("填写格式错误");
+      }
     }
   },
   computed: {
@@ -123,13 +130,13 @@ export default {
     status() {
       switch (this.actived) {
         case 1:
-          return "待发货";
+          return "03";
         case 2:
-          return "待收货";
+          return "04";
         case 3:
-          return "已取消";
+          return "00";
         case 4:
-          return "已完成";
+          return "99";
         default:
           return null;
       }
@@ -211,6 +218,7 @@ export default {
   }
   .DOD_h_l {
     flex: 5;
+    text-align: center;
   }
   .DOD_h_c {
     flex: 3;
@@ -261,8 +269,48 @@ export default {
 }
 .orderList {
   margin-top: 14px;
-  height: calc(100vh - 187px);
+  height: calc(100vh - 170px);
   overflow-y: scroll;
   position: relative;
+}
+.tips_wrap {
+  width: 310px;
+  height: 190px;
+  background: #fff;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 38px 35px 0 35px;
+  .tips_h {
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+  }
+  .tips_c {
+    width: 100%;
+    border: 1px solid #999;
+    height: 33px;
+    box-sizing: border-box;
+    margin: 36px 0 24px;
+    input {
+      width: 90%;
+      height: 100%;
+      padding-left: 10px;
+      box-sizing: border-box;
+    }
+  }
+  .tips_btn {
+    width: 100%;
+    text-align: center;
+    .tips_btn1 {
+      display: inline-block;
+      width: 70px;
+      height: 26px;
+      line-height: 26px;
+      background: $Color;
+      color: #fff;
+      font-size: 15px;
+      border-radius: 5px;
+    }
+  }
 }
 </style>

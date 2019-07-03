@@ -10,12 +10,12 @@
     <!-- content -->
     <div class="pg_model_content">
       <!-- list -->
-      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh">
+      <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" class="isFresh">
         <van-list
           v-model="loading"
           :finished="finished"
           @load="onLoad"
-          finished-text="没有更多了"
+          :finished-text="dataList.length===0?'':'没有更多了'"
           :immediate-check="false"
         >
           <div
@@ -26,7 +26,10 @@
           >
             <div class="list_li_l">
               <div class="user_icon" :style="{backgroundImage:'url('+v.userImages+')'}">
-                <div class="user_icon_dailog">{{v.distributorTypeLabel}}</div>
+                <div
+                  class="user_icon_dailog"
+                  v-if="v.distributorTypeLabel!==undefined"
+                >{{v.distributorTypeLabel}}</div>
               </div>
               <p class="user_name ellipsis-line">{{v.nickName}}</p>
               <p class="user_time ellipsis-line">创建时间:{{v.createDateLabel}}</p>
@@ -112,10 +115,14 @@ export default {
           //赋值
           if (isInit) {
             this.dataList = getList;
-            this.curPage = this.curPage + 1;
+            if (getList.length < 10) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
-            if (getList.length === 0) {
+            if (getList.length < 10) {
               this.finished = true;
             } else {
               this.curPage = this.curPage + 1;
@@ -187,11 +194,15 @@ export default {
 .pg_model_content {
   width: 100vw;
   position: absolute;
-  top: 46px;
+  height: 100vh;
+  box-sizing: border-box;
+  .isFresh {
+    min-height: 100%;
+  }
 }
 .pg_SalerManege {
   .pg_model_content {
-    padding-top: 10px;
+    padding-top: 56px;
   }
   .list_li {
     width: 99%;
@@ -262,23 +273,6 @@ export default {
         }
       }
     }
-  }
-}
-
-.noData {
-  width: 100%;
-  height: calc(100vh - 120px);
-  text-align: center;
-  position: absolute;
-  top: 120px;
-  img {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    display: inline-block;
-    width: 227px;
-    height: 200px;
   }
 }
 </style>

@@ -81,10 +81,14 @@ export default {
           //赋值
           if (isInit) {
             this.dataList = getList;
-            this.curPage = this.curPage + 1;
+            if (getList.length < 10) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
-            if (getList.length === 0) {
+            if (getList.length < 10) {
               this.finished = true;
             } else {
               this.curPage = this.curPage + 1;
@@ -163,8 +167,7 @@ export default {
     transform: translate(-50%, -50%);
     left: 50%;
     display: inline-block;
-    width: 227px;
-    height: 200px;
+    width: 150px;
   }
 }
 </style>

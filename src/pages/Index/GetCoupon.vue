@@ -70,10 +70,14 @@ export default {
           //赋值
           if (isInit) {
             this.couponList = getList;
-            this.curPage = this.curPage + 1;
+            if (getList.length < 10) {
+              this.finished = true;
+            } else {
+              this.curPage = this.curPage + 1;
+            }
           } else {
             [...this.couponList] = [...this.couponList, ...getList];
-            if (getList.length === 0) {
+            if (getList.length < 10) {
               this.finished = true;
             } else {
               this.curPage = this.curPage + 1;
