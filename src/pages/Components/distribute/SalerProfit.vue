@@ -68,14 +68,14 @@ export default {
           //赋值
           if (isInit) {
             this.dataList = getList;
-            if (getList.length === 0) {
+            if (getList.length < 10) {
               this.finished = true;
             } else {
               this.curPage = this.curPage + 1;
             }
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
-            if (getList.length === 0) {
+            if (getList.length < 10) {
               this.finished = true;
             } else {
               this.curPage = this.curPage + 1;

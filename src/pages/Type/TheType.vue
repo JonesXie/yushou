@@ -7,7 +7,7 @@
     </div>
     <div class="pgt_list">
       <van-badge-group :active-key="activeKey" @change="onChange" class="pgt_L">
-        <van-badge v-for="(v,i) in barList" :key="i" :title="v.codeName"/>
+        <van-badge v-for="(v,i) in barList" :key="i" :title="v.codeName" />
       </van-badge-group>
       <div class="pgt_R">
         <type-right :istype="getType"></type-right>
@@ -27,7 +27,7 @@ export default {
     return {
       activeKey: 0,
       getType: [],
-      barList:[]
+      barList: []
     };
   },
   components: {
@@ -40,14 +40,14 @@ export default {
     ...mapActions(["ChangeActive"]),
     onChange(key) {
       this.activeKey = key;
-      this.getType = this.barList[key]
+      this.getType = this.barList[key];
     }
   },
   mounted() {
     this.ChangeActive(2);
     findGoodsCode().then(({ data }) => {
       this.barList = data.data;
-      this.getType = this.barList[0]
+      this.getType = this.barList[0];
     });
   }
 };
@@ -86,6 +86,7 @@ export default {
   .pgt_list {
     position: relative;
     margin-top: 10px;
+    overflow: hidden;
     &/deep/ .van-badge--select {
       border-color: #ea047b;
     }
@@ -102,13 +103,14 @@ export default {
     left: 0;
     height: calc(100vh - 134px);
     background: #f8f8f8;
+    overflow-y: scroll;
   }
   .pgt_R {
     width: 76%;
     display: inline-block;
     height: calc(100vh - 134px);
     margin-left: 24%;
-    overflow: auto;
+    overflow-y: scroll;
   }
 }
 </style>

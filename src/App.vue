@@ -39,10 +39,10 @@ $Color: #ea047b;
 //无数据
 .noData {
   width: 100%;
-  height: calc(100vh - 120px);
+  // height: calc(100vh - 120px);
   text-align: center;
   position: absolute;
-  top: 120px;
+  top: 200px;
   img {
     position: absolute;
     top: 40%;

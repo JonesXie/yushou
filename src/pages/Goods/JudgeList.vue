@@ -145,14 +145,14 @@ export default {
           //赋值
           if (isInit) {
             this.judgeList = getList;
-            if (getList.length === 0) {
+            if (getList.length < 10) {
               this.finished = true;
             } else {
               this.curPage = this.curPage + 1;
             }
           } else {
             [...this.judgeList] = [...this.judgeList, ...getList];
-            if (getList.length === 0) {
+            if (getList.length < 10) {
               this.finished = true;
             } else {
               this.curPage = this.curPage + 1;
