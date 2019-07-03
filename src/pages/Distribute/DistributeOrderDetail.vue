@@ -123,13 +123,13 @@ export default {
     status() {
       switch (this.actived) {
         case 1:
-          return "待发货";
+          return "03";
         case 2:
-          return "待收货";
+          return "04";
         case 3:
-          return "已取消";
+          return "00";
         case 4:
-          return "已完成";
+          return "99";
         default:
           return null;
       }

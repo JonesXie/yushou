@@ -101,11 +101,12 @@ export default {
           if (data.code === 1) {
             localStorage.setItem("token", data.token);
             this.$store.commit("SET_Token", data.token);
-            this.$router.push(this.$store.state.fromToLogin);
+            this.$router.replace(this.$store.state.fromToLogin);
           }
         });
       } else {
         this.$toast("请先进行微信授权");
+        sessionStorage.setItem("wxclick", this.$store.state.fromToLogin);
         let That = this;
         setTimeout(() => {
           sessionStorage.setItem(
@@ -119,6 +120,17 @@ export default {
   },
   mounted() {
     this.ChangeStatus(false);
+    let wxData = this.$store.state.wxData;
+    if (notNull(wxData) && notNull(sessionStorage.getItem("wxclick"))) {
+      doLogin({ wxId: this.$store.state.wxData.unionid }).then(({ data }) => {
+        this.$toast(data.msg);
+        if (data.code === 1) {
+          localStorage.setItem("token", data.token);
+          this.$store.commit("SET_Token", data.token);
+          this.$router.push(sessionStorage.getItem("wxclick"));
+        }
+      });
+    }
   },
   beforeDestroy() {
     this.ChangeStatus(true);

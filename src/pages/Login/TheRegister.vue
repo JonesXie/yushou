@@ -112,7 +112,8 @@ export default {
               nickName: wxData.nickname,
               sex: wxData.sex,
               wxId: wxData.unionid,
-              imagePath: wxData.headimgurl
+              imagePath: wxData.headimgurl,
+              distributorId: sessionStorage.getItem("distributorId")
             };
             thirdlyRegister(_data).then(({ data }) => {
               if (data.code === 1) {

@@ -5,10 +5,12 @@ import {
 } from "@/layout/methods.js"
 router.beforeEach((to, from, next) => {
   //上线时放开注释
+  //获取微信openid
   if (!notNull(localStorage.getItem("openId"))) {
     sessionStorage.setItem("enterURL", `${window.location.href}`.split("/")[3])
     store.dispatch("getWX");
   }
+  //兼容ios
   if (!notNull(store.state.wxURL)) {
     if (from.path === "/") {
       // sessionStorage.setItem("firstURL", `${window.location.href}index`)
