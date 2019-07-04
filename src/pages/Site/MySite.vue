@@ -111,7 +111,6 @@ export default {
         }
       });
     },
-
     onRefresh() {
       this.onInit(true);
     },
@@ -136,8 +135,12 @@ export default {
           //赋值
           if (isInit) {
             this.dataList = getList;
+            //没有分页，若有删除下面一行
+            this.finished = true;
           } else {
             [...this.dataList] = [...this.dataList, ...getList];
+            //没有分页，若有删除下面一行
+            this.finished = true;
             this.curPage = this.curPage + 1;
             if (getList.length === 0) {
               this.finished = true;

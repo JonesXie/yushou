@@ -32,12 +32,14 @@
               合计：
               <em>{{v.goodsSalePrice}}.0</em>元
             </div>
-            <div class="cut">
+            <div class="cut" v-if="isOnline">
               <div
-                v-if="isOnline"
                 class="profit"
               >利润比例：{{100 - Number(v.scale)}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.mainIncome}}元</div>
               <div class="rental">佣金比例：{{Number(v.scale)}}%&nbsp;&nbsp;&nbsp;&nbsp;{{v.income}}元</div>
+            </div>
+            <div class="cut" v-else>
+              <div class="rental">佣金：{{v.income}}元</div>
             </div>
           </div>
         </li>
@@ -91,7 +93,7 @@ export default {
       }
     },
     isOnline() {
-      if (sessionStorage.getItem("onOroff")) {
+      if (sessionStorage.getItem("onOroff") == "true") {
         return false;
       } else {
         return true;
