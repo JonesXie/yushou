@@ -10,12 +10,12 @@ router.beforeEach((to, from, next) => {
       sessionStorage.setItem("distributorId", to.query.distributorId)
     }
   }
-  //上线时放开注释
-  // if (!notNull(localStorage.getItem("openId"))) {
-  //   let domain = document.domain || window.location.host
-  //   sessionStorage.setItem("enterURL", `${window.location.href}`.split(domain)[1])
-  //   store.dispatch("getWX");
-  // }
+  // 上线时放开注释
+  if (!notNull(localStorage.getItem("openId"))) {
+    let domain = document.domain || window.location.host
+    sessionStorage.setItem("enterURL", `${window.location.href}`.split(domain)[1])
+    store.dispatch("getWX");
+  }
   //兼容WX ios首次进入
   if (!notNull(store.state.wxURL)) {
     if (from.path === "/") {
