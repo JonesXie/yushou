@@ -21,6 +21,7 @@ import { mapActions } from "vuex";
 import { NavBar, BadgeGroup, Badge } from "vant";
 import TypeRight from "./TypeRight.vue";
 import { findGoodsCode } from "@/api/index.js";
+import { notNull } from "@/layout/methods.js";
 export default {
   name: "TheType",
   data() {
@@ -39,15 +40,19 @@ export default {
   methods: {
     ...mapActions(["ChangeActive"]),
     onChange(key) {
+      sessionStorage.setItem("typeActived", key);
       this.activeKey = key;
       this.getType = this.barList[key];
     }
   },
   mounted() {
     this.ChangeActive(1); //激活当前tabbar
+    if (notNull(sessionStorage.getItem("typeActived"))) {
+      this.activeKey = Number(sessionStorage.getItem("typeActived"));
+    }
     findGoodsCode().then(({ data }) => {
       this.barList = data.data;
-      this.getType = this.barList[0];
+      this.getType = this.barList[this.activeKey];
     });
   }
 };
