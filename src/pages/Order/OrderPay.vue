@@ -25,7 +25,7 @@
             :class="['pgo_li_item',props.checked ? 'active' : '']"
           >
             <div class="pgo_li_img">
-              <img src="@/assets/img/order/pg_pay_wechat.png" alt>
+              <img src="@/assets/img/order/pg_pay_wechat.png" alt />
             </div>
             <p class="pgo_li_type">微信支付</p>
             <p class="pgo_li_info">微信快捷支付</p>
@@ -39,7 +39,7 @@
             :class="['pgo_li_item',props.checked ? 'active' : '']"
           >
             <div class="pgo_li_img">
-              <img src="@/assets/img/order/pg_pay_yue.png" alt>
+              <img src="@/assets/img/order/pg_pay_yue.png" alt />
             </div>
             <p class="pgo_li_type">余额支付</p>
             <p class="pgo_li_info">使用余额支付</p>
@@ -56,11 +56,11 @@
       <van-popup v-model="balanceShow" class="balanceWrap" :lock-scroll="true" position="bottom">
         <!-- 密码输入框 -->
         <div class="balanceInput">
-          <van-password-input :value="psw"/>
+          <van-password-input :value="psw" />
         </div>
         <router-link to="/setpay/1" class="bakanceForget">忘记密码?</router-link>
         <!-- 数字键盘 -->
-        <van-number-keyboard @input="onInput" @delete="onDelete" :show="showKeyboard"/>
+        <van-number-keyboard @input="onInput" @delete="onDelete" :show="showKeyboard" />
       </van-popup>
     </template>
   </HeadFoot>
@@ -71,6 +71,7 @@ import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { Radio, RadioGroup, PasswordInput, NumberKeyboard, Popup } from "vant";
 import { toPayOrder, balancePay, doPayOrder } from "@/api/order.js";
 import { notNull } from "@/layout/methods.js";
+import { setTimeout } from "timers";
 
 export default {
   name: "OrderPay",
@@ -88,6 +89,7 @@ export default {
       psw: "",
       balanceShow: false,
       showKeyboard: false,
+      isSetPayPassword: false,
       needIdentityCard: 0 //0不需要，1需要已填写 2需要未填写
     };
   },
@@ -118,8 +120,15 @@ export default {
     submit() {
       if (notNull(this.selected)) {
         if (this.selected == "0") {
-          this.balanceShow = true;
-          this.showKeyboard = true;
+          if (this.isSetPayPassword) {
+            this.balanceShow = true;
+            this.showKeyboard = true;
+          } else {
+            this.$toast("您尚未设置支付密码");
+            setTimeout(() => {
+              this.$router.push("/setpay/0");
+            }, 2000);
+          }
         } else {
           this.doPay();
         }
@@ -131,9 +140,7 @@ export default {
     paySuccess() {
       this.$toast.success("支付成功");
       this.$router.replace({
-        path: `/paysuccess/${this.selected}/${this.orderPayPrice}/${
-          this.needIdentityCard
-        }`,
+        path: `/paysuccess/${this.selected}/${this.orderPayPrice}/${this.needIdentityCard}`,
         query: {
           orderId: this.orderId,
           addressId: this.addressId
@@ -205,7 +212,7 @@ export default {
         },
         function(res) {
           if (res.err_msg == "get_brand_wcpay_request:ok") {
-            // THAT.getPayInfo(); // 获取支付信息
+            // THAT.getPaySuc(); // 获取支付信息
             THAT.paySuccess();
           } else if (
             res.err_msg == "get_brand_wcpay_request:cancel" ||
@@ -218,7 +225,7 @@ export default {
       );
     },
     //验证支付
-    getPayInfo() {
+    getPaySuc() {
       this.$http
         .get("/order/checkPaySuccess/?reqsn=" + this.orderId, {
           timeout: 15000
@@ -245,6 +252,7 @@ export default {
         this.goodsBuyNum = data.data.goodsBuyNum;
         this.orderPayPrice = data.data.orderPayPrice;
         this.orderNo = data.data.orderNo;
+        this.isSetPayPassword = data.data.isSetPayPassword;
         this.allInfo = data.data;
       });
     }
