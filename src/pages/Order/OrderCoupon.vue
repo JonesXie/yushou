@@ -40,7 +40,7 @@
         <img src="@/assets/img/ly_nodata.png" alt />
       </div>
       <div class="pgc_bottom">
-        <div class="pgcb_l" @click="$router.go(-1)">不使用优惠券</div>
+        <div class="pgcb_l" @click="cancel">不使用优惠券</div>
         <div class="pgcb_r" @click="confirm">确定</div>
       </div>
     </template>
@@ -87,6 +87,10 @@ export default {
       } else {
         this.$toast("请选择优惠券");
       }
+    },
+    cancel() {
+      this.setCouponData(null);
+      this.$router.go(-1);
     },
     // reGetData(index) {},
     onRefresh() {

@@ -82,7 +82,9 @@ export default {
               this.$toast(data.msg);
               localStorage.setItem("token", data.token);
               this.$store.commit("SET_Token", data.token);
-              this.$router.push(this.$store.state.fromToLogin);
+              setTimeout(() => {
+                this.$router.replace(this.$store.state.fromToLogin);
+              }, 1500);
             }
           });
         } else {
@@ -101,7 +103,9 @@ export default {
           if (data.code === 1) {
             localStorage.setItem("token", data.token);
             this.$store.commit("SET_Token", data.token);
-            this.$router.replace(this.$store.state.fromToLogin);
+            setTimeout(() => {
+              this.$router.replace(this.$store.state.fromToLogin);
+            }, 1500);
           }
         });
       } else {
@@ -128,7 +132,9 @@ export default {
         if (data.code === 1) {
           localStorage.setItem("token", data.token);
           this.$store.commit("SET_Token", data.token);
-          this.$router.push(sessionStorage.getItem("wxclick"));
+          setTimeout(() => {
+            this.$router.replace(sessionStorage.getItem("wxclick"));
+          }, 1500);
         }
       });
     }

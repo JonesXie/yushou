@@ -19,7 +19,7 @@
             <p class="li_info_l">手续费金额（手续费比例）</p>
           </div>
           <div class="li_money">
-            <p class="li_info_l">￥{{v.actualAmount}}</p>
+            <p class="li_info_l">￥{{v.amount}}</p>
             <p class="li_info_l">￥{{v.serviceCharge}}（{{v.serviceChargeScale}}%）</p>
           </div>
           <div class="li_info">
@@ -28,7 +28,7 @@
           </div>
           <div class="li_money">
             <p class="li_info_l">￥{{v.actualAmount}}</p>
-            <p class="li_info_l">￥{{v.platformAmount}}（{{v.depositScale}}%）</p>
+            <p class="li_info_l">￥{{v.platformAmount}}（{{100 - Number(v.depositScale)}}%）</p>
           </div>
           <div class="li_tips" v-if="v.status ===4">失败原因:{{v.remake}}</div>
         </div>

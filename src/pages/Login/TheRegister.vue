@@ -120,7 +120,9 @@ export default {
                 this.$notify("注册成功");
                 localStorage.setItem("token", data.token);
                 this.$store.commit("SET_Token", data.token);
-                this.$router.push("/index");
+                setTimeout(() => {
+                  this.$router.replace(this.$store.state.fromToLogin);
+                }, 1500);
               }
             });
           } else {

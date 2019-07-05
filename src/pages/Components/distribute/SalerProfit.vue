@@ -15,7 +15,7 @@
             <em class="fr">+{{v.amount}}元</em>
           </p>
           <p class="li_time li_title">
-            佣金比例：{{v.depositScale}}
+            佣金比例：{{Number(v.sourceScale)}}%
             <i class="fr">{{v.createDateLabel}}</i>
           </p>
         </div>

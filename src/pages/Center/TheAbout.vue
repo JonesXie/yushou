@@ -1,7 +1,7 @@
 <template>
   <div class="pg_TheAbout">
     <div class="pgw_h_nav">
-      <van-icon name="arrow-left" @click="GoBack()"/>
+      <van-icon name="arrow-left" @click="GoBack()" />
       <span>关于我们</span>
     </div>
   </div>
@@ -39,8 +39,8 @@ export default {
   height: 100vh;
   overflow: hidden;
   position: relative;
-  background: url("~@/assets/img/center/pg_about.png");
-  background-size: 100%;
+  background: url("~@/assets/img/center/pg_about.jpg");
+  background-size: 100% 100%;
   background-position: top center;
   background-repeat: no-repeat;
   .pgw_h_nav {
