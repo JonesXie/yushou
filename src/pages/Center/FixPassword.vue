@@ -3,7 +3,7 @@
     <template #content>
       <van-cell-group class="pgs_link">
         <van-cell>
-          <img slot="icon" src="@/assets/img/login/pg_login_phone.png" alt class="num_img">
+          <img slot="icon" src="@/assets/img/login/pg_login_phone.png" alt class="num_img" />
           <input
             type="tel"
             placeholder="请输入手机号码"
@@ -11,22 +11,22 @@
             @blur="validPhone"
             v-model="phone"
             maxlength="11"
-          >
+          />
         </van-cell>
         <van-cell>
-          <img slot="icon" src="@/assets/img/login/pg_login_safe.png" alt class="msn_img">
-          <input type="text" placeholder="输入短信验证码" class="msn" v-model="msn">
+          <img slot="icon" src="@/assets/img/login/pg_login_safe.png" alt class="msn_img" />
+          <input type="text" placeholder="输入短信验证码" class="msn" v-model="msn" />
           <p class="msn_tips" @click="getCode">{{msnTxt}}</p>
         </van-cell>
       </van-cell-group>
       <van-cell-group class="newData">
         <van-cell>
-          <img slot="icon" src="@/assets/img/login/pg_login_phone.png" alt class="num_img">
-          <input type="password" placeholder="新密码" class="num" v-model="newPW">
+          <img slot="icon" src="@/assets/img/login/pg_login_phone.png" alt class="num_img" />
+          <input type="password" placeholder="新密码" class="num" v-model="newPW" />
         </van-cell>
         <van-cell>
-          <img slot="icon" src="@/assets/img/login/pg_login_phone.png" alt class="num_img">
-          <input type="password" placeholder="确认密码" class="num" v-model="confirmPW">
+          <img slot="icon" src="@/assets/img/login/pg_login_phone.png" alt class="num_img" />
+          <input type="password" placeholder="确认密码" class="num" v-model="confirmPW" />
         </van-cell>
       </van-cell-group>
       <div class="pps_out" @click="submit">确认</div>
@@ -57,7 +57,7 @@ export default {
   components: { HeadFoot, [Cell.name]: Cell, [CellGroup.name]: CellGroup },
   methods: {
     validPhone() {
-      let reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+      let reg = 11 && /^((13|14|15|17|18|19)[0-9]{1}\d{8})$/;
       if (this.phone === null) {
         this.$toast("手机号不能为空");
       } else if (!reg.test(this.phone)) {

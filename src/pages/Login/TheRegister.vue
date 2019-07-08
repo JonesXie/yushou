@@ -57,7 +57,7 @@ export default {
       }
     },
     validPhone() {
-      let reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+      let reg = 11 && /^((13|14|15|17|18|19)[0-9]{1}\d{8})$/;
       if (this.phone === null) {
         Toast("手机号不能为空");
       } else if (!reg.test(this.phone)) {
