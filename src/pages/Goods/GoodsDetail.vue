@@ -142,7 +142,7 @@
             <span class="price_li_dot"></span>
             <em>市场原价</em>
           </p>
-          <p class="price_p2">商品市场最低价格，由预兽官方比对价格后确认市场最低价</p>
+          <p class="price_p2">商品市场最低价格，由宝宝湾官方比对价格后确认市场最低价</p>
         </li>
         <li>
           <p class="price_p1">
@@ -163,7 +163,7 @@
             <span class="price_li_dot"></span>
             <em>假一赔十</em>
           </p>
-          <p class="price_p2">预兽优选产品，百分百质量保障，若出现假货，假一赔十</p>
+          <p class="price_p2">宝宝湾优选产品，百分百质量保障，若出现假货，假一赔十</p>
         </li>
         <li>
           <p class="price_p1">
@@ -182,11 +182,11 @@
         <li>
           <p class="price_p1">
             <span class="price_li_dot"></span>
-            <em>何为预兽</em>
+            <em>何为宝宝湾</em>
           </p>
           <p
             class="price_p2"
-          >预兽的货源主要来自全球直采、品牌一级经销商等源头渠道。预兽为了让您购买到最具性价比的商品，我们不会预先准备库存，因此有一定的调货周期，请耐心等待。预兽只在商品首发日以极低的价格预售商品，在调货期间内买家订单可自由买卖。</p>
+          >宝宝湾的货源主要来自全球直采、品牌一级经销商等源头渠道。宝宝湾为了让您购买到最具性价比的商品，我们不会预先准备库存，因此有一定的调货周期，请耐心等待。宝宝湾只在商品首发日以极低的价格预售商品，在调货期间内买家订单可自由买卖。</p>
         </li>
       </ul>
       <div class="power_close_btn" @click="showPower=false">完成</div>

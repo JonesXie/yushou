@@ -28,7 +28,7 @@
         <div class="pgai_tips" @click="readTips">
           <img v-if="selected" src="@/assets/img/ly_choosed.png" alt />
           <img v-else src="@/assets/img/ly_choose.png" alt />
-          我已阅读预兽
+          我已阅读宝宝湾
           <a style="color:#fa4ba6">母婴门店</a>店长细则
         </div>
         <div class="next_btn" @click="submit">提交</div>
