@@ -33,9 +33,9 @@
     <!-- 待收货-->
     <div class="mol_f" v-else-if="isShow ==='04'">
       <span class="wuliu">
-         <router-link :to="{path:`/logistics/${itemData.id}`}">查看物流</router-link>
+        <router-link :to="{path:`/logistics/${itemData.id}`}">查看物流</router-link>
       </span>
-      <span class="check">确认收货</span>
+      <span class="check" @click="deliverConfrim">确认收货</span>
     </div>
     <!-- 交易成功-->
     <div class="mol_f" v-else-if="isShow ==='99'">
