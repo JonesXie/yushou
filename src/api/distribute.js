@@ -72,3 +72,12 @@ export function cancelUserDistributorCode(data, isJson) {
 export function withdrawalPrompt(data, isJson) {
   return post('/api/distributor/withdrawalPrompt', data, isJson)
 }
+
+//分销-获取分销商品下载地址-列表
+export function selectYmWaitQRCodeZipFilesPage(data, isJson) {
+  return post('/goods/selectYmWaitQRCodeZipFilesPage', data, isJson)
+}
+//分销-提交请求获取全部商品标价牌
+export function createProductQRCode(data, isJson) {
+  return post('/goods/createProductQRCode', data, isJson)
+}

@@ -32,6 +32,13 @@ router.beforeEach((to, from, next) => {
       store.commit('SET_FromToLogin', from.path)
     }
   }
+  if (to.path === '/login' || to.path === '/registor') {
+    if (notNull(sessionStorage.getItem("isLogin"))) {
+      router.replace({
+        path: '/index'
+      })
+    }
+  }
   next()
 })
 

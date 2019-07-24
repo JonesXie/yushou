@@ -82,6 +82,7 @@ export default {
               this.$toast(data.msg);
               localStorage.setItem("token", data.token);
               this.$store.commit("SET_Token", data.token);
+              sessionStorage.setItem("isLogin", true);
               setTimeout(() => {
                 this.$router.replace(this.$store.state.fromToLogin);
               }, 1500);
@@ -103,6 +104,7 @@ export default {
           if (data.code === 1) {
             localStorage.setItem("token", data.token);
             this.$store.commit("SET_Token", data.token);
+            sessionStorage.setItem("isLogin", true);
             setTimeout(() => {
               this.$router.replace(this.$store.state.fromToLogin);
             }, 1500);
@@ -132,6 +134,7 @@ export default {
         if (data.code === 1) {
           localStorage.setItem("token", data.token);
           this.$store.commit("SET_Token", data.token);
+          sessionStorage.setItem("isLogin", true);
           setTimeout(() => {
             this.$router.replace(sessionStorage.getItem("wxclick"));
           }, 1500);

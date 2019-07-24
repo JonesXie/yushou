@@ -2,8 +2,8 @@
   <HeadFoot class="pg_setting" :Title="title" :backPath="backPath">
     <template #content>
       <van-cell-group class="pgs_link">
-        <van-cell title="修改密码" is-link to="/fixpassword"/>
-        <van-cell title="安全设置" is-link to="/security"/>
+        <van-cell title="修改密码" is-link to="/fixpassword" />
+        <van-cell title="安全设置" is-link to="/security" />
       </van-cell-group>
       <div class="pps_out" @click="getOut">退出登录</div>
     </template>
@@ -18,13 +18,14 @@ export default {
   data() {
     return {
       title: "设置",
-      backPath:'/center'
+      backPath: "/center"
     };
   },
   components: { HeadFoot, [Cell.name]: Cell, [CellGroup.name]: CellGroup },
   methods: {
     getOut() {
       localStorage.removeItem("token");
+      sessionStorage.removeItem("isLogin");
       this.$store.commit("SET_Token", null);
       this.$router.push("/login");
     }
