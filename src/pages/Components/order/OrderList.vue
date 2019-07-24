@@ -13,7 +13,8 @@
           <li class="mo_li" v-for="(v,i) in dataList" :key="i">
             <div class="mol_h">
               <p>订单编号:{{v.orderNo}}</p>
-              <p>{{setArr[v.orderState]}}</p>
+              <!-- <p>{{setArr[v.orderState]}}</p> -->
+              <p>{{v.orderStateLabel}}</p>
             </div>
             <div class="mol_c">
               <router-link :to="`/orderdetail/${v.id}`">

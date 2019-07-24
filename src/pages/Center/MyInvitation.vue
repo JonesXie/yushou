@@ -45,7 +45,10 @@ export default {
       code: "YQ0000088",
       phone: null,
       datalist: [],
-      showPopup: false
+      showPopup: false,
+      shareTitle: "【宝宝湾】全球进口母婴 国企供应 阳光放心",
+      shareContent:
+        "低价预售，不怕比价。大牌正品，质量保证。订单挂卖，获取盈利。"
     };
   },
   components: { HeadFoot, [Popup.name]: Popup },
@@ -86,8 +89,8 @@ export default {
       wx.ready(function() {
         //分享到朋友
         wx.updateAppMessageShareData({
-          title: "【宝宝湾】不赚差价的电商，你见过？", // 分享标题
-          desc: "低价预售，不怕比价。大牌正品，质量保证。订单挂卖，获取盈利。", // 分享描述
+          title: That.shareTitle, // 分享标题
+          desc: That.shareContent, // 分享描述
           link: `https://m.fishmaimai.com/register?inviter=${That.phone}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           imgUrl: "https://www.fishmaimai.com/logo/logo.png", // 分享图标
           success: function() {
@@ -97,7 +100,7 @@ export default {
         });
         //分享到朋友圈
         wx.updateTimelineShareData({
-          title: "【宝宝湾】不赚差价的电商，你见过？", // 分享标题
+          title: That.shareTitle, // 分享标题
           link: `https://m.fishmaimai.com/register?inviter=${That.phone}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           imgUrl: "https://www.fishmaimai.com/logo/logo.png", // 分享图标
           success: function() {

@@ -1,9 +1,9 @@
 <template>
   <HeadFoot class="pg_WithDraw pg_walletout" :Title="title" :backPath="backPath">
-    <template #content>
+    <template #content v-if="TipsInfo !==null">
       <!-- do somethings -->
-      <van-field v-model="alipay" label="提现账户" placeholder="支付宝(15221425895)" />
-      <div class="cut_tip">因股权分配问题，您的实际到账金额为提现金额的50%</div>
+      <van-field v-model="alipay" label="提现账户" :placeholder="`支付宝(${TipsInfo.phone})`" />
+      <div class="cut_tip">{{TipsInfo.reminder1}}</div>
       <div class="pgw_money">
         <div class="tips">提现金额</div>
         <div class="input">
@@ -11,7 +11,7 @@
           <input type="number" v-model="outMoney" class="outMoney" />
         </div>
       </div>
-      <p class="tips">提示：额外扣除￥{{reduceM}}手续费(为微信及支付宝对本平台产生的手续费,费率0.75)</p>
+      <p class="tips">{{reminder2}}</p>
       <div class="submit" @click="submit">提现</div>
     </template>
   </HeadFoot>
@@ -20,7 +20,7 @@
 <script>
 import HeadFoot from "@/pages/Public/HeadFoot.vue";
 import { notNull } from "@/layout/methods.js";
-import { withdrawDeposit } from "@/api/distribute.js";
+import { withdrawDeposit, withdrawalPrompt } from "@/api/distribute.js";
 import { Field } from "vant";
 export default {
   name: "WithDraw",
@@ -29,17 +29,24 @@ export default {
       title: "提现",
       backPath: "", //返回路由，可删除
       alipay: null,
-      outMoney: null
+      outMoney: null,
+      TipsInfo: null
     };
   },
   components: { HeadFoot, [Field.name]: Field },
   computed: {
     reduceM() {
       if (notNull(this.outMoney)) {
-        return (Number(this.outMoney) * 0.0075).toFixed(2);
+        return (
+          Number(this.outMoney) * Number(this.TipsInfo.serviceChargeScale)
+        ).toFixed(2);
       } else {
         return 0;
       }
+    },
+    reminder2() {
+      let arr = this.TipsInfo.reminder2.split("${serviceCharge}");
+      return arr.join(`${this.reduceM}`);
     }
   },
   methods: {
@@ -60,9 +67,16 @@ export default {
       } else {
         this.$toast("填写提现账号");
       }
+    },
+    getTips() {
+      withdrawalPrompt().then(({ data }) => {
+        this.TipsInfo = data.data;
+      });
     }
   },
-  mounted() {}
+  mounted() {
+    this.getTips();
+  }
 };
 </script>
 

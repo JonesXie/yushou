@@ -9,12 +9,13 @@
             alt
           />
           <img v-else src="@/assets/img/components/pg_orderdetail_wait.png" alt />
-          <span>{{orderStatus[detailData.orderState]}}</span>
+          <!-- <span>{{orderStatus[detailData.orderState]}}</span> -->
+          <span>{{detailData.orderStateLabel}}</span>
         </p>
-        <p class="pgod_h_p2" v-if="detailData.orderState === '99'">您的包裹已到达,祝您购物愉快</p>
+        <!-- <p class="pgod_h_p2" v-if="detailData.orderState === '99'">您的包裹已到达,祝您购物愉快</p>
         <p class="pgod_h_p2" v-else-if="detailData.orderState === '00'">您的订单已取消</p>
-        <p class="pgod_h_p2" v-else-if="detailData.orderState === '01'">等待支付中</p>
-        <p class="pgod_h_p2" v-else>您的包裹已经在路上啦，请您耐心等待哦</p>
+        <p class="pgod_h_p2" v-else-if="detailData.orderState === '01'">等待支付中</p>-->
+        <p class="pgod_h_p2">{{detailData.orderStateDescLabel}}</p>
       </div>
       <van-cell-group>
         <van-cell :center="true">

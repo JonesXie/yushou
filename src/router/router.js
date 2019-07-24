@@ -337,6 +337,12 @@ const RouterMap = [
     name: 'thecheck',
     component: () => import('@/pages/Distribute/TheCheck.vue')
   },
+  //商品标价签下载
+  {
+    path: '/labeldownload',
+    name: 'labeldownload',
+    component: () => import('@/pages/Distribute/LabelDownload.vue')
+  },
   // 设置404页面
   {
     path: '/404',
@@ -344,7 +350,7 @@ const RouterMap = [
   },
   {
     path: '*',
-    redirect: '/404'
+    component: () => import('@/pages/404/404.vue')
   }
 ]
 export default new Router({

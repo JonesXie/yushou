@@ -9,7 +9,7 @@
         :finished-text="dataList.length===0?'':'没有更多了'"
         :immediate-check="false"
       >
-        <div class="list_li van-hairline--bottom" v-for="(v,i) in dataList" :key="i">
+        <div v-for="(v,i) in dataList" :key="i" :class="['list_li', `li_status${v.status}`]">
           <p class="li_title">
             线上店长：{{v.distributorCodeName}}
             <em class="fr">+{{v.amount}}元</em>
@@ -18,6 +18,7 @@
             佣金比例：{{Number(v.sourceScale)}}%
             <i class="fr">{{v.createDateLabel}}</i>
           </p>
+          <p class="li_time li_title" v-if="v.status == 1">到账时间：{{v.performDateLabel}}</p>
         </div>
       </van-list>
     </van-pull-refresh>
@@ -100,7 +101,6 @@ export default {
 .mod_realprofit {
   width: 345px;
   margin: 0 auto 0;
-  background: #fff;
   border-radius: 5px;
   box-sizing: border-box;
   position: relative;
@@ -108,6 +108,12 @@ export default {
   .list_li {
     padding: 26px 2px 16px 15px;
     box-sizing: border-box;
+    margin-bottom: 10px;
+    background: #fff;
+    border-radius: 10px;
+    background-position: 105% 250%;
+    background-repeat: no-repeat;
+    background-size: 68px 68px;
     .li_title {
       width: 100%;
       font-size: 13px;
@@ -117,14 +123,33 @@ export default {
         font-size: 14px;
         margin-right: 5px;
       }
+      .fr {
+        margin-right: 10px;
+      }
     }
     .li_time {
       color: #999;
       font-size: 12px;
-      margin-top: 8px;
-      i {
-        margin-right: 5px;
+      margin-top: 15px;
+    }
+    &.li_status0 {
+      background-image: url("~@/assets/img/distribution/ly_distribut_order_close.png");
+      color: #cccccc;
+      .li_title {
+        em {
+          color: #cccccc;
+        }
       }
+      .li_time {
+        color: #ccc;
+      }
+    }
+    &.li_status2 {
+      background-image: url("~@/assets/img/distribution/ly_distribut_order_frozen.png");
+    }
+    &.li_status1 {
+      background-image: url("~@/assets/img/distribution/ly_distribut_order_yes.png");
+      background-position: 105% 150%;
     }
   }
   .isfresh {

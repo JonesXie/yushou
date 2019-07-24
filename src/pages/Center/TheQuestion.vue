@@ -61,6 +61,7 @@ export default {
     .li_c {
       padding: 15px;
       color: #999;
+      line-height: 18px;
     }
   }
 }

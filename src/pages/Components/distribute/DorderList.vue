@@ -6,13 +6,14 @@
         v-model="loading"
         :finished="finished"
         @load="onLoad"
-        :finished-text="dataList.length===0?'':finshTxt"
+        :finished-text="dataList.length===0?'':finishTxt"
         :immediate-check="false"
       >
         <li class="mdl_li" v-for="(v,i) in dataList" :key="i" @click="turnPage(v.id)">
           <div class="mdl_li_h">
             <p class="fl">订单编号：{{v.orderNo}}</p>
-            <p class="fr">{{v.createtime}}</p>
+            <!-- <p class="fr">{{v.createtime}}</p> -->
+            <p class="fr">{{v.orderStateLabel}}</p>
           </div>
           <div class="mdl_l_c van-hairline--bottom">
             <div class="mdl_l_c_img" :style="{backgroundImage:'url('+v.goodsImages+')'}"></div>
@@ -28,9 +29,12 @@
             </div>
           </div>
           <div class="mdl_l_f">
-            <div class="money">
-              合计：
-              <em>{{v.goodsSalePrice}}.0</em>元
+            <div class="money cut">
+              <p class="profit">
+                合计：
+                <em>{{v.goodsSalePrice}}.0</em>元
+              </p>
+              <p class="rental">{{v.createtime}}</p>
             </div>
             <div class="cut" v-if="isOnline">
               <div
@@ -77,7 +81,7 @@ export default {
       isRefresh: false,
       loading: false,
       finished: false,
-      finshTxt: "没有更多了",
+      finishTxt: "没有更多了",
       noLimit: true
     };
   },
@@ -199,6 +203,9 @@ export default {
       font-size: 12px;
       color: #999999;
       overflow: hidden;
+      .fr {
+        color: $Color;
+      }
     }
     .mdl_l_c {
       padding: 39px 0 19px;
@@ -245,9 +252,14 @@ export default {
       .money {
         flex: 1;
         height: 66px;
-        line-height: 66px;
+        // line-height: 66px;
+        text-align: left !important;
         em {
           font-size: 16px;
+        }
+        .rental {
+          color: #999999;
+          margin-top: 12px !important;
         }
       }
       .cut {

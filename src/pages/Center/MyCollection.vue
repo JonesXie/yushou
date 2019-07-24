@@ -12,14 +12,18 @@
         >
           <ul class="pgmc_ul">
             <li class="pgmc_li" v-for="(v,i) in dataList" :key="i">
-              <img class="pgmc_li_l" :src="v.goodsImages" alt />
-              <div class="pgmc_li_c">
-                <p class="ellipsis-three">{{v.goodsName}}</p>
-                <p class="price">￥{{v.goodsPrice}}.0</p>
-                <div class="collection" @click="cancelCellected(v.collectId)">
-                  <img src="@/assets/img/goods/pg_goods_collected.png" alt />
-                  <p>取消收藏</p>
+              <router-link :to="{path:`/goods/${v.goodsId}`}">
+                <div class="pgmc_li_l">
+                  <img :src="v.goodsImages" alt />
                 </div>
+                <div class="pgmc_li_c">
+                  <p class="ellipsis-three">{{v.goodsName}}</p>
+                  <p class="price">￥{{v.goodsPrice}}.0</p>
+                </div>
+              </router-link>
+              <div class="collection" @click="cancelCellected(v.collectId)">
+                <img src="@/assets/img/goods/pg_goods_collected.png" alt />
+                <p>取消收藏</p>
               </div>
             </li>
           </ul>
@@ -123,9 +127,27 @@ export default {
       background: #fff;
       display: flex;
       position: relative;
+      a {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
       .pgmc_li_l {
         width: 80px;
         height: 80px;
+        text-align: center;
+        line-height: 80px;
+        display: inline-block;
+        img {
+          max-height: 100%;
+          max-width: 100%;
+        }
+      }
+      .pgmc_li_c {
+        flex: 1;
+        margin-left: 15px;
+        line-height: 18px;
       }
       .price {
         position: absolute;
@@ -138,10 +160,10 @@ export default {
         font-size: 11px;
         color: #999;
         display: inline-block;
-        width: 45px;
+        width: 70px;
         text-align: center;
         position: absolute;
-        bottom: 15px;
+        bottom: 10px;
         right: 15px;
         img {
           width: 20px;

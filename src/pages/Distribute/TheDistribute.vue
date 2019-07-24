@@ -54,6 +54,11 @@
           <em class="cell_title">线上店长审核</em>
           <div class="num_icon" slot="right-icon">{{num}}</div>
         </van-cell>
+        <!-- 线下店长才有 -->
+        <van-cell is-link to="/labeldownload" v-if="!type">
+          <img class="cell_icon" src="@/assets/img/distribution/pg_distribute_downlaod.png" alt />
+          <em class="cell_title">商品标价签下载</em>
+        </van-cell>
       </van-cell-group>
       <div class="apply_wrap" v-if="!status">
         <router-link :to="{path:`/applyinfo/0`}" class="apply_l fl">申请线下店长</router-link>

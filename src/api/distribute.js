@@ -67,3 +67,8 @@ export function selectDistributorOrder(data, isJson) {
 export function cancelUserDistributorCode(data, isJson) {
   return post('/api/distributor/cancelUserDistributorCode', data, isJson)
 }
+
+//分销-提现提示
+export function withdrawalPrompt(data, isJson) {
+  return post('/api/distributor/withdrawalPrompt', data, isJson)
+}
