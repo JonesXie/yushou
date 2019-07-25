@@ -26,6 +26,7 @@ export default {
     getOut() {
       localStorage.removeItem("token");
       sessionStorage.removeItem("isLogin");
+      sessionStorage.removeItem("wxclick");
       this.$store.commit("SET_Token", null);
       this.$router.push("/login");
     }
