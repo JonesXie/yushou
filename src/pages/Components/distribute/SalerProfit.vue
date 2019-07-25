@@ -11,7 +11,7 @@
       >
         <div v-for="(v,i) in dataList" :key="i" :class="['list_li', `li_status${v.status}`]">
           <p class="li_title">
-            线上店长：{{v.distributorCodeName}}
+            线上店长：{{v.userPhone}}
             <em class="fr">+{{v.amount}}元</em>
           </p>
           <p class="li_time li_title">
