@@ -16,6 +16,7 @@
             <em class="fr">+{{v.amount}}元</em>
           </p>
           <p class="li_time">生产时间：{{v.createDateLabel}}</p>
+          <p class="li_time li_title" v-if="v.status == 1">到账时间：{{v.performDateLabel}}</p>
         </div>
       </van-list>
     </van-pull-refresh>
@@ -146,6 +147,7 @@ export default {
     }
     &.li_status1 {
       background-image: url("~@/assets/img/distribution/ly_distribut_order_yes.png");
+      background-position: 105% 150%;
     }
   }
   .isfresh {

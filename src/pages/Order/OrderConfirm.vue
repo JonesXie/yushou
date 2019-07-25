@@ -26,7 +26,7 @@
             <p>{{allInfo.goodsName}}</p>
             <p class="guige">
               {{allInfo.goodsParams}}
-              <span>￥{{allInfo.goodsSalePrice}}.00</span>
+              <span>￥{{allInfo.goodsSalePrice}}</span>
             </p>
           </div>
         </div>

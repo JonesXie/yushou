@@ -14,7 +14,7 @@
         <router-link :to="{path:type?'offwallet':'onwallet'}" class="head_panel">
           <div class="panel_l">
             <p>总销售额</p>
-            <em>￥{{initInfo.userDistributorAccount.profit}}.00</em>
+            <em>￥{{initInfo.userDistributorAccount.profit}}</em>
           </div>
           <div class="panel_r">
             <p>余额</p>

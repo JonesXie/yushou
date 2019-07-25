@@ -44,7 +44,7 @@
                 <!-- <span>立减1000元</span> -->
                 <p class="ellipsis-line">
                   ￥
-                  <em>{{item.newDatePrice}}</em>.00
+                  <em>{{item.newDatePrice}}</em>
                 </p>
               </div>
               <div class="info ellipsis-two">{{item.goodsName}}</div>

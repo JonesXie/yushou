@@ -1,7 +1,7 @@
 <template>
   <div class="fisrt_list">
     <div class="title">
-      <img src="@/assets/img/index/pg_index_first_jx.png" alt>
+      <img src="@/assets/img/index/pg_index_first_jx.png" alt />
     </div>
 
     <van-list
@@ -12,8 +12,13 @@
       :offset="10"
     >
       <ul class="fl_ul">
-        <li class="van-hairline--bottom fl_li" v-for="(v,i) in listData" :key="i" @click="turnGoods(v.goodsId)">
-          <img :src="v.goodsImages" alt>
+        <li
+          class="van-hairline--bottom fl_li"
+          v-for="(v,i) in listData"
+          :key="i"
+          @click="turnGoods(v.goodsId)"
+        >
+          <img :src="v.goodsImages" alt />
           <div class="fl_li_r">
             <p class="fl_li_rP1">{{v.goodsName}}</p>
             <p class="fl_li_rP2">
@@ -22,7 +27,7 @@
             </p>
             <p class="fl_li_rP3">
               ￥
-              <span>{{v.goodsSalePrice}}</span>.00
+              <span>{{v.goodsSalePrice}}</span>
             </p>
             <p class="fl_li_rP4">{{v.goodsWaitDays}}天后发货</p>
           </div>
@@ -66,7 +71,7 @@ export default {
         }
       });
     },
-    turnGoods(val){
+    turnGoods(val) {
       this.$router.push(`/goods/${val}`);
     }
   },

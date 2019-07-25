@@ -50,7 +50,7 @@
     </div>
     <!-- 设置比例弹窗 -->
     <van-popup v-model="ratePop" class="tips_wrap">
-      <div class="tips_h">请重新设置该分销账户的分成比例</div>
+      <div class="tips_h">请设置该分销账户的分成比例</div>
       <div class="tips_c">
         <input type="number" v-model="reRate" @blur="validRate" />%
       </div>
@@ -92,7 +92,8 @@ export default {
       loading: false,
       finished: false,
       noLimit: true,
-      changeId: null
+      changeId: null,
+      isAdd: false
     };
   },
   components: {
@@ -159,14 +160,19 @@ export default {
     },
     confirmRate() {
       if (notNull(this.reRate)) {
-        saveDistributor({
-          id: this.changeId,
+        let _data = {
           scale: this.reRate,
           status: 1
-        }).then(({ data }) => {
+        };
+        if (this.isAdd) {
+          Object.assign(_data, { userPhone: this.isSearch });
+        } else {
+          Object.assign(_data, { id: this.changeId });
+        }
+        saveDistributor(_data).then(({ data }) => {
           this.$toast(data.msg);
+          this.ratePop = false;
           if (data.code === 1) {
-            this.ratePop = false;
             this.onInit();
           }
         });
@@ -185,15 +191,17 @@ export default {
       });
     },
     add() {
-      saveDistributor({
-        userPhone: this.isSearch,
-        status: 1
-      }).then(({ data }) => {
-        this.$toast(data.msg);
-        if (data.code === 1) {
-          this.onInit();
-        }
-      });
+      this.ratePop = true;
+      this.isAdd = true;
+      // saveDistributor({
+      //   userPhone: this.isSearch,
+      //   status: 1
+      // }).then(({ data }) => {
+      //   this.$toast(data.msg);
+      //   if (data.code === 1) {
+      //     this.onInit();
+      //   }
+      // });
     },
     onRefresh() {
       this.onInit(true);

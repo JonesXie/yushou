@@ -33,7 +33,7 @@
               </p>
               <p class="fl_li_rP3">
                 ￥
-                <span>{{v.goodsSalePrice}}</span>.00
+                <span>{{v.goodsSalePrice}}</span>
               </p>
               <p class="fl_li_rP4">{{v.goodsWaitDays}}天后发货</p>
             </div>

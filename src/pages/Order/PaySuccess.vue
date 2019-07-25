@@ -3,14 +3,14 @@
     <template #content>
       <div class="pgp_content">
         <div class="pgpc_title">
-          <img v-if="payType ===1" src="@/assets/img/order/pg_pay_alipay.png" alt>
-          <img v-else-if="payType ===2" src="@/assets/img/order/pg_pay_wechat.png" alt>
-          <img v-else src="@/assets/img/order/pg_pay_yue.png" alt>
+          <img v-if="payType ===1" src="@/assets/img/order/pg_pay_alipay.png" alt />
+          <img v-else-if="payType ===2" src="@/assets/img/order/pg_pay_wechat.png" alt />
+          <img v-else src="@/assets/img/order/pg_pay_yue.png" alt />
           <span>支付成功</span>
         </div>
         <div class="pgpc_money">
           <span>￥</span>
-          {{price}}.00
+          {{price}}
         </div>
         <div class="pgpc_btn">
           <div class="pgpc_btn1" @click="$router.replace('/myorder/0')">查看详情</div>
@@ -30,7 +30,7 @@
         <van-radio-group v-model="radio" class="id_ul">
           <van-cell-group class="id_li" v-for="(v,i) in idList" :key="i">
             <van-cell :title="`姓名:${v.cardName}`" clickable @click="chooseId(v.id)">
-              <van-radio :name="v.id"/>
+              <van-radio :name="v.id" />
             </van-cell>
             <van-cell title="身份证号码:" :value="v.cardId"></van-cell>
           </van-cell-group>

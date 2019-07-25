@@ -30,7 +30,7 @@
           </div>
         </div>
         <van-cell title="今日价格">
-          <span>￥{{allInfo.newDatePrice}}.00</span>
+          <span>￥{{allInfo.newDatePrice}}</span>
         </van-cell>
         <van-cell title="剩余调货周期">
           <span>{{allInfo.inWaitDay}}天</span>
@@ -47,7 +47,7 @@
       </div>
 
       <van-cell title="折扣">
-        <span class="zhekou">-{{allInfo.discountPrice}}.00</span>
+        <span class="zhekou">-{{allInfo.discountPrice}}</span>
       </van-cell>
       <van-cell-group class="info">
         <van-cell title="邮费">

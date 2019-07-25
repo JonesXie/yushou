@@ -43,6 +43,7 @@ service.interceptors.response.use(
     } else if (response.data.code === -1) {
       //未登录 -1
       localStorage.setItem("token", null);
+      sessionStorage.removeItem("isLogin");
       Toast.fail(response.data.msg);
       router.push('/login')
     } else if (response.data.code === -2) {

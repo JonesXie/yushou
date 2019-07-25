@@ -48,7 +48,7 @@
       </van-radio-group>
       <div class="pay_info">
         <span>共：{{goodsBuyNum}}件</span>
-        <em>总金额：￥{{orderPayPrice}}.00</em>
+        <em>总金额：￥{{orderPayPrice}}</em>
       </div>
       <div class="pay_submit" @click="submit">支付</div>
 
