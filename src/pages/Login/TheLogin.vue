@@ -100,13 +100,18 @@ export default {
       let wxData = this.$store.state.wxData;
       if (notNull(wxData)) {
         doLogin({ wxId: this.$store.state.wxData.unionid }).then(({ data }) => {
-          this.$toast(data.msg);
           if (data.code === 1) {
+            this.$toast(data.msg);
             localStorage.setItem("token", data.token);
             this.$store.commit("SET_Token", data.token);
             sessionStorage.setItem("isLogin", true);
             setTimeout(() => {
               this.$router.replace(this.$store.state.fromToLogin);
+            }, 1500);
+          } else if (data.code === 0) {
+            this.$toast(`${data.msg},将为你跳转注册`);
+            setTimeout(() => {
+              this.$router.replace("/register");
             }, 1500);
           }
         });
