@@ -344,17 +344,18 @@ export default {
       }
       WXSign({ url: isURL }).then(({ data }) => {
         if (data.code === 1) {
-          this.showPopup = true;
+          // this.showPopup = true;
           this.WXconfig(data.data, isLink);
         }
       });
     },
     getShareLink() {
-      getGoodsShareLink(this.goodsId).then(({ data }) => {
-        if (data.code === 1) {
-          this.share(data.data.shareUrl);
-        }
-      });
+      // getGoodsShareLink(this.goodsId).then(({ data }) => {
+      //   if (data.code === 1) {
+      //     this.share(data.data.shareUrl);
+      //   }
+      // });
+      this.showPopup = true;
     },
     WXconfig(val, isLink) {
       let That = this;
@@ -390,6 +391,15 @@ export default {
         });
       });
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      getGoodsShareLink(this.goodsId).then(({ data }) => {
+        if (data.code === 1) {
+          this.share(data.data.shareUrl);
+        }
+      });
+    });
   },
   created() {
     findGoodsDetail({
