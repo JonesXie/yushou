@@ -1,4 +1,3 @@
-// 直卖收益
 <template>
   <div class="mod_realprofit">
     <!-- list -->

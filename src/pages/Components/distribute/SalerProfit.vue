@@ -1,4 +1,3 @@
-// 线上店长收益
 <template>
   <div class="mod_realprofit">
     <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" class="isfresh">
