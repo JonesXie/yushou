@@ -14,7 +14,7 @@
         </div>
         <div class="pgpc_btn">
           <div class="pgpc_btn1" @click="$router.replace('/myorder/0')">查看详情</div>
-          <div class="pgpc_btn2" @click="$router.push('/index')">回到首页</div>
+          <div class="pgpc_btn2" @click="$router.push('/')">回到首页</div>
         </div>
         <div class="pgpc_tips">温馨提示：一切冒充我平台工作人员的第三方皆为诈骗，如遇到问题，请致电0551-65156891。</div>
       </div>

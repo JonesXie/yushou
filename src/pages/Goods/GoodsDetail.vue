@@ -116,7 +116,7 @@
       ></params-choose>
     </van-actionsheet>
     <!-- 参数选择弹窗 02-->
-    <van-actionsheet v-model="showParams02"  class="params_pop">
+    <van-actionsheet v-model="showParams02" class="params_pop">
       <params-choose
         :paramsList="paramsList"
         :paramsLimit="paramsLimit"

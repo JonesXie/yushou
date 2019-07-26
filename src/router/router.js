@@ -7,7 +7,8 @@ const RouterMap = [
   //首页跳转
   {
     path: '/',
-    redirect: '/index'
+    // redirect: '/index'
+    component: () => import('@/pages/Index/TheIndex.vue')
   },
   //登录注册
   {

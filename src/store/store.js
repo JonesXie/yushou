@@ -11,7 +11,7 @@ Vue.use(Vuex); //注册到vue中
 
 const state = {
   stickTop: 0,
-  fromToLogin: "/index",
+  fromToLogin: "/",
   Token: null,
   wxData: null,
   wxURL: null,
@@ -67,7 +67,7 @@ const actions = {
           data.data.appId
         }&redirect_uri=${
           data.data.url
-        }/index&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
+        }&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
       }
     });
   }

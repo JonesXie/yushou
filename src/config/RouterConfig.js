@@ -18,13 +18,8 @@ router.beforeEach((to, from, next) => {
   }
   //兼容WX ios首次进入
   if (!notNull(store.state.wxURL)) {
-    if (from.path === "/") {
-      // sessionStorage.setItem("firstURL", `${window.location.href}index`)
-      store.commit('SET_WxURL', `${window.location.href}index`)
-    } else {
-      // sessionStorage.setItem("firstURL", window.location.href)
-      store.commit('SET_WxURL', window.location.href)
-    }
+    store.commit('SET_WxURL', window.location.href)
+    // sessionStorage.setItem("firstURL", window.location.href)
   }
   //记录去登录的url，登陆后返回
   if (to.path === '/login') {
@@ -35,7 +30,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login' || to.path === '/registor') {
     if (notNull(sessionStorage.getItem("isLogin"))) {
       router.replace({
-        path: '/index'
+        path: '/'
       })
     }
   }
