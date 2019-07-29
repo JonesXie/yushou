@@ -13,23 +13,23 @@
       <van-tab>
         <div slot="title" @click="priceRange" class="price">
           价格
-          <img v-if="priceActive === 1" src="@/assets/img/goods/pg_guamai_up.png" alt>
-          <img v-else-if="priceActive === 2" src="@/assets/img/goods/pg_guamai_down.png" alt>
-          <img v-else src="@/assets/img/goods/pg_guamai_default.png" alt>
+          <img v-if="priceActive === 1" src="@/assets/img/goods/pg_guamai_up.png" alt />
+          <img v-else-if="priceActive === 2" src="@/assets/img/goods/pg_guamai_down.png" alt />
+          <img v-else src="@/assets/img/goods/pg_guamai_default.png" alt />
         </div>
       </van-tab>
       <van-tab>
         <div slot="title" @click="dayRange" class="days price">
           天数
-          <img v-if="dayActive === 1" src="@/assets/img/goods/pg_guamai_up.png" alt>
-          <img v-else-if="dayActive === 2" src="@/assets/img/goods/pg_guamai_down.png" alt>
-          <img v-else src="@/assets/img/goods/pg_guamai_default.png" alt>
+          <img v-if="dayActive === 1" src="@/assets/img/goods/pg_guamai_up.png" alt />
+          <img v-else-if="dayActive === 2" src="@/assets/img/goods/pg_guamai_down.png" alt />
+          <img v-else src="@/assets/img/goods/pg_guamai_default.png" alt />
         </div>
       </van-tab>
       <van-tab>
         <div slot="title" class="others" @click="filterShow">
           筛选
-          <img src="@/assets/img/goods/pg_guamai_add.png" alt>
+          <img src="@/assets/img/goods/pg_guamai_add.png" alt />
         </div>
       </van-tab>
     </van-tabs>
@@ -163,7 +163,10 @@ export default {
     },
     //筛选
     filterShow() {
-      findGoodsDetail({ goodsId: this.goodsId }).then(({ data }) => {
+      findGoodsDetail({
+        goodsId: this.goodsId,
+        distributorId: sessionStorage.getItem("distributorId")
+      }).then(({ data }) => {
         if (data.code === 1) {
           this.filterList = data.data.parameterNameVOS;
           this.show = true;

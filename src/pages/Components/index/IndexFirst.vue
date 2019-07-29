@@ -195,7 +195,9 @@ export default {
         this.PushImg = data.data;
       });
 
-      selectCodeSubject().then(({ data }) => {
+      selectCodeSubject({
+        distributorId: sessionStorage.getItem("distributorId")
+      }).then(({ data }) => {
         this.FLImg = data.data.page;
       });
       selectBrandSubject().then(({ data }) => {

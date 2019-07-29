@@ -75,7 +75,8 @@ export default {
             password: this.psw,
             qqId: null,
             wxId: this.unionid,
-            platform: "weixin"
+            platform: "weixin",
+            distributorId: sessionStorage.getItem("distributorId")
           };
           doLogin(_data).then(({ data }) => {
             if (data.code === 1) {
@@ -99,7 +100,10 @@ export default {
     wxLogin() {
       let wxData = this.$store.state.wxData;
       if (notNull(wxData)) {
-        doLogin({ wxId: this.$store.state.wxData.unionid }).then(({ data }) => {
+        doLogin({
+          wxId: this.$store.state.wxData.unionid,
+          distributorId: sessionStorage.getItem("distributorId")
+        }).then(({ data }) => {
           if (data.code === 1) {
             this.$toast(data.msg);
             localStorage.setItem("token", data.token);
@@ -134,7 +138,10 @@ export default {
     this.ChangeStatus(false);
     let wxData = this.$store.state.wxData;
     if (notNull(wxData) && notNull(sessionStorage.getItem("wxclick"))) {
-      doLogin({ wxId: this.$store.state.wxData.unionid }).then(({ data }) => {
+      doLogin({
+        wxId: this.$store.state.wxData.unionid,
+        distributorId: sessionStorage.getItem("distributorId")
+      }).then(({ data }) => {
         this.$toast(data.msg);
         if (data.code === 1) {
           localStorage.setItem("token", data.token);
