@@ -10,6 +10,12 @@ router.beforeEach((to, from, next) => {
       sessionStorage.setItem("distributorId", to.query.distributorId)
     }
   }
+  // 从首页获取 distributorId
+  if (`${window.location.href}`.includes('distributorId') && from.path === '/') {
+    if (notNull(to.query.distributorId)) {
+      sessionStorage.setItem("distributorId", to.query.distributorId)
+    }
+  }
   // 上线时放开注释
   if (!notNull(localStorage.getItem("openId"))) {
     let domain = document.domain || window.location.host
